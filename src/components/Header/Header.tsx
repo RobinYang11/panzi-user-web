@@ -6,6 +6,9 @@ import '../Dropdown/Dropdown'
 import Dropdown from '../Dropdown/Dropdown';
 import DropMenus from '../DropMenus/DropMenus';
 
+// import panzi from '../../assets/pnazi.png';
+import panzi from '../../assets/panzi.png';
+
 
 export default () => {
   
@@ -14,7 +17,7 @@ export default () => {
         <div className="header-main">
           <div className="logo">
              <a href="">
-               <img src="https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*OwZWQ68zSTMAAAAAAAAAAABkARQnAQ" alt="语雀"/>
+               <img src={panzi} alt="盘子"/>
              </a>
           </div>
           <div className="header-nav-right">
