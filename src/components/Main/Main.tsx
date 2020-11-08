@@ -8,7 +8,8 @@ export default (props:any)=>{
 
   const generateRoutes = (routes: Array<any>) => {
     return routes.map((item: any) => {
-      return <Route key={item.name} exact={item.exact} path={item.path} component={item.component} />
+      console.log(item)
+      return <Route key={item.name}  path={item.path} component={item.component} />
     })
   }
 
@@ -16,12 +17,12 @@ export default (props:any)=>{
       <div className="main">
         <div className="layout-container-middle">
           <div className="Menu ant-col-sm-4">
-              <Menu menu={menu} />
+            <Menu menu={menu}/>
           </div>
-        <div className="navContent">
-          </div>
+          <div  className="navContent ant-col-sm-20">
             {generateRoutes(menu)}
           </div>
+        </div>
       </div>
   )
 }

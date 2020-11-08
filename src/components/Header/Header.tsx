@@ -1,12 +1,13 @@
 import React from 'react';
 import './header.less';
-import { SearchOutlined, AppstoreAddOutlined, HistoryOutlined, MessageOutlined, UserAddOutlined, UserDeleteOutlined, CaretDownOutlined, LogoutOutlined, SettingOutlined,} from '@ant-design/icons';
+import { SearchOutlined, AppstoreAddOutlined, HistoryOutlined, MessageOutlined, UserAddOutlined, UserDeleteOutlined, CaretDownOutlined, LogoutOutlined, SettingOutlined, AlertOutlined, SplitCellsOutlined,} from '@ant-design/icons';
 import { Button, Divider, Popover} from 'antd';
 import '../Dropdown/Dropdown'
 import Dropdown from '../Dropdown/Dropdown';
+import DropMenus from '../DropMenus/DropMenus';
+
 
 export default () => {
-
   
   return (
       <div className="header">
@@ -19,18 +20,18 @@ export default () => {
           <div className="header-nav-right">
             <ul>
               <li>
-                <Popover content={Dropdown}  trigger="hover">
-                  <AppstoreAddOutlined />
+                <Popover content={<Dropdown dropMenu={DropMenus}/>}  trigger="hover">
+                  <AppstoreAddOutlined className="icon"/>
                 </Popover>
               </li>
               <li>
-                 <HistoryOutlined />
+                 <HistoryOutlined  className="icon"/>
               </li>
               <li>
-                <MessageOutlined />
+                <SplitCellsOutlined  className="icon"/>
               </li>
               <li>
-                <Popover placement="bottomRight" content={Dropdown}  trigger="hover" className="user">
+                <Popover placement="bottomRight" content={<Dropdown dropMenu={DropMenus}/>}  trigger="hover" className="user">
                   <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1604677773530&di=d9eafa6edbfbf32b4062f394aab35554&imgtype=0&src=http%3A%2F%2Fwx1.sinaimg.cn%2Forj360%2F735ea4a2ly1gk3ntbuxhuj20jg0jgmz7.jpg" alt=""/>
                 </Popover>
                 <CaretDownOutlined style={{fontSize:"9px",marginLeft:6}}/>

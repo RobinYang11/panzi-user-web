@@ -6,7 +6,7 @@ export interface IMenuItem{
   name:string,
   path:string,
   icon:ReactNode,
-  component:React.FC,
+  component:any
 }
 
 interface IMenuProps {
