@@ -1,9 +1,12 @@
 import React from 'react';
 
-export default ()=>{
+const Drawing =()=>{
+
   return (
     <div>
-      hello
+      图纸
     </div>
   )
 }
+
+export default Drawing;

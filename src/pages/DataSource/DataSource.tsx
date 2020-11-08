@@ -1,12 +1,9 @@
 import React from 'react';
 
-const A =()=>{
-
+export default ()=>{
   return (
     <div>
-      tste
+      资料假
     </div>
   )
 }
-
-export default A;

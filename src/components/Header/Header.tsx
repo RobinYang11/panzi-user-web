@@ -4,9 +4,7 @@ import { SearchOutlined, AppstoreAddOutlined, HistoryOutlined, MessageOutlined, 
 import { Button, Divider, Popover} from 'antd';
 import '../Dropdown/Dropdown'
 import Dropdown from '../Dropdown/Dropdown';
-import DropMenus from '../DropMenus/DropMenus';
-
-// import panzi from '../../assets/pnazi.png';
+import DropMenus from '../../DropMenus';
 import panzi from '../../assets/panzi.png';
 
 
