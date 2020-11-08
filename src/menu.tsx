@@ -26,7 +26,7 @@ export default [
   },
   {
     name:"缺陷库",
-    path:"/test4",
+    path:"/test3",
     icon:<Loading3QuartersOutlined />,
     component:Defect,
   }
