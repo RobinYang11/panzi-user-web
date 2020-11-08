@@ -9,4 +9,4 @@ const Defect =()=>{
   )
 }
 
-export default Defect();
+export default Defect;

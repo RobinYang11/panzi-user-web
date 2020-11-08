@@ -1,4 +1,4 @@
-import { DatabaseOutlined,  EditOutlined, FileUnknownOutlined,  Loading3QuartersOutlined } from "@ant-design/icons";
+import { DatabaseOutlined,  EditOutlined, FileUnknownOutlined,  HistoryOutlined,  Loading3QuartersOutlined } from "@ant-design/icons";
 import React from "react";
 import Defect from "./pages/Defect/Defect";
 import Drawing from "./pages/Drawing/Drawing";
@@ -9,7 +9,7 @@ export default [
   {
     name:"返场记录",
     path:"/test",
-    icon:<EditOutlined />,
+    icon:<HistoryOutlined />,
     component:ReturnRecord
   },
   {
@@ -28,6 +28,6 @@ export default [
     name:"缺陷库",
     path:"/test4",
     icon:<Loading3QuartersOutlined />,
-    component:Defect
+    component:Defect,
   }
 ]
