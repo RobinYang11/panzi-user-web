@@ -1,7 +1,7 @@
 import React from 'react';
 import './header.less';
-import { SearchOutlined, AppstoreAddOutlined, HistoryOutlined, MessageOutlined, UserAddOutlined, UserDeleteOutlined, CaretDownOutlined, LogoutOutlined, SettingOutlined, AlertOutlined, SplitCellsOutlined,} from '@ant-design/icons';
-import { Button, Divider, Popover} from 'antd';
+import { SearchOutlined, AppstoreAddOutlined, HistoryOutlined,  CaretDownOutlined,  SplitCellsOutlined,} from '@ant-design/icons';
+import { Popover} from 'antd';
 import '../Dropdown/Dropdown'
 import Dropdown from '../Dropdown/Dropdown';
 import DropMenus from '../../DropMenus';
