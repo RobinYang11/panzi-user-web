@@ -48,19 +48,16 @@ export default () => {
           <div className="header-nav-menu">
             <ul className="header-menu">
               <li className="list-item frist-item">
+                <a href="">首页</a>
+              </li>
+              <li className="list-item">
                 <a href="">工作台</a>
-              </li>
-              <li className="list-item">
-                <a href="">空间</a>
-              </li>
-              <li className="list-item">
-                <a href="">发现</a>
               </li>
               <li className="list-item">
                 <a href="">帮助</a>
               </li>
               <li className="list-item">
-                <a href="">反馈</a>
+                <a href="">icon</a>
               </li>
             </ul>
           </div>
