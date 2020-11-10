@@ -1,25 +1,24 @@
-import { LogoutOutlined, SettingOutlined, UserAddOutlined } from "@ant-design/icons"
 import React, { ReactNode } from "react";
 import './Dropdown.less';
 
 interface DropdownProps {
-  icon:ReactNode,
-  text:string,
+  icon: ReactNode,
+  text: string,
 }
 
 interface DropdownMenu {
-  dropMenu:Array<DropdownProps>
+  dropMenu: Array<DropdownProps>
 }
 
-export default (props:DropdownMenu)=>{
+export default (props: DropdownMenu) => {
 
-  const {dropMenu} = props;
+  const { dropMenu } = props;
 
   return (
     <div className="userMenu">
       <ul>
         {
-          dropMenu.map((item)=>{
+          dropMenu.map((item) => {
             return (
               <li>
                 {item.icon}
