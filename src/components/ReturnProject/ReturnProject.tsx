@@ -23,7 +23,7 @@ export default (props:IReturnProps)=>{
       trigger={['contextMenu']}
       overlay={
            <ul className="rightModal">
-            <li onClick ={onEdit}>编辑</li>
+            <li onClick ={onEdit}>重命名</li>
             <li onClick={()=>{onDelete(project.id)}}>删除</li>
           </ul>
       }
