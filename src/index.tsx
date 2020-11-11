@@ -5,10 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import './index.less';
 import 'antd/dist/antd.css';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+ReactDOM.render( <App />,
   document.getElementById('root')
 );
 

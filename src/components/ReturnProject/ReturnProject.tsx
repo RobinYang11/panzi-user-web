@@ -1,6 +1,7 @@
-import React from 'react';
-import { Dropdown, Popover } from 'antd';
+import React, { useState } from 'react';
+import { Dropdown, Form, Input, Modal} from 'antd';
 import './ReturnProject.less'
+import { Link } from 'react-router-dom';
 
 interface IReturnProps{
   project:IReturnRecordProject
@@ -13,25 +14,25 @@ export default (props:IReturnProps)=>{
   const onDelete =(id:number) =>{
     console.log(id)
   }
-
-  const onEdit =()=>{
-
-  }
+  
 
   return(
-    <Dropdown
-      trigger={['contextMenu']}
-      overlay={
-           <ul className="rightModal">
-            <li onClick ={onEdit}>重命名</li>
-            <li onClick={()=>{onDelete(project.id)}}>删除</li>
-          </ul>
-      }
-     >
-      <li className="recordLi">
-        <img src={project.logo}/>
-        <span>{project.name}</span>
-      </li>
-     </Dropdown>
+    <>
+      <Dropdown
+        trigger={['contextMenu']}
+        overlay={
+            <ul className="rightModal">
+              <li onClick={()=>{onDelete(project.id)}}>删除</li>
+            </ul>
+        }
+       >
+        <li className="recordLi">
+          <a href={`#/test4/${project.id}`}>
+            <img src={project.logo}/>
+          </a>
+          <span>{project.name}</span>
+        </li>
+      </Dropdown>
+     </>
   )
 }

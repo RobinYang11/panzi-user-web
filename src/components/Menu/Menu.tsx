@@ -6,7 +6,8 @@ export interface IMenuItem{
   name:string,
   path:string,
   icon:ReactNode,
-  component:any
+  component:any,
+  render:boolean
 }
 
 interface IMenuProps {
@@ -20,7 +21,10 @@ export default (props:IMenuProps)=>{
   return(
     <ul>
       {
-        menu.map((item:any)=>{
+        menu.map((item)=>{
+          if(!item.render){
+            return ;
+          }
           return(
             <li>
               <Link to={item.path} >

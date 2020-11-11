@@ -7,7 +7,6 @@ import ReturnProject from '../../components/ReturnProject/ReturnProject';
 const {Search} = Input;
 
 
-
 const ReturnRecord = (props:any) =>{
 
   const [visible,setVisible] = useState(false);
@@ -48,7 +47,6 @@ const ReturnRecord = (props:any) =>{
 
   const onSubmit =()=>{
     setVisible(false);
-
   }
 
   return(
@@ -68,7 +66,7 @@ const ReturnRecord = (props:any) =>{
           </li>
            {
              projects.map(i=>{
-              return <ReturnProject project={i} />
+              return <ReturnProject project={i} key={i.id}  />
              })
            }
         </ul>
