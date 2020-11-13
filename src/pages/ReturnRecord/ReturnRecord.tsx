@@ -1,40 +1,60 @@
-import React, { ReactNode, useState } from 'react';
-import{Input,Modal, Button ,Form, Dropdown} from 'antd';
+import React, { ReactNode, useEffect, useState } from 'react';
+import{Input,Modal, Button ,Form, Dropdown, Row, Col} from 'antd';
 import './ReturnRecord.less'
 import { PlusOutlined } from '@ant-design/icons';
 import ReturnProject from '../../components/ReturnProject/ReturnProject';
+import { addRecordProject, queryRecordProject, updateRecordProject } from '../../api/api';
 
 const {Search} = Input;
 
 
 const ReturnRecord = (props:any) =>{
-
   const [visible,setVisible] = useState(false);
-  const [projects,setProjects] = useState<Array<IRecordProject>>([
-    {
-      id:1,
-      name:"项目1",
-      creator:{},
-      logo:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605036000364&di=3518742f94b859b011b5494abe3a1b5c&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F16%2F20150916235818_HVAk2.jpeg",
-      tmCreate:"1605188887853",
-      tmModify:"1605188887853",
-      isDeleted:1|2,
-    }
-  ]);
+  const [projects,setProjects] = useState<Array<IRecordProject>>([]);
+  const [name,setName] = useState('');
+  const [toggle,setToggle] = useState('');
+
+  useEffect(()=>{
+    onQueryRecordProject();
+  },[])
   
+  const onQueryRecordProject = ()=>{
+    queryRecordProject({
+      "creator":{
+        "id":window.user.id
+      }
+    }).then((res:any)=>{
+      console.log(res);
+      setProjects(res.result);
+    })
+  }
+
+  const onSubmit =(data:any)=>{
+      addRecordProject(data).then(res=>{
+        setVisible(false);
+        onQueryRecordProject();
+      })
+  }
+
   const onSearch = (value:any) =>{ 
-    console.log(value);
+    setName(value);
+    queryRecordProject({
+      name,
+      "creator":{
+        "id":window.user.id
+      }
+    }).then((res:any)=>{
+      console.log(res);
+      setProjects(res.result);
+    })
   }
 
   const showModal = () =>{
     setVisible(true);
+    setToggle("添加项目")
   }
 
   const handleCancel =()=>{ 
-    setVisible(false);
-  }
-
-  const onSubmit =()=>{
     setVisible(false);
   }
 
@@ -42,23 +62,28 @@ const ReturnRecord = (props:any) =>{
     <>
       <div className="record">
         <div className="recordSearch">
-          <Search placeholder="搜索" onSearch={onSearch} enterButton />
+          <Search
+          placeholder="搜索" 
+          value={name}  
+          onChange={(e:any)=>{
+            setName(e.target.value)
+        }} onSearch={onSearch} enterButton />
         </div>
-        <ul>
-          <li>
-            <div className="recordModal">
-              <div className="recordAdd">
-               <PlusOutlined  onClick={showModal} className="icon"/>
-              </div>
-              <p>新建项目</p>
-            </div>
-          </li>
-           {
-             projects.map(i=>{
-              return <ReturnProject project={i} key={i.id}  />
-             })
-           }
-        </ul>
+          <Row gutter={16}>
+            <Col className="gutter-row" span={4}>
+                <div className="recordModal">
+                  <div className="recordAdd">
+                   <PlusOutlined  onClick={showModal} className="icon"/>
+                  </div>
+                  <p>新建项目</p>
+                </div>
+            </Col>
+             {
+               projects.map(i=>{
+                return <ReturnProject project={i} key={i.id}  />
+               })
+             }
+          </Row>
       </div>
       <Modal
         title="新建项目"
@@ -66,19 +91,21 @@ const ReturnRecord = (props:any) =>{
         onCancel={handleCancel}
         footer={null}
       >
-        <Form>
+        <Form
+          onFinish={onSubmit}
+        >
           <Form.Item
             label="项目名称"
-            name="username"
+            name="name"
             rules={[{ required: true, message: '请输入项目名称' }]}
           >
-            <Input />
+            <Input  name="name" type="text"/>
           </Form.Item>
           <div style={{textAlign:"right"}}>
             <button type="submit" onClick={handleCancel} style={{marginRight:"10px"}}>
               取消
             </button>
-            <button type="submit" onClick={onSubmit}>
+            <button type="submit">
               确定
             </button>
           </div>

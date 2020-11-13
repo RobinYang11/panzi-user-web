@@ -1,5 +1,9 @@
 
 
+interface Window {
+  user: any;
+}
+
 //返场记录项目实体
 interface IReturnRecordProject {
   id?: number,
@@ -45,13 +49,13 @@ interface ITeam {
 interface IRecordProject {
   id: number;
   //个人版巡场记录的项目名
-  name?: string;
+  name: string;
   //巡场项目创建者
   creator?: IUser ;
   tmCreate?: string;
   tmModify?: string;
   //1 未删除 || 2 已删除
-  isDeleted?: number;
+  isDeleted: number;
   logo?:string;
 }
 

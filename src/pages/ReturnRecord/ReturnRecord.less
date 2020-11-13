@@ -1,36 +1,27 @@
-.record {
+.recordSearch {
+  width : 300px;
+  margin: 20px auto;
+}
 
-  .recordSearch {
-    width : 300px;
-    margin: 20px auto;
-  }
+.gutter-row {
+  text-align: center;
 
-  ul {
-    overflow: hidden;
+  
+  .recordAdd {
+    width          : 70px;
+    height         : 70px;
+    border         : 1px solid #8b8a8a;
+    text-align     : center;
+    margin-top     : 3px;
+    display        : inline-block;
 
-    li {
-      float       : left;
-      margin-right: 50px;
-      text-align  : center;
-      cursor: pointer;
+    &:hover {
+      box-shadow: 0px 0px 3px rgb(65, 64, 64);
+    }
 
-      .recordAdd {
-        width          : 70px;
-        height         : 70px;
-        border         : 1px solid #8b8a8a;
-        display        : flex;
-        justify-content: center;
-        align-items    : center;
-
-        &:hover {
-          box-shadow: 0px 0px 3px rgb(65, 64, 64);
-        }
-
-        .icon {
-          font-size : 36px;
-          margin-top: 3px;
-        }
-      }
+    .icon {
+      font-size : 36px;
+      margin-top: 15px;
     }
   }
 }
