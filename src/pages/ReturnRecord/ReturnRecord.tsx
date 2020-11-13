@@ -10,26 +10,15 @@ const {Search} = Input;
 const ReturnRecord = (props:any) =>{
 
   const [visible,setVisible] = useState(false);
-  const [projects,setProjects] = useState<Array<IReturnRecordProject>>([
+  const [projects,setProjects] = useState<Array<IRecordProject>>([
     {
       id:1,
       name:"项目1",
-      logo:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605036000364&di=3518742f94b859b011b5494abe3a1b5c&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F16%2F20150916235818_HVAk2.jpeg"
-    },
-    {
-      id:2,
-      name:"项目2",
-      logo:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605036000364&di=3518742f94b859b011b5494abe3a1b5c&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F16%2F20150916235818_HVAk2.jpeg"
-    },
-    {
-      id:3,
-      name:"项目3",
-      logo:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605036000364&di=3518742f94b859b011b5494abe3a1b5c&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F16%2F20150916235818_HVAk2.jpeg"
-    },
-    {
-      id:4,
-      name:"项目4",
-      logo:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605036000364&di=3518742f94b859b011b5494abe3a1b5c&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F16%2F20150916235818_HVAk2.jpeg"
+      creator:{},
+      logo:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605036000364&di=3518742f94b859b011b5494abe3a1b5c&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F16%2F20150916235818_HVAk2.jpeg",
+      tmCreate:"1605188887853",
+      tmModify:"1605188887853",
+      isDeleted:1|2,
     }
   ]);
   
@@ -41,7 +30,7 @@ const ReturnRecord = (props:any) =>{
     setVisible(true);
   }
 
-  const handleCancel =()=>{
+  const handleCancel =()=>{ 
     setVisible(false);
   }
 

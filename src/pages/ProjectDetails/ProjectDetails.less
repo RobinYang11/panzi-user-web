@@ -1,35 +1,99 @@
 .projectDetail {
 
   .projectDetailHeader {
+    overflow: hidden;
 
     .projectDetailLeft {
       overflow: hidden;
       float   : left;
 
       li {
-        float: left;
-        text-align: center;
-        margin-right:10px; 
-
-        a {
-          display: inline-block;
-          width: 70px;
-          padding: 5px;
-          background-color: rgb(117, 116, 116);
-          color: #ffffff;
-          border-radius: 5px;
-        }
+        float       : left;
+        text-align  : center;
+        margin-right: 10px;
       }
     }
 
     .projectDetailRight {
-      overflow: hidden;
-      float   : right;
+      overflow     : hidden;
+      float        : right;
+      margin-bottom: 0;
 
       li {
-        float: left;
+        float       : left;
         margin-right: 10px;
+        font-size   : 20px;
       }
     }
   }
+
+  .projectDetailNav {
+    overflow: hidden;
+
+    .creatTime {
+      float: left;
+    }
+
+    .favorableComments {
+      float        : right;
+      overflow     : hidden;
+      margin-bottom: 0;
+
+      li {
+        margin-left: 10px;
+        float      : left;
+        font-size  : 24px;
+      }
+    }
+  }
+
+  .content {
+    font-size  : 16px;
+    font-weight: 600;
+  }
+
+  .projectImg {
+    overflow  : hidden;
+    margin-top: 5px;
+
+    li {
+      float : left;
+      margin: 0 5px;
+
+      img {
+        border-radius: 5px;
+        display      : inline-block;
+        width        : 100px;
+        height       : 100px;
+      }
+    }
+  }
+
+  .projectBottom {
+    overflow: hidden;
+
+    .buildingInformation {
+      float        : left;
+      margin-bottom: 0em;
+
+      li {
+        float      : left;
+        margin-left: 5px;
+      }
+    }
+
+    .operation {
+      float: right;
+    }
+  }
+
+  .solid {
+    border-top: 1px solid #eeeeee;
+  }
+
+
+}
+
+.modal {
+  width: 666px !important;
 }

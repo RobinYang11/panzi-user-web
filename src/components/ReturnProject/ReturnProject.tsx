@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Dropdown, Form, Input, Modal} from 'antd';
+import { Dropdown, Form, Input, Modal, Popconfirm, message} from 'antd';
 import './ReturnProject.less'
 import { Link } from 'react-router-dom';
 
 interface IReturnProps{
-  project:IReturnRecordProject
+  project:IRecordProject;
 }
 
 export default (props:IReturnProps)=>{
@@ -15,6 +15,9 @@ export default (props:IReturnProps)=>{
     console.log(id)
   }
   
+  function confirm() {
+    message.info('已成功删除');
+  }
 
   return(
     <>
@@ -22,7 +25,10 @@ export default (props:IReturnProps)=>{
         trigger={['contextMenu']}
         overlay={
             <ul className="rightModal">
-              <li onClick={()=>{onDelete(project.id)}}>删除</li>
+              <li>重命名</li>
+              <Popconfirm placement="top" title="是否确认删除" onConfirm={confirm} okText="Yes" cancelText="No">
+                <li onClick={()=>{onDelete(project.id)}}>删除</li>
+              </Popconfirm>
             </ul>
         }
        >

@@ -5,6 +5,8 @@ import Drawing from "./pages/Drawing/Drawing";
 import DataSource from "./pages/DataSource/DataSource";
 import ReturnRecord from "./pages/ReturnRecord/ReturnRecord";
 import ProjectDetails from "./pages/ProjectDetails/ProjectDetails";
+import NewReturnRecord from "./pages/NewReturnRecord/NewReturnRecord";
+import ExportProject from "./pages/ExportContent/ExportContent";
 
 export default [
   {
@@ -15,17 +17,17 @@ export default [
     render:true,
   },
   {
-    name:"资料假",
+    name:"图纸",
     path:"/test1",
     icon:<DatabaseOutlined />,
-    component:DataSource,
+    component:Drawing,
     render:true,
   },
   {
-    name:"图纸",
+    name:"文档",
     path:"/test2",
     icon:<FileUnknownOutlined />,
-    component:Drawing,
+    component:DataSource,
     render:true,
   },
   {
@@ -40,6 +42,20 @@ export default [
     path:"/test4/:id",
     icon:<Loading3QuartersOutlined />,
     component:ProjectDetails,
+    render:false,
+  },
+  {
+    name:"新建巡场记录",
+    path:"/test5",
+    icon:<Loading3QuartersOutlined />,
+    component:NewReturnRecord,
+    render:false,
+  },
+  {
+    name:"导出",
+    path:"/test6",
+    icon:<Loading3QuartersOutlined />,
+    component:ExportProject,
     render:false,
   }
 ]
