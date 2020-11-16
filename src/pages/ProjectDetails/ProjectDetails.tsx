@@ -2,8 +2,7 @@ import { FilterOutlined,  PlusOutlined, SortAscendingOutlined } from '@ant-desig
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload } from 'antd';
 import './ProjectDetails.less';
-import ProjectDetail from '../../components/Record/Record';
-import RecordDetail from '../../components/Record/Record';
+import Record from '../../components/Record/Record';
 import { addRecord, queryRecord } from '../../api/api';
 import TextArea from 'antd/lib/input/TextArea';
 
@@ -14,6 +13,7 @@ const {Search} = Input;
 export default (props:any) =>{
   // 获取路由动态参数
   console.log(props.match.params);
+  const name ="rboin";
 
   const [visible,setVisible] = useState(false);
   const [recordDetails,setRecordDetails] =useState<Array<IRecordDocument>>();
@@ -29,7 +29,6 @@ export default (props:any) =>{
 
   const onQueryRecord =()=>{
     queryRecord({recordProjectId:3}).then((res:any)=>{
-      console.log(res);
       setRecordDetails(res.result);
     })
   }
@@ -79,6 +78,7 @@ export default (props:any) =>{
     console.log(value);
   }
 
+
   const content = (
     <div>
       <p>创建时间最近</p>
@@ -93,6 +93,7 @@ export default (props:any) =>{
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+
 
   return(
     <>
@@ -129,7 +130,7 @@ export default (props:any) =>{
       </div>
       {
         recordDetails?.map(item=>{
-          return <RecordDetail projectDetail={item} key={item.id}/>
+          return <Record onQueryRecord={onQueryRecord} record={item} key={item.id}/>
         })
       }
     </div>
@@ -197,7 +198,6 @@ export default (props:any) =>{
         <p>项目:保利一期</p>
         <Form
           name="basic"
-          initialValues={{ remember: true }}
           onFinish={onFinish}
         >
           <Upload

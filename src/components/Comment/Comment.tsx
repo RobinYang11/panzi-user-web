@@ -2,12 +2,12 @@ import { Button } from 'antd';
 import React, { useState } from 'react';
 
 interface CommentProps{
-  comment:IRecordCommentDocument;
+  Comment:IRecordCommentDocument;
 }
 
 export default (props:CommentProps)=>{
 
-  const {comment} = props;
+  const {Comment} = props;
   const [imgs,setImags] = useState<Array<any>>([])
 
   return (
@@ -15,9 +15,9 @@ export default (props:CommentProps)=>{
       <div>
         <div>
           <span>最新追评</span>
-          <span>{comment.tmCreate}</span>
+          <span>{Comment.tmCreate}</span>
         </div>
-        <p>{comment.description}</p>
+        <p>{Comment.description}</p>
         <div>
           {
             imgs.map(item=>{

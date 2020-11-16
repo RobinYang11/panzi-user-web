@@ -136,7 +136,7 @@ interface IRecordDocument {
    //状态  未处理 1 | 已处理 2
    status :number ;
    //创建时间
-   tmCreate :number ;
+   tmCreate :string ;
    //修改时间
    tmModify: string ;
    //问题图片

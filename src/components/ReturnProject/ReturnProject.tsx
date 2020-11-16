@@ -5,6 +5,7 @@ import { queryRecordProject, updateRecordProject } from '../../api/api';
 
 interface IReturnProps{
   project:IRecordProject;
+  onQueryRecordProject:()=>void;
 }
 
 export default (props:IReturnProps)=>{
@@ -36,18 +37,17 @@ export default (props:IReturnProps)=>{
     updateRecordProject({id:project.id,...data}).then(res=>{
       console.log(res)
       setVisible(false);
+      props.onQueryRecordProject();
     })
-    form.setFieldsValue(data);
-    onQueryRecordProject();
   }
 
   // 删除
   function confirm(id:number,isDeleted:number) {
     message.info('已成功删除'); 
     updateRecordProject({id,isDeleted}).then(res=>{
-        console.log(res);
-        onQueryRecordProject();
-      })
+      console.log(res);
+      props.onQueryRecordProject();
+    })
   }
 
   const handleCancel =()=>{ 
@@ -56,6 +56,7 @@ export default (props:IReturnProps)=>{
 
   const showModal =()=>{
     setVisible(true);
+    form.setFieldsValue({name:project.name});
   }
   
   return(

@@ -4,16 +4,19 @@ import { useForm } from 'antd/lib/form/Form';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { addRecord, deleteRecord, queryRecord } from '../../api/api';
+import { addRecord, deleteRecord, queryRecord, updateRecordQuestion } from '../../api/api';
+import './Record.less'
 const {Search} = Input
 
 interface RecordDocumentProps{
-  projectDetail:IRecordDocument
+  record:IRecordDocument,
+  onQueryRecord:()=>void;
 }
 
 export default(props:RecordDocumentProps)=>{
    
-  const {projectDetail} = props;
+  const {record} = props;
+
   const [form] = useForm();
   const [reacordVisible,setRecordVisible] = useState(false);
   const [tags,setTags] = useState<Array<any>>([]);
@@ -22,21 +25,21 @@ export default(props:RecordDocumentProps)=>{
   const [imgs,setImage] =useState<Array<any>>([])
   const [rate,setRate] = useState(0);
 
+  const[comments,setComments] =useState<Array<IRecordCommentDocument>>([]);
 
   useEffect(()=>{
-    queryRecord({recordProjectId:3}).then((res:any)=>{
-      console.log(res);
-    })
+    onQueryRecord();
   },[])
 
   const onChangeRate =(value:number)=>{
     setRate(value);
   }
 
+  // 删除一条记录
   function confirm(id:number) {
-       message.info('已成功删除');
+      message.info('已成功删除');
       deleteRecord({id}).then((res)=>{
-
+      props.onQueryRecord();
     })
   }
 
@@ -45,7 +48,7 @@ export default(props:RecordDocumentProps)=>{
   }
 
   const handleChange =(value:any)=>{
-    console.log(value);
+    // console.log(value);
   }
 
   const uploadButton = (
@@ -55,23 +58,22 @@ export default(props:RecordDocumentProps)=>{
     </div>
   );
   
+  // 修改记录
   const onFinish =(data:any)=>{
-    console.log(data);
-    addRecord({
-      "recordProjectId":3,
+    updateRecordQuestion({
+      "id":record.id,
       "tags":tags,
-      "isStandard":2,
-      ...data,
-    }).then((res)=>{
-      console.log(res)
+      "imgs":imgs,
+      ...data
+     }).then((res)=>{
       setRecordVisible(false);
-      onQueryRecord();
+      // onQueryRecord();
+      props.onQueryRecord();
     })
   }
 
   const onQueryRecord =()=>{
     queryRecord({recordProjectId:3}).then((res:any)=>{
-      console.log(res);
       setRecordDetails(res.result);
     })
   }
@@ -81,23 +83,30 @@ export default(props:RecordDocumentProps)=>{
     setTags([...tags]);
   }
 
-  const showRecordModal =(data:any)=>{
+  const showRecordModal =()=>{
     setRecordVisible(true);
-    form.setFieldsValue(data);
+    setTags(record.tags);
+    form.setFieldsValue({
+      id:record.id,
+      description:record.description,
+      level:2,
+      imgs:imgs,
+      tags:tags
+    });
   }
 
   return (
     <>
     <div>
        <div className="projectDetailNav">
-        <div className="creatTime">{projectDetail.tmCreate}</div>
+        <div className="creatTime">{ moment(parseInt(record.tmCreate)).format("YYYY:MM:DD hh:ss:mm")}</div>
         {/* moment(projectDetail.tmCreate).format("YYYY:MM:DD hh:ss:mm") */}
         <ul className="favorableComments">
-          <Rate count={3}/>
+          <Rate count={3} value={record.level}/>
         </ul>
       </div>
       <div className="content">
-        {projectDetail.description}
+        {record.description}
       </div>
       <ul className="projectImg">
         {
@@ -110,21 +119,27 @@ export default(props:RecordDocumentProps)=>{
         <ul className="buildingInformation">
           {
             tags.map(i=>{
-              return  <li><span>{projectDetail.tags}</span> </li>
+              return  <span className="tags">{i}</span>
             })
           }
         </ul>
         <div className="operation">
           <Button type="link" onClick={showRecordModal}>编辑</Button>
-          <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>confirm(projectDetail.id)} okText="Yes" cancelText="No">
+          <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>confirm(record.id)} okText="Yes" cancelText="No">
             <Button type="link">删除</Button>
           </Popconfirm>
         </div>
       </div>
       <p className="solid"></p>
     </div>
-
-
+    <div>
+      {
+        // comments.map(item=>{
+        //   return <Comment Comment={item} />
+        // })
+      }
+    </div>
+   
     <Modal
       visible={reacordVisible}
       onCancel={handleCancel}
@@ -136,8 +151,6 @@ export default(props:RecordDocumentProps)=>{
       </div>
       <p>项目:保利一期</p>
       <Form
-        name="basic"
-        initialValues={{ remember: true }}
         onFinish={onFinish}
         form={form}
       >

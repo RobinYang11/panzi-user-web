@@ -5,16 +5,18 @@ import { PlusOutlined } from '@ant-design/icons';
 import ReturnProject from '../../components/ReturnProject/ReturnProject';
 import { addRecordProject, queryRecordProject, updateRecordProject } from '../../api/api';
 import ProjectDetail from '../../components/Record/Record';
+import { useForm } from 'antd/lib/form/Form';
 
 const {Search} = Input;
 
 
 const ReturnRecord = (props:any) =>{
+
+  const [form] = useForm();
   const [visible,setVisible] = useState(false);
   const [projects,setProjects] = useState<Array<IRecordProject>>([]);
   const [name,setName] = useState('');
   const [toggle,setToggle] = useState('');
-
 
   useEffect(()=>{
     onQueryRecordProject();
@@ -35,6 +37,7 @@ const ReturnRecord = (props:any) =>{
       addRecordProject(data).then(res=>{
         setVisible(false);
         onQueryRecordProject();
+        form.resetFields(data);
       })
   }
 
@@ -82,7 +85,7 @@ const ReturnRecord = (props:any) =>{
             </Col>
              {
                projects.map(i=>{
-                return <ReturnProject project={i} key={i.id}  />
+                return <ReturnProject project={i} key={i.id} onQueryRecordProject={onQueryRecordProject} />
                })
              }
           </Row>
@@ -95,6 +98,7 @@ const ReturnRecord = (props:any) =>{
       >
         <Form
           onFinish={onSubmit}
+          form={form}
         >
           <Form.Item
             label="项目名称"
