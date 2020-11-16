@@ -1,20 +1,42 @@
-import { FilterOutlined, SearchOutlined, SortAscendingOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
-import avator from '../../assets/touxiang.jpg';
-import { Button, Rate, Modal, Form, Radio,DatePicker, Popover, Input, Popconfirm, message } from 'antd';
+import { FilterOutlined,  PlusOutlined, SortAscendingOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload } from 'antd';
 import './ProjectDetails.less';
+import ProjectDetail from '../../components/Record/Record';
+import RecordDetail from '../../components/Record/Record';
+import { addRecord, queryRecord } from '../../api/api';
+import TextArea from 'antd/lib/input/TextArea';
 
 const { RangePicker } = DatePicker;
 const {Search} = Input;
 
+
 export default (props:any) =>{
   // 获取路由动态参数
-  console.log(props.match.params)
+  console.log(props.match.params);
 
   const [visible,setVisible] = useState(false);
+  const [recordDetails,setRecordDetails] =useState<Array<IRecordDocument>>();
+  const [reacordVisible,setRecordVisible] = useState(false);
+  const [rate,setRate] = useState(0);
+  let [tags,setTags] = useState<Array<any>>([]);
+  const [fileList,setFileList] = useState<Array<any>>([])
+  const [comments,setComments]= useState<Array<IRecordCommentDocument>>([]);
 
-  const handleCancel =()=>{
+  useEffect(()=>{
+    onQueryRecord();
+  },[])
+
+  const onQueryRecord =()=>{
+    queryRecord({recordProjectId:3}).then((res:any)=>{
+      console.log(res);
+      setRecordDetails(res.result);
+    })
+  }
+
+  const handleCancel = ()=>{
     setVisible(false);
+    setRecordVisible(false);
   }
 
   const showModal = () =>{
@@ -25,6 +47,38 @@ export default (props:any) =>{
     console.log(e)
   }
 
+  const showRecordModal =()=>{
+    setRecordVisible(true)
+  }
+
+  const onFinish =(data:any)=>{
+    console.log(data);
+    addRecord({
+      "recordProjectId":3,
+      "tags":tags,
+      "isStandard":2,
+      ...data,
+    }).then((res)=>{
+      console.log(res)
+      setRecordVisible(false);
+      onQueryRecord();
+    })
+  }
+
+  const onChangeRate =(value:number)=>{
+    setRate(value);
+  }
+
+  const onAddTag =(value:any)=>{
+    tags.push(value);
+    // setTags(tags); 这种事错误的，react 任务 tags 指向原来的那个tags，是同一个对象，没有变化，所以不重新渲染,
+    setTags([...tags]);
+  }
+
+  const handleChange =(value:any)=>{
+    console.log(value);
+  }
+
   const content = (
     <div>
       <p>创建时间最近</p>
@@ -33,9 +87,12 @@ export default (props:any) =>{
     </div>
   );
 
-  function confirm() {
-    message.info('已成功删除');
-  }
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
 
   return(
     <>
@@ -43,9 +100,7 @@ export default (props:any) =>{
       <div className="projectDetailHeader">
         <ul className="projectDetailLeft">
             <li>
-              <a href={"#/test5"}>
-                <Button>新建</Button>
-              </a>
+               <Button onClick={showRecordModal}>新建</Button>
             </li>
             <li>
               <a href={"#/test6"}>
@@ -67,57 +122,18 @@ export default (props:any) =>{
               <SortAscendingOutlined/>
             </Popover>
           </li>
-          <li >
+          <li>
             <FilterOutlined onClick={showModal} />
           </li>
         </ul>
       </div>
-      <div className="projectDetailNav">
-        <div className="creatTime">2020-11-12 9:30</div>
-        <ul className="favorableComments">
-          <Rate count={3}/>
-        </ul>
-      </div>
-      <div className="content">
-        今天是个好日子 新乡是的事儿总能城 开发库拉进来倒垃圾速度快放假卡兰蒂斯交罚款发顺丰发顺丰按时发生
-      </div>
-      <ul className="projectImg">
-        <li>
-          <img src={avator} alt=""/>
-        </li>
-        <li>
-          <img src={avator} alt=""/>
-        </li>
-        <li>
-          <img src={avator} alt=""/>
-        </li>
-        <li>
-          <img src={avator} alt=""/>
-        </li>
-        <li>
-          <img src={avator} alt=""/>
-        </li>
-      </ul>
-      <div className="projectBottom">
-        <ul className="buildingInformation">
-          <li>
-            <span>#301房间</span>
-          </li>
-          <li>
-            <span>#A户型</span>
-          </li>
-        </ul>
-        <div className="operation">
-          <a href={"#/test5"}>
-           <Button type="link">编辑</Button>
-          </a>
-            <Popconfirm placement="top" title="是否确认删除" onConfirm={confirm} okText="Yes" cancelText="No">
-              <Button type="link">删除</Button>
-            </Popconfirm>
-        </div>
-      </div>
-      <p className="solid"></p>
+      {
+        recordDetails?.map(item=>{
+          return <RecordDetail projectDetail={item} key={item.id}/>
+        })
+      }
     </div>
+
     <Modal
       title="筛选内容"
       visible={visible}
@@ -162,6 +178,66 @@ export default (props:any) =>{
             className="submit"
           >
             <Button onClick={handleCancel}>取消</Button>
+            <Button type="primary" htmlType="submit" className="sure">
+              确定
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+    <Modal
+        visible={reacordVisible}
+        onCancel={handleCancel}
+        footer={null}
+        className="RecordModal"
+      >
+        <div className="recordHeader">
+          <h3>新建巡场记录</h3>
+        </div>
+        <p>项目:保利一期</p>
+        <Form
+          name="basic"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+        >
+          <Upload
+            action="http://2081uw5545.iask.in:46203/api/uploadFile"
+            listType="picture-card"
+            fileList={fileList}
+            onChange={handleChange}
+          >
+            {fileList.length >= 8 ? null : uploadButton}
+          </Upload>
+          <p>问题描述</p>
+          <Form.Item
+            name="description"
+            rules={[{ required: true,message: '请描述具体问题'}]}
+          >
+              <TextArea rows={4} placeholder="请描述下具体问题并提交建议" />
+          </Form.Item>
+           <p className="tag">标签</p>
+          {
+            tags.map(item=>{
+              return <span className="tags">{item}</span>
+            })
+          }
+            <Search
+              className="search"
+              placeholder="添加标签"
+              enterButton="添加标签"
+              size="middle"
+              onSearch={onAddTag} 
+           />
+          <p>严重程度</p>
+          <Form.Item
+            name="level"
+          >
+             <Rate count={3} onChange={onChangeRate} value={rate}/>
+          </Form.Item>
+          <Form.Item
+            className="submit"
+          >
+            <Button htmlType="reset" onClick={handleCancel}>取消</Button>
             <Button type="primary" htmlType="submit" className="sure">
               确定
             </Button>

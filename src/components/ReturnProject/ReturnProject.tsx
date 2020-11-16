@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Dropdown, Form, Input, Modal, Popconfirm, message, Col} from 'antd';
 import './ReturnProject.less'
-import { Link } from 'react-router-dom';
 import { queryRecordProject, updateRecordProject } from '../../api/api';
 
 interface IReturnProps{
@@ -11,31 +10,15 @@ interface IReturnProps{
 export default (props:IReturnProps)=>{
   const [form] = Form.useForm();
   const { project } = props;
+
   const [projects,setProjects] = useState<Array<IRecordProject>>([]);
   const [visible,setVisible] = useState(false);
+  const [id,setId] = useState(0);
 
   const onUpdateName = (id:number,name:string) =>{
     updateRecordProject({id,name}).then(res=>{
       console.log(res)
     })
-  }
-
-  const onSubmit =()=>{
-    onUpdateRecordProject(project.id,project.name)
-  }
-
-  const onUpdateRecordProject =(id:number,name:string)=>{
-    updateRecordProject({id,name}).then(res=>{
-      console.log(res)
-    })
-  }
-
-  function confirm(id:number,isDelet:number) {
-    message.info('已成功删除'); 
-      updateRecordProject({id,isDelet}).then(res=>{
-        console.log(res);
-        onQueryRecordProject();
-      })
   }
 
   const onQueryRecordProject = ()=>{
@@ -44,9 +27,27 @@ export default (props:IReturnProps)=>{
         "id":window.user.id
       }
     }).then((res:any)=>{
-      console.log(res);
       setProjects(res.result);
     })
+  }
+
+  // 重命名
+  const onSubmit =(data:any)=>{
+    updateRecordProject({id:project.id,...data}).then(res=>{
+      console.log(res)
+      setVisible(false);
+    })
+    form.setFieldsValue(data);
+    onQueryRecordProject();
+  }
+
+  // 删除
+  function confirm(id:number,isDeleted:number) {
+    message.info('已成功删除'); 
+    updateRecordProject({id,isDeleted}).then(res=>{
+        console.log(res);
+        onQueryRecordProject();
+      })
   }
 
   const handleCancel =()=>{ 
@@ -55,10 +56,6 @@ export default (props:IReturnProps)=>{
 
   const showModal =()=>{
     setVisible(true);
-  }
-
-  const onSetFaileValue =(data:any)=>{
-    form.setFieldsValue(data);
   }
   
   return(
@@ -69,7 +66,11 @@ export default (props:IReturnProps)=>{
           overlay={
               <ul className="rightModal">
                 <li onClick={showModal}>重命名</li>
-                <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>confirm(project.id,2)} okText="Yes" cancelText="No">
+                <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>{
+                  confirm(project.id,2); 
+                 }
+                  }
+                   okText="Yes" cancelText="No">
                   <li>删除</li>
                 </Popconfirm>
               </ul>
@@ -84,7 +85,7 @@ export default (props:IReturnProps)=>{
         </Dropdown>
        </Col>
        <Modal
-        title="新建项目"
+        title="项目重命名"
         visible={visible}
         onCancel={handleCancel}
         footer={null}

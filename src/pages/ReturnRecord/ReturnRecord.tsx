@@ -4,6 +4,7 @@ import './ReturnRecord.less'
 import { PlusOutlined } from '@ant-design/icons';
 import ReturnProject from '../../components/ReturnProject/ReturnProject';
 import { addRecordProject, queryRecordProject, updateRecordProject } from '../../api/api';
+import ProjectDetail from '../../components/Record/Record';
 
 const {Search} = Input;
 
@@ -13,6 +14,7 @@ const ReturnRecord = (props:any) =>{
   const [projects,setProjects] = useState<Array<IRecordProject>>([]);
   const [name,setName] = useState('');
   const [toggle,setToggle] = useState('');
+
 
   useEffect(()=>{
     onQueryRecordProject();
