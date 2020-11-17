@@ -177,7 +177,7 @@ interface IRecordCommentDocument{
   //追评问题
   description: String ;
   //问题图片
-  imgs:List<any> ;
+  imgs:Array<any> ;
   //追评时间
   tmCreate: string ;
 }

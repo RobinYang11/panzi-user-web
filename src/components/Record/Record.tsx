@@ -1,16 +1,17 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, message, Modal, Popconfirm, Rate, Upload } from 'antd';
+import { Button, Form, Input, message, Modal, Popconfirm, Rate, Tag, Upload } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { addRecord, deleteRecord, queryRecord, updateRecordQuestion } from '../../api/api';
-import './Record.less'
+import {addRecordComment, deleteRecord, queryRecord, queryRecordComment, updateRecordQuestion } from '../../api/api';
+import './Record.less';
+import Comment from '../Comment/Comment';
 const {Search} = Input
 
 interface RecordDocumentProps{
   record:IRecordDocument,
-  onQueryRecord:()=>void;
+  onQueryRecord:()=>void
 }
 
 export default(props:RecordDocumentProps)=>{
@@ -24,15 +25,23 @@ export default(props:RecordDocumentProps)=>{
   const [recordDetails,setRecordDetails] =useState<Array<IRecordDocument>>();
   const [imgs,setImage] =useState<Array<any>>([])
   const [rate,setRate] = useState(0);
+  const [comments,setComments]= useState<Array<IRecordCommentDocument>>();
+  const [description,setDescription] = useState('');
 
-  const[comments,setComments] =useState<Array<IRecordCommentDocument>>([]);
 
   useEffect(()=>{
     onQueryRecord();
+    onQueryRecordComment();
   },[])
 
   const onChangeRate =(value:number)=>{
     setRate(value);
+  }
+
+  const onQueryRecordComment =()=>{
+    queryRecordComment({recordId:record.id}).then((res:any)=>{
+      setComments(res.result);
+    })
   }
 
   // 删除一条记录
@@ -67,7 +76,6 @@ export default(props:RecordDocumentProps)=>{
       ...data
      }).then((res)=>{
       setRecordVisible(false);
-      // onQueryRecord();
       props.onQueryRecord();
     })
   }
@@ -95,12 +103,23 @@ export default(props:RecordDocumentProps)=>{
     });
   }
 
+  // 添加评论
+  const onAddRecordComment =()=>{
+    addRecordComment({
+      recordId:record.id,
+      "imgs":["1.jpg","2.jpg","3.jpg"],
+      description
+    }).then(res=>{
+      console.log(res);
+      onQueryRecord();
+    })
+  }
+
   return (
     <>
     <div>
        <div className="projectDetailNav">
         <div className="creatTime">{ moment(parseInt(record.tmCreate)).format("YYYY:MM:DD hh:ss:mm")}</div>
-        {/* moment(projectDetail.tmCreate).format("YYYY:MM:DD hh:ss:mm") */}
         <ul className="favorableComments">
           <Rate count={3} value={record.level}/>
         </ul>
@@ -118,8 +137,8 @@ export default(props:RecordDocumentProps)=>{
       <div className="projectBottom">
         <ul className="buildingInformation">
           {
-            tags.map(i=>{
-              return  <span className="tags">{i}</span>
+            record.tags.map(i=>{
+              return <Tag>{i}</Tag> 
             })
           }
         </ul>
@@ -131,13 +150,24 @@ export default(props:RecordDocumentProps)=>{
         </div>
       </div>
       <p className="solid"></p>
-    </div>
-    <div>
-      {
-        // comments.map(item=>{
-        //   return <Comment Comment={item} />
-        // })
-      }
+      <ul className="comment">
+        <Search
+          allowClear
+          enterButton="添加评论"
+          size="middle"
+          onSearch={onAddRecordComment}
+          style={{
+            margin:"10px 0"
+          }}
+        />
+        <p>最新追评</p>
+        {
+          comments?.map((item)=>{
+            return <Comment comment={item} key={item.id}/>
+          })
+        }
+      </ul>
+     
     </div>
    
     <Modal

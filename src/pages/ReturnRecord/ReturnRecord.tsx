@@ -37,7 +37,7 @@ const ReturnRecord = (props:any) =>{
       addRecordProject(data).then(res=>{
         setVisible(false);
         onQueryRecordProject();
-        form.resetFields(data);
+        form.resetFields();
       })
   }
 

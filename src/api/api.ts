@@ -29,5 +29,17 @@ export function deleteRecord(params:any):Promise<Response> {
   return request.post('/api/deleteRecord',params)
 }
 
+export function queryRecordComment(params:any):Promise<Response> {
+  return request.post('/api/queryRecordComment',params)
+}
+
+export function addRecordComment(params:any):Promise<Response> {
+  return request.post('/api/addRecordComment',params)
+}
+
+export function deleteRecordComment(params:any):Promise<Response> {
+  return request.post('/api/deleteRecordComment',params)
+}
+
 
 

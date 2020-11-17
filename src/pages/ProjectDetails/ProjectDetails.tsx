@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload } from 'antd';
 import './ProjectDetails.less';
 import Record from '../../components/Record/Record';
-import { addRecord, queryRecord } from '../../api/api';
+import { addRecord, queryRecord} from '../../api/api';
 import TextArea from 'antd/lib/input/TextArea';
 
 const { RangePicker } = DatePicker;
@@ -13,15 +13,14 @@ const {Search} = Input;
 export default (props:any) =>{
   // 获取路由动态参数
   console.log(props.match.params);
-  const name ="rboin";
 
   const [visible,setVisible] = useState(false);
   const [recordDetails,setRecordDetails] =useState<Array<IRecordDocument>>();
   const [reacordVisible,setRecordVisible] = useState(false);
   const [rate,setRate] = useState(0);
-  let [tags,setTags] = useState<Array<any>>([]);
+  const [tags,setTags] = useState<Array<any>>([]);
   const [fileList,setFileList] = useState<Array<any>>([])
-  const [comments,setComments]= useState<Array<IRecordCommentDocument>>([]);
+
 
   useEffect(()=>{
     onQueryRecord();
@@ -133,6 +132,7 @@ export default (props:any) =>{
           return <Record onQueryRecord={onQueryRecord} record={item} key={item.id}/>
         })
       }
+
     </div>
 
     <Modal

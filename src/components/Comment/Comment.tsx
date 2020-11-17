@@ -1,33 +1,42 @@
-import { Button } from 'antd';
 import React, { useState } from 'react';
+import { Button } from 'antd';
+import moment from 'moment';
+import './Comment.less';
+import { deleteRecordComment } from '../../api/api';
 
 interface CommentProps{
-  Comment:IRecordCommentDocument;
+  comment:IRecordCommentDocument
 }
 
-export default (props:CommentProps)=>{
+export default(props:CommentProps)=>{
 
-  const {Comment} = props;
-  const [imgs,setImags] = useState<Array<any>>([])
+  const {comment} = props;
+  
+  const [imgs,setImags] = useState<Array<any>>([]);
+
+  const onDeletComment =()=>{
+    deleteRecordComment({
+      id:comment.id
+    }).then((res)=>{
+      console.log(res)
+    })
+  }
 
   return (
-    <>
-      <div>
-        <div>
-          <span>最新追评</span>
-          <span>{Comment.tmCreate}</span>
-        </div>
-        <p>{Comment.description}</p>
-        <div>
-          {
-            imgs.map(item=>{
-              return <img src={item} alt=""/>
-            })
-          }
-        </div>
-        <Button>删除</Button>
-      </div>
-    </>
-  )
 
+    <li>
+      <div className="commentHeart">{moment(parseInt(comment.tmCreate)).format("YYYY:MM:DD hh:mm:ss") }</div>
+      <div className="discription">{comment.description}</div>
+      <div>
+        {
+          imgs.map(item=>{
+            return <img src={item} alt=""/>
+          })
+        }
+      </div>
+      <div className="btn">
+        <Button type="link" onClick={onDeletComment}>删除</Button>
+      </div>
+    </li>
+  )
 }
