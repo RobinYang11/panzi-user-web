@@ -52,6 +52,7 @@ interface IRecordProject {
   isDeleted: number;
   logo?:string;
 }
+
 // 用户实体
 interface IUser {
   id?: number;
@@ -173,11 +174,92 @@ interface IRecordCommentDocument{
 
   id: string ;
   //返场记录id
-  recordId:String ;
+  recordId:string ;
   //追评问题
-  description: String ;
+  description: string ;
   //问题图片
   imgs:Array<any> ;
   //追评时间
   tmCreate: string ;
+}
+
+
+/**
+ * 返场记录多条件查询接口的请求对象
+ */
+interface  IRecordFilterReq {
+
+    /**
+     * 团队id（与项目id并存）
+     */
+    teamId :number ;
+
+    /**
+     * 项目id（必须）
+     */
+    project:number ;
+
+    /**
+     * 个人版巡场记录的项目id
+     */
+    recordProjectId:number;
+
+    /**
+     * 时间周期值查询：
+     * 按固定时间查询：一周内 || 两周内 || 一个月内 || 两个月内
+     */
+    tmPeriod:string ;
+
+    /**
+     * 时间查询：
+     * 按起止时间条件查询：起始时间
+     */
+    tmStart :string ;
+
+    /**
+     * 时间查询：
+     * 按起止时间条件查询：截至时间
+     */
+    tmEnd :string ;
+
+    /**
+     * 按专业筛选（返场标准动作一级分类）
+     */
+    major:Array<string> ;
+
+    /**
+     * 搜索的关键字
+     */
+    keyword :string ;
+
+    /**
+     * 整改状态： 未处理 1 || 已处理 2
+     */
+    status :number ;
+
+    /**
+     * 严重等级 严重 1 || 重要 2 || 一般 3
+     */
+    level:Array<number>;
+
+    /**
+     * 是否有追评： 1 有追评 || 2 无追评
+     */
+    hasComment:Array<number>;
+
+    /**
+     * 身份： 自己 1 || 所有人 2
+     */
+    isSelf :number ;
+
+    /**
+     * 发送到邮箱地址
+     */
+    email: string ;
+    //导出文件格式: 传参值为 word || excel || ppt
+    exportType:Array<string> ;
+    //排序类型: 1 最近编辑时间 || 2 创建时间最近 || 3 创建时间最远 || 4 整改时间最近 || 5 严重程度最高 || 6 追评时间最近
+    sortType: number ;
+    // ppt模板实体
+    pptDocument: PptDocument ;    
 }

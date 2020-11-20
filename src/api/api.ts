@@ -41,5 +41,8 @@ export function deleteRecordComment(params:any):Promise<Response> {
   return request.post('/api/deleteRecordComment',params)
 }
 
+export function exportRecord(params:any):Promise<Response> {
+  return request.post('/api/exportRecord',params)
+}
 
 

@@ -28,6 +28,7 @@ export default(props:RecordDocumentProps)=>{
   const [comments,setComments]= useState<Array<IRecordCommentDocument>>();
   const [description,setDescription] = useState('');
 
+  const id = record.id;
 
   useEffect(()=>{
     onQueryRecord();
@@ -104,14 +105,16 @@ export default(props:RecordDocumentProps)=>{
   }
 
   // 添加评论
-  const onAddRecordComment =()=>{
+  const onAddRecordComment =(value:any)=>{
+    console.log(value);
     addRecordComment({
       recordId:record.id,
-      "imgs":["1.jpg","2.jpg","3.jpg"],
-      description
+      // imgs:comment.imgs,
+      description:description,
     }).then(res=>{
       console.log(res);
-      onQueryRecord();
+      setDescription(value);
+      onQueryRecordComment();
     })
   }
 
@@ -121,7 +124,7 @@ export default(props:RecordDocumentProps)=>{
        <div className="projectDetailNav">
         <div className="creatTime">{ moment(parseInt(record.tmCreate)).format("YYYY:MM:DD hh:ss:mm")}</div>
         <ul className="favorableComments">
-          <Rate count={3} value={record.level}/>
+          <Rate count={3} value={record.level} style={{color:"red"}}/>
         </ul>
       </div>
       <div className="content">
@@ -150,24 +153,27 @@ export default(props:RecordDocumentProps)=>{
         </div>
       </div>
       <p className="solid"></p>
+      <Search
+        allowClear
+        enterButton="添加评论"
+        size="middle"
+        value={description}
+        onSearch={onAddRecordComment}
+        onChange={(e:any)=>{
+          setDescription(e.target.value);
+        }}
+        style={{
+          margin:"10px 0"
+        }}
+      />
       <ul className="comment">
-        <Search
-          allowClear
-          enterButton="添加评论"
-          size="middle"
-          onSearch={onAddRecordComment}
-          style={{
-            margin:"10px 0"
-          }}
-        />
-        <p>最新追评</p>
+        <p>最新追评</p> 
         {
           comments?.map((item)=>{
-            return <Comment comment={item} key={item.id}/>
+            return <Comment comment={item} key={item.id} id={id} onQueryRecordComment={()=>{onQueryRecordComment()}}/>
           })
         }
       </ul>
-     
     </div>
    
     <Modal
@@ -202,7 +208,7 @@ export default(props:RecordDocumentProps)=>{
          <p className="tag">标签</p>
         {
           tags.map(item=>{
-            return <span className="tags">{item}</span>
+            return <Tag>{item}</Tag>  
           })
         }
           <Search
@@ -216,7 +222,7 @@ export default(props:RecordDocumentProps)=>{
         <Form.Item
           name="level"
         >
-           <Rate count={3} onChange={onChangeRate} value={rate}/>
+           <Rate count={3} onChange={onChangeRate} value={rate} style={{color:"red"}}/>
         </Form.Item>
         <Form.Item
           className="submit"

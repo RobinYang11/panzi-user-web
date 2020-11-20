@@ -5,8 +5,7 @@ import { Popover} from 'antd';
 import '../Dropdown/Dropdown'
 import Dropdown from '../Dropdown/Dropdown';
 import DropMenus from '../../DropMenus';
-import panzi from '../../assets/panzi.png';
-
+import q from '../../assets/q.png';
 
 export default () => {
   
@@ -15,7 +14,7 @@ export default () => {
         <div className="header-main">
           <div className="logo">
              <a href="">
-               <img src={panzi} alt="盘子"/>
+               <img src={q} alt="盘子"/>
              </a>
           </div>
           <div className="header-nav-right">

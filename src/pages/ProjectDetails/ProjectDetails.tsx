@@ -1,18 +1,23 @@
-import { FilterOutlined,  PlusOutlined, SortAscendingOutlined } from '@ant-design/icons';
+import { FilterOutlined,  PlusCircleOutlined,  PlusOutlined, SortAscendingOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload } from 'antd';
+import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload, Tag, Table, Checkbox } from 'antd';
 import './ProjectDetails.less';
 import Record from '../../components/Record/Record';
-import { addRecord, queryRecord} from '../../api/api';
+import { addRecord, exportRecord, queryRecord} from '../../api/api';
 import TextArea from 'antd/lib/input/TextArea';
 
 const { RangePicker } = DatePicker;
 const {Search} = Input;
 
+interface IexportProps{
+  filtContent:IRecordFilterReq
+}
 
-export default (props:any) =>{
+export default (props:IexportProps) =>{
   // 获取路由动态参数
-  console.log(props.match.params);
+  // console.log(props.match.params);
+
+  const {filtContent}=props;
 
   const [visible,setVisible] = useState(false);
   const [recordDetails,setRecordDetails] =useState<Array<IRecordDocument>>();
@@ -20,21 +25,40 @@ export default (props:any) =>{
   const [rate,setRate] = useState(0);
   const [tags,setTags] = useState<Array<any>>([]);
   const [fileList,setFileList] = useState<Array<any>>([])
+  const [exports,setExports] = useState(false);
 
+  const [data,setData] = useState([
+    {
+      key: '1',
+      name: '金地集团模板1',
+      img:"https://livewebbs2.msstatic.com/home_recommend_live_web_1605148453.jpg"
+    },
+    {
+      key: '2',
+      name: '金地集团模板2',
+      img:"https://livewebbs2.msstatic.com/home_recommend_live_web_1605148453.jpg"
+    },
+    {
+      key: '3',
+      name: '金地集团模板3',
+      img:"https://livewebbs2.msstatic.com/home_recommend_live_web_1605148453.jpg"
+    },
+  ])
+
+  const [level,setLevel] = useState <Array<number>>([]);
+  const [hasComment,setHasComment] = useState<Array<any>>([]);
+  const [exportType,setExportType] = useState<Array<any>>([]);
+  const [tmPeriod,setTmPeriod] = useState('');
 
   useEffect(()=>{
-    onQueryRecord();
+    onQueryRecord({recordProjectId:3});
   },[])
 
-  const onQueryRecord =()=>{
-    queryRecord({recordProjectId:3}).then((res:any)=>{
-      setRecordDetails(res.result);
-    })
-  }
 
   const handleCancel = ()=>{
     setVisible(false);
     setRecordVisible(false);
+    setExports(false);
   }
 
   const showModal = () =>{
@@ -59,7 +83,7 @@ export default (props:any) =>{
     }).then((res)=>{
       console.log(res)
       setRecordVisible(false);
-      onQueryRecord();
+      onQueryRecord({recordProjectId:3});
     })
   }
 
@@ -77,6 +101,62 @@ export default (props:any) =>{
     console.log(value);
   }
 
+  const showExportModal =()=>{
+    setExports(true);
+  }
+
+  // 导出内容
+  const onExportFilter=(data:any)=>{
+    console.log(data);
+    exportRecord({
+      // "teamId":filtContent.teamId,
+      // "project":filtContent.project,
+      "tmPeriod":tmPeriod,
+      "status":1,
+      "level":level,
+      "isSelf":1,
+      "exportType":exportType,
+      "email":"zhnv76f@dingtalk.com",
+      ...data
+    }).then(res=>{
+      console.log(res);
+      // setHasComment(filtContent.hasComment);
+      // setLevel(filtContent.level);
+      setExportType(filtContent.exportType);
+    })
+  }
+
+  // 选择严重程度
+  const onAddLevel =(value:any)=>{
+    console.log(value);
+    level.push(value);
+    setLevel([...level]);
+  }
+
+  // 导出文件格式
+  const onExportTypeChange =(value:any)=>{
+    console.log(value);
+    exportType.push(value);
+    setExportType([...exportType]);
+  }
+
+  // 追评
+  const onChangeHasComment =(value:any)=>{
+    console.log(value);
+    hasComment.push(value);
+    setHasComment([...hasComment]);
+  }
+
+  // 导出方式
+  // const onChangeExportMode =(value:any)=>{
+  //   console.log(value);
+  //   exportMode.push(value);
+  //   setExportMode([...exportMode]);
+  // }
+
+  const onChangeTmPeriod =(value:any)=>{
+    setTmPeriod(value);
+  }
 
   const content = (
     <div>
@@ -93,6 +173,44 @@ export default (props:any) =>{
     </div>
   );
 
+  const radioStyle = {
+    display: 'block',
+    height: '30px',
+    lineHeight: '30px',
+  };
+
+  const columns = [
+    {
+      title: '盘子默认模板',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: '图片',
+      dataIndex: 'img',
+      key: 'img',
+      render:()=>{ return <img src="https://livewebbs2.msstatic.com/home_recommend_live_web_1605148453.jpg" style={{width:100}}/>}
+    },
+  ];
+
+
+  // 查询Record
+  const onQueryRecord =(params:any)=>{
+    queryRecord(params).then((res:any)=>{
+      setRecordDetails(res.result);
+    })
+  }
+
+  // 内容筛选
+  const onQueryRecords =(data:any)=>{
+    console.log(data)
+    onQueryRecord({
+      "recordProjectId":3,
+      "tmStart":"1604629213601",
+      "tmEnd":"1605261538169",
+      ...data
+    })
+  }
 
   return(
     <>
@@ -103,9 +221,7 @@ export default (props:any) =>{
                <Button onClick={showRecordModal}>新建</Button>
             </li>
             <li>
-              <a href={"#/test6"}>
-                <Button>导出</Button>
-              </a>
+                <Button onClick={showExportModal}>导出</Button>
             </li>
             <li>
               <a href="">
@@ -142,12 +258,14 @@ export default (props:any) =>{
       footer={null}
       className="modal"
       >
-        <Form>
+        <Form
+          onFinish={onQueryRecords}
+        >
           <p>创建时间</p>
           <Form.Item
-            name="createTime"
+            name="tmPeriod"
           >
-            <Radio.Group name="radiogroup" defaultValue={1}>
+            <Radio.Group>
               <Radio value={1}>今日</Radio>
               <Radio value={2}>一周内</Radio>
               <Radio value={3}>一个月内</Radio>
@@ -156,23 +274,29 @@ export default (props:any) =>{
             </Radio.Group>
           </Form.Item>
           <p>严重程度</p>
-          <Form.Item
-            name="severity"
-          >
-            <Radio.Group name="radiogroup" defaultValue={1}>
-              <Radio value={1}>一般</Radio>
-              <Radio value={2}>重要</Radio>
-              <Radio value={3}>严重</Radio>
-            </Radio.Group>
+          <Form.Item name="level">
+            <Checkbox.Group>
+                <Checkbox value={1}>
+                  一般
+                </Checkbox>
+                <Checkbox value={2}>
+                  重要
+                </Checkbox>
+                <Checkbox value={3}>
+                  严重
+                </Checkbox>
+            </Checkbox.Group>
           </Form.Item>
           <p>追评</p>
-          <Form.Item
-            name="review"
-          >
-            <Radio.Group name="radiogroup" defaultValue={1}>
-              <Radio value={1}>有追评</Radio>
-              <Radio value={2}>没有追评</Radio>
-            </Radio.Group>
+          <Form.Item name="hasComment">
+            <Checkbox.Group>
+                <Checkbox value={1}>
+                  有追评
+                </Checkbox>
+                <Checkbox value={2}>
+                  无追评
+                </Checkbox>
+            </Checkbox.Group>
           </Form.Item>
           <Form.Item
             name="exportTemplate"
@@ -218,7 +342,7 @@ export default (props:any) =>{
            <p className="tag">标签</p>
           {
             tags.map(item=>{
-              return <span className="tags">{item}</span>
+              return <Tag>{item}</Tag>  
             })
           }
             <Search
@@ -232,7 +356,7 @@ export default (props:any) =>{
           <Form.Item
             name="level"
           >
-             <Rate count={3} onChange={onChangeRate} value={rate}/>
+             <Rate count={3} onChange={onChangeRate} value={rate} style={{color:"red"}}/>
           </Form.Item>
           <Form.Item
             className="submit"
@@ -244,6 +368,97 @@ export default (props:any) =>{
           </Form.Item>
         </Form>
       </Modal>
+
+    <Modal
+       visible={exports}
+       onCancel={handleCancel}
+       footer={null}
+       className="RecordModal"
+    >
+      <div className="exportContent">
+        <div className="exportHeader">
+          <h3>导出内容</h3>
+        </div>
+        <Form
+          onFinish={onExportFilter}
+        >
+          <p>创建时间</p>
+          <Form.Item
+            name="tmPeriod"
+          >
+            <Radio.Group>
+              <Radio value={1}>今日</Radio>
+              <Radio value={2}>一周内</Radio>
+              <Radio value={3}>一个月内</Radio>
+              <Radio value={4}>自定义</Radio>
+              <RangePicker />
+            </Radio.Group>
+          </Form.Item>
+          <p>严重程度</p>
+          <Form.Item name="level">
+            <Checkbox.Group>
+                <Checkbox value={1}>
+                  一般
+                </Checkbox>
+                <Checkbox value={2}>
+                  重要
+                </Checkbox>
+                <Checkbox value={3}>
+                  严重
+                </Checkbox>
+            </Checkbox.Group>
+          </Form.Item>
+          <p>追评</p>
+          <Form.Item name="hasComment">
+            <Checkbox.Group>
+                <Checkbox value={1}>
+                  有追评
+                </Checkbox>
+                <Checkbox value={2}>
+                  无追评
+                </Checkbox>
+            </Checkbox.Group>
+          </Form.Item>
+          <p>导出方式</p>
+          <div>
+            {/* <Checkbox.Group options={exportMode} defaultValue={['下载到本地']} onChange={onChangeExportMode} /> */}
+            <Input placeholder="请填写邮箱地址"/>
+          </div>
+          <p>导出文件格式</p>
+          <div>
+            <Checkbox.Group options={exportType} defaultValue={['Word']} onChange={onExportTypeChange} />
+            <Radio.Group name="radiogroup" defaultValue={1}>
+              <Radio value={1}>横版</Radio>
+              <Radio value={2}>竖版</Radio>
+            </Radio.Group>
+          </div>
+          <div className="exportTemplate">
+            <p className="exportLeft">导出模板</p>
+            <div className="exportRight">
+              <PlusCircleOutlined />
+              <span>新增</span>
+            </div>
+          </div>
+          {/* <Form.Item
+            name="exportTemplate"
+            rules={[{ required: true, message: '请导出模板' }]}
+          >
+            <Table
+              columns={columns}
+              dataSource={data}
+            />
+          </Form.Item> */}
+          <Form.Item
+            className="submit"
+          >
+            <Button htmlType="reset">取消</Button>
+            <Button type="primary" htmlType="submit" className="sure">
+              确定
+            </Button>
+          </Form.Item>
+        </Form>
+        </div>
+    </Modal>
     </>
   )
 }
