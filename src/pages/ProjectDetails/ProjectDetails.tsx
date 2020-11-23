@@ -5,6 +5,7 @@ import './ProjectDetails.less';
 import Record from '../../components/Record/Record';
 import { addRecord, exportRecord, queryRecord} from '../../api/api';
 import TextArea from 'antd/lib/input/TextArea';
+import { useForm } from 'antd/lib/form/Form';
 
 const { RangePicker } = DatePicker;
 const {Search} = Input;
@@ -18,6 +19,7 @@ export default (props:IexportProps) =>{
   // console.log(props.match.params);
 
   const {filtContent}=props;
+  const [form] = useForm();
 
   const [visible,setVisible] = useState(false);
   const [recordDetails,setRecordDetails] =useState<Array<IRecordDocument>>();
@@ -56,7 +58,8 @@ export default (props:IexportProps) =>{
 
 
   const handleCancel = ()=>{
-    setVisible(false);
+    form.resetFields();
+    // setVisible(false);
     setRecordVisible(false);
     setExports(false);
   }
@@ -205,11 +208,10 @@ export default (props:IexportProps) =>{
   const onQueryRecords =(data:any)=>{
     console.log(data)
     onQueryRecord({
-      "recordProjectId":3,
-      "tmStart":"1604629213601",
-      "tmEnd":"1605261538169",
+      recordProjectId:3,
       ...data
     })
+    setVisible(false);
   }
 
   return(
@@ -224,9 +226,7 @@ export default (props:IexportProps) =>{
                 <Button onClick={showExportModal}>导出</Button>
             </li>
             <li>
-              <a href="">
-                <Button>数据分析</Button>
-              </a>
+                <Button onClick={showExportModal}>数据分析</Button>
             </li>
         </ul>
         <ul className="projectDetailRight">
@@ -245,10 +245,9 @@ export default (props:IexportProps) =>{
       </div>
       {
         recordDetails?.map(item=>{
-          return <Record onQueryRecord={onQueryRecord} record={item} key={item.id}/>
+          return <Record onQueryRecord={()=>{onQueryRecord({recordProjectId:3})}} record={item} key={item.id}/>
         })
       }
-
     </div>
 
     <Modal
@@ -260,19 +259,20 @@ export default (props:IexportProps) =>{
       >
         <Form
           onFinish={onQueryRecords}
+          form={form}
         >
-          <p>创建时间</p>
+          {/* <p>创建时间</p>
           <Form.Item
             name="tmPeriod"
           >
             <Radio.Group>
-              <Radio value={1}>今日</Radio>
-              <Radio value={2}>一周内</Radio>
-              <Radio value={3}>一个月内</Radio>
-              <Radio value={4}>自定义</Radio>
+              <Radio value="a">今日</Radio>
+              <Radio value="b">一周内</Radio>
+              <Radio value="c">一个月内</Radio>
+              <Radio value="d">自定义</Radio>
               <RangePicker />
             </Radio.Group>
-          </Form.Item>
+          </Form.Item> */}
           <p>严重程度</p>
           <Form.Item name="level">
             <Checkbox.Group>
@@ -299,10 +299,9 @@ export default (props:IexportProps) =>{
             </Checkbox.Group>
           </Form.Item>
           <Form.Item
-            name="exportTemplate"
             className="submit"
           >
-            <Button onClick={handleCancel}>取消</Button>
+            <Button onClick={handleCancel}>重置</Button>
             <Button type="primary" htmlType="submit" className="sure">
               确定
             </Button>

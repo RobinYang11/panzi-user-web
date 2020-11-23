@@ -1,4 +1,4 @@
-import { DatabaseOutlined,  EditOutlined, FileUnknownOutlined,  HistoryOutlined,  Loading3QuartersOutlined } from "@ant-design/icons";
+import { DatabaseOutlined,  FileUnknownOutlined,  HistoryOutlined,  Loading3QuartersOutlined } from "@ant-design/icons";
 import React from "react";
 import Defect from "./pages/Defect/Defect";
 import Drawing from "./pages/Drawing/Drawing";
@@ -7,6 +7,7 @@ import ReturnRecord from "./pages/ReturnRecord/ReturnRecord";
 import ProjectDetails from "./pages/ProjectDetails/ProjectDetails";
 import ExportProject from "./pages/ExportContent/ExportContent";
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default [
   {
     name:"返场记录",

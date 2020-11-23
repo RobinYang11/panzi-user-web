@@ -20,6 +20,7 @@ const ReturnRecord = (props:any) =>{
 
   useEffect(()=>{
     onQueryRecordProject();
+    console.log(window.user.id)
   },[])
   
   const onQueryRecordProject = ()=>{

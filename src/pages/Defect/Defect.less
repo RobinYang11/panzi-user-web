@@ -1,0 +1,68 @@
+.headers {
+  overflow: hidden;
+
+  ul {
+    overflow: hidden;
+    float   : left;
+
+    li {
+      float       : left;
+      margin-right: 10px;
+
+      a {
+        font-size: 14px;
+        color    : #000;
+
+        &:hover {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .search {
+    float: right;
+  }
+}
+
+.defectMain {
+  margin-top: 20px;
+
+  li {
+    border-bottom: 1px solid rgb(201, 196, 196);
+    cursor: pointer;
+
+    .content {
+      margin: 10px 0px;
+      font-size : 14px;
+    }
+
+    .bottom{
+      position: relative;
+      bottom: 0;
+
+      .tags{
+        float: left;
+
+        span{
+          margin-right: 5px;
+        }
+      }
+
+      span{
+        float: right;
+        margin-right: 10px;
+      }
+    }
+  }
+
+}
+
+.modal{
+  width: 800px;
+  text-align: center;
+
+  p{
+    margin-top: 10px;
+  }
+}

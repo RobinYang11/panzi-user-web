@@ -21,9 +21,9 @@ export default(props:RecordDocumentProps)=>{
   const [form] = useForm();
   const [reacordVisible,setRecordVisible] = useState(false);
   const [tags,setTags] = useState<Array<any>>([]);
-  const [fileList,setFileList] = useState<Array<any>>([])
-  const [recordDetails,setRecordDetails] =useState<Array<IRecordDocument>>();
-  const [imgs,setImage] =useState<Array<any>>([])
+  const [fileList] = useState<Array<any>>([])
+  const [,setRecordDetails] =useState<Array<IRecordDocument>>();
+  const [imgs] =useState<Array<any>>([])
   const [rate,setRate] = useState(0);
   const [comments,setComments]= useState<Array<IRecordCommentDocument>>();
   const [description,setDescription] = useState('');
@@ -48,7 +48,7 @@ export default(props:RecordDocumentProps)=>{
   // 删除一条记录
   function confirm(id:number) {
       message.info('已成功删除');
-      deleteRecord({id}).then((res)=>{
+      deleteRecord({id}).then(()=>{
       props.onQueryRecord();
     })
   }
@@ -57,7 +57,7 @@ export default(props:RecordDocumentProps)=>{
     setRecordVisible(false);
   }
 
-  const handleChange =(value:any)=>{
+  const handleChange =()=>{
     // console.log(value);
   }
 
@@ -75,7 +75,7 @@ export default(props:RecordDocumentProps)=>{
       "tags":tags,
       "imgs":imgs,
       ...data
-     }).then((res)=>{
+     }).then(()=>{
       setRecordVisible(false);
       props.onQueryRecord();
     })
