@@ -45,4 +45,8 @@ export function exportRecord(params:any):Promise<Response> {
   return request.post('/api/exportRecord',params)
 }
 
+export function queryLatestTags(params:any):Promise<Response> {
+  return request.post('/api/queryLatestTags',params)
+}
+
 

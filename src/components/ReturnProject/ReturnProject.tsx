@@ -8,6 +8,7 @@ interface IReturnProps{
   onQueryRecordProject:()=>void;
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (props:IReturnProps)=>{
   const [form] = Form.useForm();
   const { project } = props;

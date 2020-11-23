@@ -14,6 +14,7 @@ interface RecordDocumentProps{
   onQueryRecord:()=>void
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default(props:RecordDocumentProps)=>{
    
   const {record} = props;
@@ -95,12 +96,13 @@ export default(props:RecordDocumentProps)=>{
   const showRecordModal =()=>{
     setRecordVisible(true);
     setTags(record.tags);
+  
     form.setFieldsValue({
       id:record.id,
       description:record.description,
-      level:2,
-      imgs:imgs,
-      tags:tags
+      level:record.level,
+      imgs:record.imgs,
+      tags:record.tags
     });
   }
 

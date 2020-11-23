@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload, Tag, Table, Checkbox } from 'antd';
 import './ProjectDetails.less';
 import Record from '../../components/Record/Record';
-import { addRecord, exportRecord, queryRecord} from '../../api/api';
+import { addRecord, exportRecord, queryLatestTags, queryRecord} from '../../api/api';
 import TextArea from 'antd/lib/input/TextArea';
 import { useForm } from 'antd/lib/form/Form';
 
@@ -14,6 +14,7 @@ interface IexportProps{
   filtContent:IRecordFilterReq
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (props:IexportProps) =>{
   // 获取路由动态参数
   // console.log(props.match.params);
@@ -22,7 +23,7 @@ export default (props:IexportProps) =>{
   const [form] = useForm();
 
   const [visible,setVisible] = useState(false);
-  const [recordDetails,setRecordDetails] =useState<Array<IRecordDocument>>();
+  const [record,setRecordDetails] =useState<Array<IRecordDocument>>();
   const [reacordVisible,setRecordVisible] = useState(false);
   const [rate,setRate] = useState(0);
   const [tags,setTags] = useState<Array<any>>([]);
@@ -52,6 +53,8 @@ export default (props:IexportProps) =>{
   const [exportType,setExportType] = useState<Array<any>>([]);
   const [tmPeriod,setTmPeriod] = useState('');
 
+  const [keyword,setKeyword] =useState("");
+
   useEffect(()=>{
     onQueryRecord({recordProjectId:3});
   },[])
@@ -59,7 +62,7 @@ export default (props:IexportProps) =>{
 
   const handleCancel = ()=>{
     form.resetFields();
-    // setVisible(false);
+    setVisible(false);
     setRecordVisible(false);
     setExports(false);
   }
@@ -68,10 +71,7 @@ export default (props:IexportProps) =>{
     setVisible(true);
   }
 
-  const onSearch =(e:any)=>{
-    console.log(e)
-  }
-
+ 
   const showRecordModal =()=>{
     setRecordVisible(true)
   }
@@ -88,16 +88,20 @@ export default (props:IexportProps) =>{
       setRecordVisible(false);
       onQueryRecord({recordProjectId:3});
     })
+
+    
   }
 
   const onChangeRate =(value:number)=>{
     setRate(value);
   }
 
+  // 添加tags
   const onAddTag =(value:any)=>{
     tags.push(value);
     // setTags(tags); 这种事错误的，react 任务 tags 指向原来的那个tags，是同一个对象，没有变化，所以不重新渲染,
     setTags([...tags]);
+   
   }
 
   const handleChange =(value:any)=>{
@@ -161,8 +165,35 @@ export default (props:IexportProps) =>{
     setTmPeriod(value);
   }
 
+  // 查询Record
+  const onQueryRecord =(params:any)=>{
+    queryRecord(params).then((res:any)=>{
+      setRecordDetails(res.result);
+    })
+  }
+
+  // 内容筛选
+  const onQueryRecords =(data:any)=>{
+    console.log(data)
+    onQueryRecord({
+      recordProjectId:3,
+      ...data
+    })
+    setVisible(false);
+  }
+
+  // 根据关键字搜索
+  const onSearch =(values:any)=>{
+    setKeyword(values)
+    onQueryRecord({
+      keyword:keyword,
+      recordProjectId:3,
+    })
+  }
+
   const content = (
     <div>
+      <p>默认排序</p>
       <p>创建时间最近</p>
       <p>追评时间最近</p>
       <p>严重程度最近</p>
@@ -197,23 +228,6 @@ export default (props:IexportProps) =>{
   ];
 
 
-  // 查询Record
-  const onQueryRecord =(params:any)=>{
-    queryRecord(params).then((res:any)=>{
-      setRecordDetails(res.result);
-    })
-  }
-
-  // 内容筛选
-  const onQueryRecords =(data:any)=>{
-    console.log(data)
-    onQueryRecord({
-      recordProjectId:3,
-      ...data
-    })
-    setVisible(false);
-  }
-
   return(
     <>
     <div className="projectDetail">
@@ -231,7 +245,12 @@ export default (props:IexportProps) =>{
         </ul>
         <ul className="projectDetailRight">
           <li>
-            <Search placeholder="搜索" onSearch={onSearch} style={{ width: 100 }} />
+            <Search 
+             placeholder="搜索"
+             onSearch={onSearch}
+             onChange={e=>{ setKeyword(e.target.value)}}
+             value={keyword}
+              />
           </li>
           <li>
             <Popover placement="bottom" title="内容排序" content={content} trigger="click">
@@ -244,12 +263,13 @@ export default (props:IexportProps) =>{
         </ul>
       </div>
       {
-        recordDetails?.map(item=>{
+        record?.map(item=>{
           return <Record onQueryRecord={()=>{onQueryRecord({recordProjectId:3})}} record={item} key={item.id}/>
         })
       }
     </div>
 
+    {/* 筛选记录 */}
     <Modal
       title="筛选内容"
       visible={visible}
@@ -261,8 +281,8 @@ export default (props:IexportProps) =>{
           onFinish={onQueryRecords}
           form={form}
         >
-          {/* <p>创建时间</p>
-          <Form.Item
+          <p>创建时间</p>
+          {/* <Form.Item
             name="tmPeriod"
           >
             <Radio.Group>
@@ -309,6 +329,7 @@ export default (props:IexportProps) =>{
         </Form>
       </Modal>
 
+    {/* 添加记录 */}
     <Modal
         visible={reacordVisible}
         onCancel={handleCancel}
@@ -368,6 +389,7 @@ export default (props:IexportProps) =>{
         </Form>
       </Modal>
 
+    {/* 导出内容 */}
     <Modal
        visible={exports}
        onCancel={handleCancel}
