@@ -18,17 +18,15 @@ interface RecordDocumentProps{
 export default(props:RecordDocumentProps)=>{
    
   const {record} = props;
-
+  // debugger
   const [form] = useForm();
   const [reacordVisible,setRecordVisible] = useState(false);
   const [tags,setTags] = useState<Array<any>>([]);
-  const [fileList] = useState<Array<any>>([])
-  const [,setRecordDetails] =useState<Array<IRecordDocument>>();
-  const [imgs] =useState<Array<any>>([])
+  const [recordDetails,setRecordDetails] =useState<Array<IRecordDocument>>();
+  const [imgs,setImgs] =useState<Array<any>>([]);
   const [rate,setRate] = useState(0);
   const [comments,setComments]= useState<Array<IRecordCommentDocument>>();
   const [description,setDescription] = useState('');
-
   const id = record.id;
 
   useEffect(()=>{
@@ -56,10 +54,6 @@ export default(props:RecordDocumentProps)=>{
 
   const handleCancel = ()=>{
     setRecordVisible(false);
-  }
-
-  const handleChange =()=>{
-    // console.log(value);
   }
 
   const uploadButton = (
@@ -93,16 +87,22 @@ export default(props:RecordDocumentProps)=>{
     setTags([...tags]);
   }
 
+  const handleChange =(value:any)=>{
+    if(value.file.status==="done"){
+			imgs.push(value.file.response.result);
+			setImgs([...imgs]);
+		}
+  }
+
   const showRecordModal =()=>{
     setRecordVisible(true);
-    setTags(record.tags);
-  
+    setTags(record?.tags);
+    // debugger
+    setImgs(record?.imgs);
     form.setFieldsValue({
-      id:record.id,
-      description:record.description,
-      level:record.level,
-      imgs:record.imgs,
-      tags:record.tags
+      id:record?.id,
+      description:record?.description,
+      level:record?.level,
     });
   }
 
@@ -111,7 +111,6 @@ export default(props:RecordDocumentProps)=>{
     console.log(value);
     addRecordComment({
       recordId:record.id,
-      // imgs:comment.imgs,
       description:description,
     }).then(res=>{
       console.log(res);
@@ -133,11 +132,11 @@ export default(props:RecordDocumentProps)=>{
         {record.description}
       </div>
       <ul className="projectImg">
-        {
-          imgs.map(i=>{
-            return <li> <img src={i} alt=""/> </li>
-          })
-        }
+          {
+            record.imgs?.map(item=>{
+              return <img src={item} alt="图片" style={{width:100,marginRight:"10px"}}/>
+            })
+          }
       </ul>
       <div className="projectBottom">
         <ul className="buildingInformation">
@@ -192,14 +191,20 @@ export default(props:RecordDocumentProps)=>{
         onFinish={onFinish}
         form={form}
       >
-        <Upload
-          action="http://2081uw5545.iask.in:46203/api/uploadFile"
+        <p>问题照片</p> 
+        <div>
+  				{imgs.map(i=>{
+    					return <img src={i} style={{width:"100px",marginRight:"10px"}} />
+    				})}
+          <Upload
+          action="api/upload"
           listType="picture-card"
-          fileList={fileList}
+          showUploadList={false}
           onChange={handleChange}
-        >
-          {fileList.length >= 8 ? null : uploadButton}
+          >
+          {uploadButton}
         </Upload>
+  			</div>
         <p>问题描述</p>
         <Form.Item
           name="description"
@@ -208,11 +213,11 @@ export default(props:RecordDocumentProps)=>{
             <TextArea rows={4} placeholder="请描述下具体问题并提交建议" />
         </Form.Item>
          <p className="tag">标签</p>
-        {
-          tags.map(item=>{
-            return <Tag>{item}</Tag>  
-          })
-        }
+          {
+            tags.map(item=>{
+              return <Tag>{item}</Tag>  
+            })
+          }
           <Search
             className="search"
             placeholder="添加标签"

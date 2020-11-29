@@ -49,4 +49,17 @@ export function queryLatestTags(params:any):Promise<Response> {
   return request.post('/api/queryLatestTags',params)
 }
 
+export function addPpt(params:any):Promise<Response> {
+  return request.post('/api/addPpt',params)
+}
+
+export function deletePpt(params:any):Promise<Response> {
+  return request.post('/api/deletePpt',params)
+}
+
+export function queryPpt(params:any):Promise<Response> {
+  return request.post('/api/queryPpt',params)
+}
+
+
 

@@ -11,6 +11,7 @@ interface DropdownMenu {
   dropMenu:Array<DropdownProps>
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (props:DropdownMenu)=>{
 
   const {dropMenu} = props;
@@ -31,5 +32,4 @@ export default (props:DropdownMenu)=>{
       </ul>
     </div>
   )
-
 }

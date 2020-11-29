@@ -1,6 +1,7 @@
 import { LogoutOutlined, SettingOutlined, UserAddOutlined } from "@ant-design/icons";
 import React from "react";
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default [
   {
     text:"个人信息",

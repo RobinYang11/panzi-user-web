@@ -1,15 +1,24 @@
-import { FilterOutlined,  PlusCircleOutlined,  PlusOutlined, SortAscendingOutlined } from '@ant-design/icons';
+import { FilterOutlined,  SortAscendingOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload, Tag, Table, Checkbox } from 'antd';
+import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload, Tag, Table, Checkbox, Row, Select, Popconfirm } from 'antd';
 import './ProjectDetails.less';
 import Record from '../../components/Record/Record';
-import { addRecord, exportRecord, queryLatestTags, queryRecord} from '../../api/api';
+import { addPpt, addRecord, deletePpt, exportRecord, queryPpt, queryRecord} from '../../api/api';
 import TextArea from 'antd/lib/input/TextArea';
 import { useForm } from 'antd/lib/form/Form';
+import SortType from '../../components/SortType/SortType';
+import SortMenu from '../../SortMenu';
+import { UploadOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
 const {Search} = Input;
 
+let dates = new Date().setHours(0,0,0,0);
+
+let week = new Date();
+let weeks = week.setDate(week.getDate()-7); 
+
+var months = new Date().setMonth((new Date().getMonth()-1))
 interface IexportProps{
   filtContent:IRecordFilterReq
 }
@@ -27,42 +36,22 @@ export default (props:IexportProps) =>{
   const [reacordVisible,setRecordVisible] = useState(false);
   const [rate,setRate] = useState(0);
   const [tags,setTags] = useState<Array<any>>([]);
-  const [fileList,setFileList] = useState<Array<any>>([])
+  const [fileLists,setfileLists] = useState<Array<any>>([])
   const [exports,setExports] = useState(false);
-
-  const [data,setData] = useState([
-    {
-      key: '1',
-      name: '金地集团模板1',
-      img:"https://livewebbs2.msstatic.com/home_recommend_live_web_1605148453.jpg"
-    },
-    {
-      key: '2',
-      name: '金地集团模板2',
-      img:"https://livewebbs2.msstatic.com/home_recommend_live_web_1605148453.jpg"
-    },
-    {
-      key: '3',
-      name: '金地集团模板3',
-      img:"https://livewebbs2.msstatic.com/home_recommend_live_web_1605148453.jpg"
-    },
-  ])
-
-  const [level,setLevel] = useState <Array<number>>([]);
-  const [hasComment,setHasComment] = useState<Array<any>>([]);
+  const [sort,setSort] = useState(false);
+  const [data,setData] = useState([])
   const [exportType,setExportType] = useState<Array<any>>([]);
-  const [tmPeriod,setTmPeriod] = useState('');
-
   const [keyword,setKeyword] =useState("");
+  const [email,setEmail] = useState("");
 
   useEffect(()=>{
     onQueryRecord({recordProjectId:3});
   },[])
 
-
+ 
   const handleCancel = ()=>{
     form.resetFields();
-    setVisible(false);
+    setSort(false);
     setRecordVisible(false);
     setExports(false);
   }
@@ -70,8 +59,10 @@ export default (props:IexportProps) =>{
   const showModal = () =>{
     setVisible(true);
   }
+  const onCancel =()=>{
+    setVisible(false);
+  }
 
- 
   const showRecordModal =()=>{
     setRecordVisible(true)
   }
@@ -82,14 +73,13 @@ export default (props:IexportProps) =>{
       "recordProjectId":3,
       "tags":tags,
       "isStandard":2,
+      "imgs":fileLists,
       ...data,
     }).then((res)=>{
       console.log(res)
       setRecordVisible(false);
       onQueryRecord({recordProjectId:3});
     })
-
-    
   }
 
   const onChangeRate =(value:number)=>{
@@ -103,41 +93,12 @@ export default (props:IexportProps) =>{
     setTags([...tags]);
    
   }
-
+  // 添加图片
   const handleChange =(value:any)=>{
-    console.log(value);
-  }
-
-  const showExportModal =()=>{
-    setExports(true);
-  }
-
-  // 导出内容
-  const onExportFilter=(data:any)=>{
-    console.log(data);
-    exportRecord({
-      // "teamId":filtContent.teamId,
-      // "project":filtContent.project,
-      "tmPeriod":tmPeriod,
-      "status":1,
-      "level":level,
-      "isSelf":1,
-      "exportType":exportType,
-      "email":"zhnv76f@dingtalk.com",
-      ...data
-    }).then(res=>{
-      console.log(res);
-      // setHasComment(filtContent.hasComment);
-      // setLevel(filtContent.level);
-      setExportType(filtContent.exportType);
-    })
-  }
-
-  // 选择严重程度
-  const onAddLevel =(value:any)=>{
-    console.log(value);
-    level.push(value);
-    setLevel([...level]);
+    if(value.file.status==="done"){
+			fileLists.push(value.file.response.result);
+			setfileLists([...fileLists]);
+		}
   }
 
   // 导出文件格式
@@ -145,24 +106,6 @@ export default (props:IexportProps) =>{
     console.log(value);
     exportType.push(value);
     setExportType([...exportType]);
-  }
-
-  // 追评
-  const onChangeHasComment =(value:any)=>{
-    console.log(value);
-    hasComment.push(value);
-    setHasComment([...hasComment]);
-  }
-
-  // 导出方式
-  // const onChangeExportMode =(value:any)=>{
-  //   console.log(value);
-  //   exportMode.push(value);
-  //   setExportMode([...exportMode]);
-  // }
-
-  const onChangeTmPeriod =(value:any)=>{
-    setTmPeriod(value);
   }
 
   // 查询Record
@@ -191,42 +134,75 @@ export default (props:IexportProps) =>{
     })
   }
 
-  const content = (
-    <div>
-      <p>默认排序</p>
-      <p>创建时间最近</p>
-      <p>追评时间最近</p>
-      <p>严重程度最近</p>
-    </div>
-  );
+  const changeEmail =(e:any)=>{
+    setEmail(e.target.value);
+  }
 
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
+   // 导出内容
+   const onExportFilter=(data:any)=>{
+    console.log(data);
+   
+    exportRecord({
+      "recordProjectId":3,
+      "isHorizontal":1,
+      ...data
+    }).then(res=>{
+      console.log(res);
+    })
+  }
 
-  const radioStyle = {
-    display: 'block',
-    height: '30px',
-    lineHeight: '30px',
-  };
+  // 添加PPT
+  const onAddPpt =(value:any)=>{
+    console.log(value);
+  }
+
+  // 删除PPT
+  const onDeletePpt =()=>{
+    deletePpt({
+      "id":"5fb38782da818d7105d464ca"
+    }).then(res=>{
+    })
+  }
+
+ // 查询PPT列表
+ const showExportModal =()=>{
+  queryPpt({recordProjectId:3}).then((res:any)=>{
+    setData(res.result);
+  })
+  setExports(true);
+}
+
+  const confirm =()=>{
+
+  }
+
 
   const columns = [
     {
       title: '盘子默认模板',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'fileName',
+      key: 1,
     },
     {
-      title: '图片',
-      dataIndex: 'img',
-      key: 'img',
-      render:()=>{ return <img src="https://livewebbs2.msstatic.com/home_recommend_live_web_1605148453.jpg" style={{width:100}}/>}
+      title: '预览',
+      dataIndex: 'yulan',
+      key: 2,
+      render:()=>{ return (
+        <ul>
+          <li><a>预览</a></li>
+          <li>
+            <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>onDeletePpt()} okText="Yes" cancelText="No">
+              <Button type="link">删除</Button>
+            </Popconfirm>
+          </li>
+        </ul>
+      )}
     },
   ];
 
+  const handleUpload =()=>{
+    
+  }
 
   return(
     <>
@@ -253,9 +229,9 @@ export default (props:IexportProps) =>{
               />
           </li>
           <li>
-            <Popover placement="bottom" title="内容排序" content={content} trigger="click">
-              <SortAscendingOutlined/>
-            </Popover>
+          <Popover  title="Title" trigger="click">
+           <SortAscendingOutlined/>
+          </Popover>
           </li>
           <li>
             <FilterOutlined onClick={showModal} />
@@ -273,7 +249,7 @@ export default (props:IexportProps) =>{
     <Modal
       title="筛选内容"
       visible={visible}
-      onCancel={handleCancel}
+      onCancel={onCancel}
       footer={null}
       className="modal"
       >
@@ -282,17 +258,17 @@ export default (props:IexportProps) =>{
           form={form}
         >
           <p>创建时间</p>
-          {/* <Form.Item
+          <Form.Item
             name="tmPeriod"
           >
             <Radio.Group>
-              <Radio value="a">今日</Radio>
-              <Radio value="b">一周内</Radio>
-              <Radio value="c">一个月内</Radio>
-              <Radio value="d">自定义</Radio>
-              <RangePicker />
+              <Radio value={dates}>今日</Radio>
+              <Radio value={weeks}>一周内</Radio>
+              <Radio value={months}>一个月内</Radio>
+              <Radio value="">自定义</Radio>
+                <RangePicker/>
             </Radio.Group>
-          </Form.Item> */}
+          </Form.Item>
           <p>严重程度</p>
           <Form.Item name="level">
             <Checkbox.Group>
@@ -307,7 +283,7 @@ export default (props:IexportProps) =>{
                 </Checkbox>
             </Checkbox.Group>
           </Form.Item>
-          <p>追评</p>
+          {/* <p>追评</p>
           <Form.Item name="hasComment">
             <Checkbox.Group>
                 <Checkbox value={1}>
@@ -317,7 +293,7 @@ export default (props:IexportProps) =>{
                   无追评
                 </Checkbox>
             </Checkbox.Group>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             className="submit"
           >
@@ -344,13 +320,19 @@ export default (props:IexportProps) =>{
           name="basic"
           onFinish={onFinish}
         >
+          <p>问题照片</p> 
+          <div>
+    				{fileLists.map(i=>{
+      					return <img src={i} style={{width:"100px",marginRight:"10px"}} />
+      				})}
+    			</div>
           <Upload
-            action="http://2081uw5545.iask.in:46203/api/uploadFile"
+            action="/api/upload"
             listType="picture-card"
-            fileList={fileList}
+            showUploadList={false}
             onChange={handleChange}
           >
-            {fileList.length >= 8 ? null : uploadButton}
+            上传
           </Upload>
           <p>问题描述</p>
           <Form.Item
@@ -389,7 +371,7 @@ export default (props:IexportProps) =>{
         </Form>
       </Modal>
 
-    {/* 导出内容 */}
+    {/* 导出记录 */}
     <Modal
        visible={exports}
        onCancel={handleCancel}
@@ -408,12 +390,14 @@ export default (props:IexportProps) =>{
             name="tmPeriod"
           >
             <Radio.Group>
-              <Radio value={1}>今日</Radio>
-              <Radio value={2}>一周内</Radio>
-              <Radio value={3}>一个月内</Radio>
-              <Radio value={4}>自定义</Radio>
-              <RangePicker />
+              <Radio value={dates}>今日</Radio>
+              <Radio value={weeks}>一周内</Radio>
+              <Radio value={months}>一个月内</Radio>
+              <Radio value="自定义">自定义</Radio>
             </Radio.Group>
+          </Form.Item>
+          <Form.Item name="range-picker" label="RangePicker">
+            <RangePicker />
           </Form.Item>
           <p>严重程度</p>
           <Form.Item name="level">
@@ -429,50 +413,56 @@ export default (props:IexportProps) =>{
                 </Checkbox>
             </Checkbox.Group>
           </Form.Item>
-          <p>追评</p>
-          <Form.Item name="hasComment">
+          <p>导出方式</p>
+          <Form.Item
+            name="email"
+          >
+            <Checkbox.Group options={exportType} defaultValue={['下载到本地']} onChange={onExportTypeChange} />
+            <Input 
+             placeholder="请填写邮箱地址"
+             value={email}
+             onChange={changeEmail}
+             />
+          </Form.Item>
+          <p>导出文件格式</p>
+          <Form.Item name="exportType">
             <Checkbox.Group>
-                <Checkbox value={1}>
-                  有追评
+                <Checkbox value="word">
+                  Word
                 </Checkbox>
-                <Checkbox value={2}>
-                  无追评
+                <Checkbox value="excel">
+                  Excel
+                </Checkbox>
+                <Checkbox value="ppt">
+                  PPT
                 </Checkbox>
             </Checkbox.Group>
           </Form.Item>
-          <p>导出方式</p>
-          <div>
-            {/* <Checkbox.Group options={exportMode} defaultValue={['下载到本地']} onChange={onChangeExportMode} /> */}
-            <Input placeholder="请填写邮箱地址"/>
-          </div>
-          <p>导出文件格式</p>
-          <div>
-            <Checkbox.Group options={exportType} defaultValue={['Word']} onChange={onExportTypeChange} />
-            <Radio.Group name="radiogroup" defaultValue={1}>
-              <Radio value={1}>横版</Radio>
-              <Radio value={2}>竖版</Radio>
-            </Radio.Group>
-          </div>
           <div className="exportTemplate">
             <p className="exportLeft">导出模板</p>
             <div className="exportRight">
-              <PlusCircleOutlined />
-              <span>新增</span>
+              <Upload
+                action="/api/addPpt"
+                accept='.pptx'
+                showUploadList={false}
+                onChange={onAddPpt}
+              >
+                上传PPT
+              </Upload>
             </div>
           </div>
-          {/* <Form.Item
-            name="exportTemplate"
-            rules={[{ required: true, message: '请导出模板' }]}
+          <Form.Item
+            name="pptDocument"
           >
             <Table
               columns={columns}
               dataSource={data}
             />
-          </Form.Item> */}
+          </Form.Item>
           <Form.Item
             className="submit"
           >
-            <Button htmlType="reset">取消</Button>
+            <Button htmlType="reset" onClick={handleCancel}>取消</Button>
             <Button type="primary" htmlType="submit" className="sure">
               确定
             </Button>

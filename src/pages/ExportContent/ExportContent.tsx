@@ -5,6 +5,7 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default ()=>{
 
   const [data,setData] = useState([

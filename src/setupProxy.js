@@ -5,7 +5,8 @@ module.exports = function (app) {
   app.use(
     '/api',
     proxy({
-      target: 'http://2081uw5545.iask.in:46203',
+      target: 'http://r3x4365388.wicp.vip/',
+      // target: 'http://2081uw5545.iask.in:46203',
       // target: 'localhost:192.168.0.61:6661',
       changeOrigin: true,
     })

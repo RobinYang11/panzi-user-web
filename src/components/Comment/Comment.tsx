@@ -11,22 +11,13 @@ interface CommentProps{
   onQueryRecordComment:()=>void
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default(props:CommentProps)=>{
 
   const {comment} = props;
   
   const [imgs,setImags] = useState<Array<any>>([]);
-  const [comments,setComments]= useState<Array<IRecordCommentDocument>>();
 
-  const onDeletComment =()=>{
-    deleteRecordComment({
-      id:comment.id
-    }).then((res)=>{
-      console.log(res);
-      props.onQueryRecordComment();
-    })
-  }
- 
   const confirm =()=>{
     deleteRecordComment({
       id:comment.id

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button, Input, message, Modal, Form, Upload } from 'antd';
-import Dragger from 'antd/lib/upload/Dragger';
 import { InboxOutlined } from '@ant-design/icons';
 
 const {Search} =Input;

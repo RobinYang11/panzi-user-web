@@ -143,7 +143,7 @@ interface IRecordDocument {
    //问题图片
    imgs: Array<any> ;
    //问题标签
-   tags :Array<String> ;
+   tags :Array<string> ;
    //问题整改意见
    suggestion :string ;
    //整改图片
@@ -185,6 +185,7 @@ interface IRecordCommentDocument{
 
 
 /**
+ * 导出记录实体
  * 返场记录多条件查询接口的请求对象
  */
 interface  IRecordFilterReq {
@@ -259,7 +260,29 @@ interface  IRecordFilterReq {
     //导出文件格式: 传参值为 word || excel || ppt
     exportType:Array<string> ;
     //排序类型: 1 最近编辑时间 || 2 创建时间最近 || 3 创建时间最远 || 4 整改时间最近 || 5 严重程度最高 || 6 追评时间最近
-    sortType: number ;
+    sortType: number;
     // ppt模板实体
     pptDocument: PptDocument ;    
+}
+
+// PPT实体类
+interface PptDocument {
+
+  id: string ;
+  //个人版项目id
+  recordProjectId: number ;
+  //企业版团队id
+  groupId: number ;
+  //企业版项目id
+  projectId: number ;
+  //ppt模板名
+  fileName: string ;
+  //下载链接
+  url: string ;
+  //上传模板时间
+  tmCreate: number ;
+  //创建者id
+  creator: number ;
+  // 1 未删除  || 2 已删除
+  isDeleted: number ;
 }
