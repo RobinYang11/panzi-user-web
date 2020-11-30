@@ -1,64 +1,44 @@
+import { Col, Dropdown, Form, Input, message, Modal, Popconfirm } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
-import { Dropdown, Form, Input, Modal, Popconfirm, message, Col} from 'antd';
-import './ReturnProject.less'
-import { queryRecordProject, updateRecordProject } from '../../api/api';
+import { delDesign, updateDesign } from '../../api/api';
 
-interface IReturnProps{
-  project:IRecordProject;
-  onQueryRecordProject:()=>void;
+interface FolderProps{
+  Design:IDesign
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default (props:IReturnProps)=>{
-  const [form] = Form.useForm();
-  const { project } = props;
+export default (props:FolderProps)=>{
 
-  const [projects,setProjects] = useState<Array<IRecordProject>>([]);
+  const {Design} = props
   const [visible,setVisible] = useState(false);
-  const [id,setId] = useState(0);
+  const [form] = Form.useForm();
+  
 
-  const onUpdateName = (id:number,name:string) =>{
-    updateRecordProject({id,name}).then(res=>{
-      console.log(res)
-    })
-  }
-
-  const onQueryRecordProject = ()=>{
-    queryRecordProject({
-      "creator":{
-        "id":window.user.id
-      }
-    }).then((res:any)=>{
-      setProjects(res.result);
-    })
-  }
-
-  // 重命名
-  const onSubmit =(data:any)=>{
-    updateRecordProject({id:project.id,...data}).then(res=>{
-      console.log(res)
-      setVisible(false);
-      props.onQueryRecordProject();
-    })
-  }
-
-  // 删除
-  function confirm(id:number,isDeleted:number) {
-    message.info('已成功删除'); 
-    updateRecordProject({id,isDeleted}).then(res=>{
-      props.onQueryRecordProject();
-    })
+  const showModal =()=>{
+   setVisible(true);
+   form.setFieldsValue({name:Design.folderName});
   }
 
   const handleCancel =()=>{ 
     setVisible(false);
   }
 
-  const showModal =()=>{
-    setVisible(true);
-    form.setFieldsValue({name:project.name});
+   // 重命名
+   const onSubmit =(data:any)=>{
+    updateDesign({id:Design.id,...data}).then(res=>{
+      setVisible(false);
+    })
   }
-  
+
+  // 删除
+  function confirm(id:number,isDeleted:number) {
+    message.info('已成功删除'); 
+    delDesign({id:Design.id}).then(res=>{
+      console.log(res);
+    })
+  }
+
   return(
     <>
       <Col className="gutter-row" span={4}>
@@ -68,7 +48,7 @@ export default (props:IReturnProps)=>{
               <ul className="rightModal">
                 <li onClick={showModal}>重命名</li>
                 <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>{
-                  confirm(project.id,2); 
+                  confirm(Design.id,2); 
                  }
                   }
                    okText="Yes" cancelText="No">
@@ -78,14 +58,10 @@ export default (props:IReturnProps)=>{
           }
          >
           <li className="recordLi">
-            <a href={`#/test4/${project.id}`}>
-              <img src={project.logo}/>
-            </a>
-            <p>{project.name}</p>
+            <p>{Design.folderName}</p>
           </li>
         </Dropdown>
        </Col>
-
 
        <Modal
         title="项目重命名"
@@ -114,6 +90,7 @@ export default (props:IReturnProps)=>{
           </div>
         </Form>
       </Modal>
-     </>
-  )
+    </>
+  ) 
+
 }

@@ -7,6 +7,7 @@ import Dropdown from '../Dropdown/Dropdown';
 import DropMenus from '../../DropMenus';
 import q from '../../assets/q.png';
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
   
   return (

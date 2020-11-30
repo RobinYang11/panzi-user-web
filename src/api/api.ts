@@ -61,5 +61,53 @@ export function queryPpt(params:any):Promise<Response> {
   return request.post('/api/queryPpt',params)
 }
 
+// 图纸接口
+export function addDesignFolder(params:any):Promise<Response> {
+  return request.post('/api/addDesignFolder',params)
+}
+
+export function batchAddDesign(params:any):Promise<Response> {
+  return request.post('/api/batchAddDesign',params)
+}
+
+export function updateDesign(params:any):Promise<Response> {
+  return request.post('/api/updateDesign',params)
+}
+
+export function delDesign(params:any):Promise<Response> {
+  return request.post('/api/delDesign',params)
+}
+
+export function queryDesign(params:any):Promise<Response> {
+  return request.post('/api/queryDesign',params)
+}
+
+export function queryDesignList(params:any):Promise<Response> {
+  return request.post('/api/queryDesignList',params)
+}
+
+export function uploadFile(params:any):Promise<Response> {
+  return request.post('/api/uploadFile',params)
+}
+
+// 文档接口
+export function addDocumentFolder(params:any):Promise<Response> {
+  return request.post('/api/addDocumentFolder',params)
+}
+export function batchAddDocument(params:any):Promise<Response> {
+  return request.post('/api/batchAddDocument',params)
+}
+export function updateDocument(params:any):Promise<Response> {
+  return request.post('/api/updateDocument',params)
+}
+export function delDocument(params:any):Promise<Response> {
+  return request.post('/api/delDocument',params)
+}
+export function queryDocument(params:any):Promise<Response> {
+  return request.post('/api/queryDocument',params)
+}
+export function queryPrivateDocumentList(params:any):Promise<Response> {
+  return request.post('/api/queryPrivateDocumentList',params)
+}
 
 

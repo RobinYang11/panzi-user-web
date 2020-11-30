@@ -14,6 +14,7 @@ interface IMenuProps {
   menu:Array<IMenuItem>,
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (props:IMenuProps)=>{
 
   const {menu} = props;

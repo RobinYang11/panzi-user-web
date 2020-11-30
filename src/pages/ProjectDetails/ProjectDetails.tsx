@@ -1,6 +1,6 @@
 import { FilterOutlined,  SortAscendingOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload, Tag, Table, Checkbox, Row, Select, Popconfirm } from 'antd';
+import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload, Tag, Table, Checkbox, Row, Select, Popconfirm, message } from 'antd';
 import './ProjectDetails.less';
 import Record from '../../components/Record/Record';
 import { addPpt, addRecord, deletePpt, exportRecord, queryPpt, queryRecord} from '../../api/api';
@@ -42,7 +42,7 @@ export default (props:IexportProps) =>{
   const [data,setData] = useState([])
   const [exportType,setExportType] = useState<Array<any>>([]);
   const [keyword,setKeyword] =useState("");
-  const [email,setEmail] = useState("");
+  const [email,setEmail] = useState();
 
   useEffect(()=>{
     onQueryRecord({recordProjectId:3});
@@ -136,35 +136,21 @@ export default (props:IexportProps) =>{
 
   const changeEmail =(e:any)=>{
     setEmail(e.target.value);
+    console.log(e.target.value);
   }
 
    // 导出内容
    const onExportFilter=(data:any)=>{
     console.log(data);
-   
     exportRecord({
       "recordProjectId":3,
-      "isHorizontal":1,
       ...data
     }).then(res=>{
       console.log(res);
     })
   }
 
-  // 添加PPT
-  const onAddPpt =(value:any)=>{
-    console.log(value);
-  }
-
-  // 删除PPT
-  const onDeletePpt =()=>{
-    deletePpt({
-      "id":"5fb38782da818d7105d464ca"
-    }).then(res=>{
-    })
-  }
-
- // 查询PPT列表
+   // 查询PPT列表
  const showExportModal =()=>{
   queryPpt({recordProjectId:3}).then((res:any)=>{
     setData(res.result);
@@ -172,10 +158,18 @@ export default (props:IexportProps) =>{
   setExports(true);
 }
 
-  const confirm =()=>{
-
+  // 添加PPT
+  const onAddPpt =(value:any)=>{
+    console.log(value);
   }
 
+  const onDeletePpt =()=>{
+    deletePpt({
+      "id":"5fb38782da818d7105d464ca"
+    }).then(res=>{
+      console.log(res)
+    })
+  }
 
   const columns = [
     {
@@ -200,9 +194,26 @@ export default (props:IexportProps) =>{
     },
   ];
 
-  const handleUpload =()=>{
-    
-  }
+  const Aprops = {
+    // name: 'fileName',
+    action: "/api/addPpt",
+    showUploadList: false,
+    multiple: true,
+    fileList:data,
+    accept:".pptx",
+    data:{url:"https://app-test.obs.cn-east-2.myhuaweicloud.com:443/_73472_1606183661555_%E5%B7%A1%E5%9C%BA%E5%AF%BC%E5%87%BA%E6%A8%A1%E6%9D%BF.pptx",recordProjectId:3},
+    onChange(info:any) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} 文件上传成功`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} 文件上传失败.`);
+      }
+    },
+  };
+  
 
   return(
     <>
@@ -229,7 +240,7 @@ export default (props:IexportProps) =>{
               />
           </li>
           <li>
-          <Popover  title="Title" trigger="click">
+          <Popover  title="内容排序" content={<SortType sortTypes={SortMenu}/>} trigger="click">
            <SortAscendingOutlined/>
           </Popover>
           </li>
@@ -417,12 +428,20 @@ export default (props:IexportProps) =>{
           <Form.Item
             name="email"
           >
-            <Checkbox.Group options={exportType} defaultValue={['下载到本地']} onChange={onExportTypeChange} />
-            <Input 
-             placeholder="请填写邮箱地址"
-             value={email}
-             onChange={changeEmail}
-             />
+            <Checkbox.Group>
+                <Checkbox>
+                  下载到本地
+                </Checkbox>
+                <br/>
+                <Checkbox>
+                  导出到邮箱
+                  <Input 
+                   placeholder="请填写邮箱地址"
+                   value={email}
+                   onChange={changeEmail}
+                   />
+                </Checkbox>
+            </Checkbox.Group>
           </Form.Item>
           <p>导出文件格式</p>
           <Form.Item name="exportType">
@@ -441,14 +460,9 @@ export default (props:IexportProps) =>{
           <div className="exportTemplate">
             <p className="exportLeft">导出模板</p>
             <div className="exportRight">
-              <Upload
-                action="/api/addPpt"
-                accept='.pptx'
-                showUploadList={false}
-                onChange={onAddPpt}
-              >
-                上传PPT
-              </Upload>
+            <Upload {...Aprops}>
+              <Button>上传PPT</Button>
+            </Upload>,
             </div>
           </div>
           <Form.Item

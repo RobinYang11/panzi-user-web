@@ -3,21 +3,27 @@ import React from 'react';
 // eslint-disable-next-line import/no-anonymous-default-export
 export default[
   {
-    sortType:1
+    sortType:"最近编辑时间",
+    value:1
   },
   {
-    sortType:2
+    sortType:"创建时间最近",
+    value:2
   },
   {
-    sortType:3
+    sortType:"创建时间最远",
+    value:3
   },
   {
-    sortType:4
+    sortType:"整改时间最近",
+    value:4
   },
   {
-    sortType:5
+    sortType:"严重程度最高",
+    value:5
   },
   {
-    sortType:6
-  }
+    sortType:"追评时间最近",
+    value:6
+  },
 ]

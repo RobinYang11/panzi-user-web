@@ -1,11 +1,11 @@
 import { DatabaseOutlined,  FileUnknownOutlined,  HistoryOutlined,  Loading3QuartersOutlined } from "@ant-design/icons";
 import React from "react";
 import Defect from "./pages/Defect/Defect";
-import Drawing from "./pages/Drawing/Drawing";
-import DataSource from "./pages/DataSource/DataSource";
 import ReturnRecord from "./pages/ReturnRecord/ReturnRecord";
 import ProjectDetails from "./pages/ProjectDetails/ProjectDetails";
 import ExportProject from "./pages/ExportContent/ExportContent";
+import Documents from './pages/Documents/Documents';
+import Design from './pages/Design/Design';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -20,14 +20,14 @@ export default [
     name:"图纸",
     path:"/test1",
     icon:<DatabaseOutlined />,
-    component:Drawing,
+    component:Design,
     render:true,
   },
   {
     name:"文档",
     path:"/test2",
     icon:<FileUnknownOutlined />,
-    component:DataSource,
+    component:Documents,
     render:true,
   },
   {

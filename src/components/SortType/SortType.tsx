@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
+import {queryRecord } from '../../api/api';
+
+interface RecordFilterReq{
+  sortType:string
+}
 
 interface sortTypeProps{
-  sortTypes:IRecordFilterReq
+  sortTypes:Array<RecordFilterReq>;
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (props:sortTypeProps)=>{
   
   const {sortTypes} = props;
-  const [sort,setSrot] = useState([])
 
+  const onQueryRecord =(value:number)=>{
+    queryRecord({
+      sortType:value
+    }).then(res=>{
+      console.log(res)
+    })
+  }
+  
   return (
     <>
       <ul>
           {
-            sort.map(i=>{
-              return <li>{sortTypes.sortType}</li>
+            sortTypes.map((i:any)=>{
+              return <li style={{cursor:"pointer"}} onClick={()=>{onQueryRecord(i.value)}}>{i.sortType}</li>
             })
           }
       </ul>

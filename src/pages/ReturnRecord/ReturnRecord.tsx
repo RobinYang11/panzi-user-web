@@ -3,7 +3,7 @@ import{Input,Modal, Button ,Form, Dropdown, Row, Col} from 'antd';
 import './ReturnRecord.less'
 import { PlusOutlined } from '@ant-design/icons';
 import ReturnProject from '../../components/ReturnProject/ReturnProject';
-import { addRecordProject, queryRecordProject, updateRecordProject } from '../../api/api';
+import { addRecordProject, queryRecordProject } from '../../api/api';
 import ProjectDetail from '../../components/Record/Record';
 import { useForm } from 'antd/lib/form/Form';
 
@@ -87,7 +87,7 @@ const ReturnRecord = (props:any) =>{
                 </div>
             </Col>
              {
-               projects.map(i=>{
+               projects?.map(i=>{
                 return <ReturnProject project={i} key={i.id} onQueryRecordProject={onQueryRecordProject} />
                })
              }
