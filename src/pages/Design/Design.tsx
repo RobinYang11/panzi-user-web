@@ -3,6 +3,7 @@ import { Button, Input, Modal, Form, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import './Design.less';
 import { addDesignFolder, queryDesign, queryDesignList } from '../../api/api';
+import Folder from '../../components/Folder/Folder';
 
 const {Search} =Input;
 
@@ -90,7 +91,7 @@ const Drawing =(props:any)=>{
       <div>
         {
           design?.map(item=>{
-            return <div>foater</div>
+            return <Folder Design={item} key={item.id}/>
           })
         }
       </div>
