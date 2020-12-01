@@ -1,16 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Input, message, Modal, Form, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
+import { queryPrivateDocumentList } from '../../api/api';
+import Adocument from '../../components/Adocument/Adocument';
 
 const {Search} =Input;
 
 const DataSource =()=>{
 
   const [visible,setVisible] = useState(false);
-
+  const [document,setDocument] = useState<Array<IDocument>>([])
 
   const onSearch =()=>{
 
+  }
+
+  useEffect(()=>{
+    onQueryDocumentList();
+  })
+
+  const onQueryDocumentList = ()=>{
+    queryPrivateDocumentList({
+      "creator":{
+        "id":window.user.id
+      }
+    }).then((res:any)=>{
+      setDocument(res.result)
+    })
   }
 
   const showModal = () =>{
@@ -44,6 +60,14 @@ const DataSource =()=>{
           <Search placeholder="搜索" onSearch={onSearch} style={{ width: 200,textAlign:"right"}} />
         </div>
       </div>
+      <div>
+        {
+            document.map((item:any)=>{
+              return <Adocument document={item} key={item.id}/>
+            })
+        }
+      </div>
+      
       <Form>
         <Form.Item>
           <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
