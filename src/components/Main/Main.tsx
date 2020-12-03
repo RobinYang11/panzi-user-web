@@ -4,6 +4,7 @@ import menu from '../../menu';
 import Menu from '../Menu/Menu';
 import './Main.less';
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (props:any)=>{
 
   const generateRoutes = (routes: Array<any>) => {

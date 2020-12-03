@@ -39,7 +39,7 @@ export default (props:IexportProps) =>{
   const [fileLists,setfileLists] = useState<Array<any>>([])
   const [exports,setExports] = useState(false);
   const [sort,setSort] = useState(false);
-  const [data,setData] = useState([])
+  const [data,setData] = useState<Array<any>>([])
   const [exportType,setExportType] = useState<Array<any>>([]);
   const [keyword,setKeyword] =useState("");
   const [email,setEmail] = useState();
@@ -101,13 +101,6 @@ export default (props:IexportProps) =>{
 		}
   }
 
-  // 导出文件格式
-  const onExportTypeChange =(value:any)=>{
-    console.log(value);
-    exportType.push(value);
-    setExportType([...exportType]);
-  }
-
   // 查询Record
   const onQueryRecord =(params:any)=>{
     queryRecord(params).then((res:any)=>{
@@ -158,11 +151,6 @@ export default (props:IexportProps) =>{
   setExports(true);
 }
 
-  // 添加PPT
-  const onAddPpt =(value:any)=>{
-    console.log(value);
-  }
-
   const onDeletePpt =()=>{
     deletePpt({
       "id":"5fb38782da818d7105d464ca"
@@ -173,8 +161,8 @@ export default (props:IexportProps) =>{
 
   const columns = [
     {
-      title: '盘子默认模板',
-      dataIndex: 'fileName',
+      title:'盘子默认模板',
+      dataIndex:'fileName',
       key: 1,
     },
     {
@@ -183,32 +171,37 @@ export default (props:IexportProps) =>{
       key: 2,
       render:()=>{ return (
         <ul>
-          <li><a>预览</a></li>
-          <li>
-            <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>onDeletePpt()} okText="Yes" cancelText="No">
-              <Button type="link">删除</Button>
-            </Popconfirm>
-          </li>
+          <a>预览</a>
+          <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>onDeletePpt()} okText="Yes" cancelText="No">
+            <Button type="link">删除</Button>
+          </Popconfirm>
         </ul>
       )}
     },
   ];
 
   const Aprops = {
-    // name: 'fileName',
-    action: "/api/addPpt",
+    action: "/api/upload",
     showUploadList: false,
     multiple: true,
-    fileList:data,
     accept:".pptx",
-    data:{url:"https://app-test.obs.cn-east-2.myhuaweicloud.com:443/_73472_1606183661555_%E5%B7%A1%E5%9C%BA%E5%AF%BC%E5%87%BA%E6%A8%A1%E6%9D%BF.pptx",recordProjectId:3},
     onChange(info:any) {
+       if (info.file.status === 'done') {
+        // let url = info.file.response.result.split(".pptx");
+        // let name =info.file.name.split(".pptx");
+        addPpt({
+          "fileName":info.file.name,
+          "recordProjectId":3,
+          "url": info.file.response.result
+        }).then((res:any)=>{
+          showExportModal();
+        })
+        message.success(`${info.file.name} 文件上传成功`);
+      }
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} 文件上传成功`);
-      } else if (info.file.status === 'error') {
+      else if (info.file.status === 'error') {
         message.error(`${info.file.name} 文件上传失败.`);
       }
     },
@@ -445,17 +438,11 @@ export default (props:IexportProps) =>{
           </Form.Item>
           <p>导出文件格式</p>
           <Form.Item name="exportType">
-            <Checkbox.Group>
-                <Checkbox value="word">
-                  Word
-                </Checkbox>
-                <Checkbox value="excel">
-                  Excel
-                </Checkbox>
-                <Checkbox value="ppt">
-                  PPT
-                </Checkbox>
-            </Checkbox.Group>
+           <Radio.Group>
+              <Radio value="word">Word</Radio>
+              <Radio value="excel">Excel</Radio>
+              <Radio value="ppt">PPT</Radio>
+            </Radio.Group>
           </Form.Item>
           <div className="exportTemplate">
             <p className="exportLeft">导出模板</p>

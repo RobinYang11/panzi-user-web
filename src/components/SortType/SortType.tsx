@@ -14,8 +14,10 @@ export default (props:sortTypeProps)=>{
   
   const {sortTypes} = props;
 
-  const onQueryRecord =(value:number)=>{
+  const onQueryRecord =(value:any)=>{
+    console.log(value)
     queryRecord({
+     "recordProjectId":3,
       sortType:value
     }).then(res=>{
       console.log(res)

@@ -89,7 +89,7 @@ export default(props:RecordDocumentProps)=>{
 
   const handleChange =(value:any)=>{
     if(value.file.status==="done"){
-			imgs.push(value.file.response.result);
+			imgs?.push(value.file.response.result);
 			setImgs([...imgs]);
 		}
   }
@@ -193,7 +193,7 @@ export default(props:RecordDocumentProps)=>{
       >
         <p>问题照片</p> 
         <div>
-  				{imgs.map(i=>{
+  				{imgs?.map(i=>{
     					return <img src={i} style={{width:"100px",marginRight:"10px"}} />
     				})}
           <Upload

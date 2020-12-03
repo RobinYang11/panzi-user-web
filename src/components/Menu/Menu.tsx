@@ -7,7 +7,7 @@ export interface IMenuItem{
   path:string,
   icon:ReactNode,
   component:any,
-  render:boolean
+  render:boolean,
 }
 
 interface IMenuProps {

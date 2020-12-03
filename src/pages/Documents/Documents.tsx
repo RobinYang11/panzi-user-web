@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, message, Modal, Form, Upload } from 'antd';
+import { Button, Input, message, Modal, Form, Upload, Row, PageHeader, Col } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import { queryPrivateDocumentList } from '../../api/api';
-import Adocument from '../../components/Adocument/Adocument';
+import { addDocumentFolder, queryDocument, queryPrivateDocumentList } from '../../api/api';
+import Adocument from '../../components/AdocumentFolder/AdocumentFolder';
+import './Document.less';
+import SecondaryDirectoryDesign from '../../components/SecondaryDirectoryDesign/SecondaryDirectoryDesign';
+import DocumentFolder from '../../components/SecondaryDirectoryDocument/SecondaryDirectoryDocument';
 
 const {Search} =Input;
 
@@ -10,22 +13,35 @@ const DataSource =()=>{
 
   const [visible,setVisible] = useState(false);
   const [document,setDocument] = useState<Array<IDocument>>([])
+  const [name,setName] = useState("")
+  const [folder,setFolder] = useState(0);
 
   const onSearch =()=>{
-
+    queryPrivateDocumentList({
+      name:name
+    }).then((res:any)=>{
+      setDocument(res.result)
+    })
   }
 
   useEffect(()=>{
     onQueryDocumentList();
-  })
+  },[])
 
   const onQueryDocumentList = ()=>{
     queryPrivateDocumentList({
-      "creator":{
-        "id":window.user.id
-      }
+      "creator":112
     }).then((res:any)=>{
       setDocument(res.result)
+    })
+  }
+
+  const onQueryDocumentFolder =(value:any)=>{
+    setFolder(value);
+    queryDocument({
+      
+    }).then(res=>{
+
     })
   }
 
@@ -37,60 +53,67 @@ const DataSource =()=>{
     setVisible(false);
   }
 
-  const onSubmit =()=>{
-    setVisible(false);
+  const onAddDocument =(data:any)=>{
+    console.log(data);
+    addDocumentFolder({
+      creator: 112,
+      type: "folder",
+      ...data
+    }).then(res=>{
+     setVisible(false);
+     onQueryDocumentList();
+    })
   }
 
-  const normFile = (e:any) => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
-  };
-
-
   return (
-    <div className="drawing">
-      <div className="drawingHeader">
-        <div className="btn">
-          <Button onClick={showModal}>新建文件夹</Button>
-        </div>
-        <div className="search">
-          <Search placeholder="搜索" onSearch={onSearch} style={{ width: 200,textAlign:"right"}} />
-        </div>
-      </div>
-      <div>
-        {
-            document.map((item:any)=>{
-              return <Adocument document={item} key={item.id}/>
-            })
-        }
-      </div>
-      
-      <Form>
-        <Form.Item>
-          <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-            <Upload.Dragger name="files" action="/upload.do">
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">点击或拖拽文件夹到此处上传</p>
-              <p className="ant-upload-hint">(限pdf, txt, word, ppt, jpg, png图纸格式)</p>
-            </Upload.Dragger>
-          </Form.Item>
-        </Form.Item>
-      </Form>
+    <div className="document">
+      <PageHeader title="文档管理"/>
+      <Row>
+        <Col span={12}>
+          <div style={{padding:"0 10px"}}>
+          <div className="documentHeader">
+            <div className="btn">
+              <Button onClick={showModal}>新建文件夹</Button>
+            </div>
+            <div className="search">
+              <Search 
+              placeholder="搜索"
+              onSearch={onSearch}
+              value={name}
+              onChange={(e:any)=>{
+                setName(e.target.value);
+              }}
+              style={{ width: 200,textAlign:"right"}} />
+            </div>
+          </div>
+          <Row>
+            {
+                document?.map((item:any)=>{
+                  return <Col span={6} onClick={()=>{onQueryDocumentFolder(item.id)}}>
+                    <Adocument document={item} key={item.id} onQueryDocumentList={onQueryDocumentList} />
+                  </Col>
+                })
+            }
+          </Row>
+         </div>
+        </Col>
+        <Col span={12}>
+          <DocumentFolder id={folder} />
+        </Col>
+      </Row>
+
       <Modal
         title="新建项目"
         visible={visible}
         onCancel={handleCancel}
         footer={null}
       >
-        <Form>
+        <Form
+          onFinish={onAddDocument}
+        >
           <Form.Item
             label="项目名称"
-            name="username"
+            name="name"
             rules={[{ required: true, message: '请输入项目名称' }]}
           >
             <Input />
@@ -99,7 +122,7 @@ const DataSource =()=>{
             <button type="submit" onClick={handleCancel} style={{marginRight:"10px"}}>
               取消
             </button>
-            <button type="submit" onClick={onSubmit}>
+            <button type="submit">
               确定
             </button>
           </div>

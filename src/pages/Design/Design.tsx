@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Modal, Form, Upload } from 'antd';
+import { Button, Input, Modal, Form, Upload, Row, message, Col, PageHeader } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import './Design.less';
-import { addDesignFolder, queryDesign, queryDesignList } from '../../api/api';
-import Folder from '../../components/Folder/Folder';
+import { addDesignFolder, queryDesign, queryDesignList, uploadFile } from '../../api/api';
+import Folder from '../../components/DesignFolder/DesignFolder';
+import Dragger from 'antd/lib/upload/Dragger';
+import SecondaryDirectoryDesign from '../../components/SecondaryDirectoryDesign/SecondaryDirectoryDesign';
 
 const {Search} =Input;
 
 
-const Drawing =(props:any)=>{
+const Design =(props:any)=>{
 
 
   const [visible,setVisible] = useState(false);
   const [design,setDesign] =useState<Array<IDesign>>([]);
-  const [folderName,setFolderName] = useState("");
-  const [id,setId] =useState(0);
+  const [folder,setFolder] = useState(0);
+  const [name,setName] = useState("");
 
   useEffect(()=>{
     onQueryDesignList();
@@ -22,32 +24,29 @@ const Drawing =(props:any)=>{
 
   const onQueryDesignList = ()=>{
     queryDesignList({
-      "creator":{
-        "id":window.user.id
-      }
+      "creator":112
     }).then((res:any)=>{
       setDesign(res.result)
     })
   }
 
-  const onSearch =(value:any)=>{
-    queryDesign({
-      id
+  const onSearch =()=>{
+    queryDesignList({
+      name:name
     }).then((res:any)=>{
-      setId(value);
+      setDesign(res.result)
     })
   }
 
   // 添加图纸
   const onAddDeign = (data:any)=>{
     addDesignFolder({
-      "creator":{
-        "id":window.user.id
-      },
-      "type": "folder",
+      creator:112,
+      type: "folder",
       ...data
     }).then(res=>{
-       setVisible(false);
+      setVisible(false);
+      onQueryDesignList();
     })
   }
 
@@ -59,58 +58,53 @@ const Drawing =(props:any)=>{
     setVisible(false);
   }
 
-  const onSubmit =()=>{
-    setVisible(false);
+  const onQueryDesign =(value:any)=>{
+    setFolder(value)
+    queryDesign({
+      parentId:value
+    }).then(res=>{
+      console.log(res)
+    })
   }
 
-  const normFile = (e:any) => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
-  };
 
   return (
     <div className="Design">
-      <div className="DesignHeader">
-        <div className="btn">
-          <Button onClick={showModal}>新建文件夹</Button>
-        </div>
-        <div className="search">
-          <Search 
-          placeholder="搜索" 
-          value={id}
-          onChange={(e:any)=>{
-            setId(e.target.value);
-          }}
-          onSearch={onSearch}
-          style={{ width: 200,textAlign:"right"}}/>
-        </div>
-      </div>
-      <div>
-        {
-          design?.map(item=>{
-            return <Folder Design={item} key={item.id}/>
-          })
-        }
-      </div>
-
-      <Form
-      >
-        <Form.Item>
-          <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-            <Upload.Dragger name="files" action="/upload.do">
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">点击或拖拽文件夹到此处上传</p>
-              <p className="ant-upload-hint">(限CAD图纸格式)</p>
-            </Upload.Dragger>
-          </Form.Item>
-        </Form.Item>
-      </Form>
-
+      <PageHeader title="图纸管理"></PageHeader>
+      <Row>
+        <Col span={12}>
+          <div className="DesignFolder">
+            <div className="DesignHeader">
+              <div className="btn">
+                <Button onClick={showModal}>新建文件夹</Button>
+              </div>
+              <div className="search">
+                <Search 
+                placeholder="搜索" 
+                value={name}
+                onChange={(e:any)=>{
+                  setName(e.target.value);
+                }}
+                onSearch={onSearch}
+                style={{ width: 200,textAlign:"right"}}/>
+              </div>
+            </div>
+            <Row>
+              {
+                design?.map(item=>{
+                  return <Col span={6} onClick={()=>{onQueryDesign(item.id)}}>
+                      <Folder Design={item} onQueryDesignList={onQueryDesignList} key={item.id}  />
+                  </Col>
+                })
+              }
+            </Row>
+          </div>
+        </Col>
+        <Col span={12}>
+           <SecondaryDirectoryDesign id={folder} />
+        </Col>
+      </Row>
+     
       <Modal
         title="新建项目"
         visible={visible}
@@ -140,5 +134,4 @@ const Drawing =(props:any)=>{
     </div>
   )
 }
-
-export default Drawing;
+export default Design;

@@ -6,6 +6,7 @@ import ProjectDetails from "./pages/ProjectDetails/ProjectDetails";
 import ExportProject from "./pages/ExportContent/ExportContent";
 import Documents from './pages/Documents/Documents';
 import Design from './pages/Design/Design';
+import SecondaryDirectoryDesign from "./components/SecondaryDirectoryDesign/SecondaryDirectoryDesign";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -50,5 +51,12 @@ export default [
     icon:<Loading3QuartersOutlined />,
     component:ExportProject,
     render:false,
-  }
+  },
+  {
+    name:"图纸二级目录",
+    path:"/test7",
+    icon:<Loading3QuartersOutlined />,
+    component:SecondaryDirectoryDesign,
+    render:false,
+  },
 ]

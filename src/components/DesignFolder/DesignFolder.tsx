@@ -1,23 +1,26 @@
+import { FolderOutlined } from '@ant-design/icons';
 import { Col, Dropdown, Form, Input, message, Modal, Popconfirm } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
-import { delDocument, updateDocument } from '../../api/api';
+import { delDesign, updateDesign } from '../../api/api';
+import './DesignFolder.less';
 
-interface DocumentProps{
-  document:IDocument
+interface FolderProps{
+  Design:IDesign,
+  onQueryDesignList:()=>void;
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default (props:DocumentProps)=>{
+export default (props:FolderProps)=>{
 
-  const {document} = props
+  const {Design} = props
   const [visible,setVisible] = useState(false);
   const [form] = Form.useForm();
   
 
   const showModal =()=>{
    setVisible(true);
-   form.setFieldsValue({name:document.folderName});
+   form.setFieldsValue({name:Design.name});
   }
 
   const handleCancel =()=>{ 
@@ -26,29 +29,30 @@ export default (props:DocumentProps)=>{
 
    // 重命名
    const onSubmit =(data:any)=>{
-    updateDocument({id:document.id,...data}).then(res=>{
+    updateDesign({id:Design.id,...data}).then(res=>{
       setVisible(false);
+      props.onQueryDesignList();
     })
   }
 
   // 删除
-  function confirm(id:number,isDeleted:number) {
+  function confirm() {
     message.info('已成功删除'); 
-    delDocument({id:document.id}).then(res=>{
+    delDesign({id:Design.id}).then(res=>{
       console.log(res);
+      props.onQueryDesignList();
     })
   }
 
   return(
-    <>
-      <Col className="gutter-row" span={4}>
+    <div style={{textAlign:"center"}}>
         <Dropdown
           trigger={['contextMenu']}
           overlay={
               <ul className="rightModal">
                 <li onClick={showModal}>重命名</li>
                 <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>{
-                  confirm(document.id,2); 
+                  confirm(); 
                  }
                   }
                    okText="Yes" cancelText="No">
@@ -58,10 +62,10 @@ export default (props:DocumentProps)=>{
           }
          >
           <li className="recordLi">
-            <p>{document.folderName}</p>
+              <FolderOutlined style={{fontSize:"60px"}}/>
+            <p>{Design.name}</p>
           </li>
         </Dropdown>
-       </Col>
 
        <Modal
         title="项目重命名"
@@ -90,7 +94,7 @@ export default (props:DocumentProps)=>{
           </div>
         </Form>
       </Modal>
-    </>
+    </div>
   ) 
 
 }
