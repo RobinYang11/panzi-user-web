@@ -62,7 +62,7 @@ export default (props:DocumentProps)=>{
          >
           <li className="recordLi">
             <FolderOutlined style={{fontSize:"60px"}}/>
-            <p>{document.name}</p>
+            <p>{document.name +"---"+document.id}</p>
           </li>
         </Dropdown>
 

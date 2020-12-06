@@ -2,7 +2,6 @@
 interface Window {
   user: any;
 }
-
 //返场记录项目实体
 
 // 团队实体
@@ -41,6 +40,7 @@ interface ITeam {
 
 // 返场记录项目
 interface IRecordProject {
+  
   id: number;
   //个人版巡场记录的项目名
   name: string;
@@ -50,7 +50,6 @@ interface IRecordProject {
   tmModify?: string;
   //1 未删除 || 2 已删除
   isDeleted: number;
-  logo?:string;
 }
 
 // 用户实体
@@ -176,7 +175,6 @@ interface IRecordDocument {
    //追评内容
    recordComment:Array<IRecordCommentDocument> ;
 }
-
 
 // 评论实体
 interface IRecordCommentDocument{

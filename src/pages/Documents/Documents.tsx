@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, message, Modal, Form, Upload, Row, PageHeader, Col } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
 import { addDocumentFolder, queryDocument, queryPrivateDocumentList } from '../../api/api';
 import Adocument from '../../components/AdocumentFolder/AdocumentFolder';
 import './Document.less';
-import SecondaryDirectoryDesign from '../../components/SecondaryDirectoryDesign/SecondaryDirectoryDesign';
 import DocumentFolder from '../../components/SecondaryDirectoryDocument/SecondaryDirectoryDocument';
 
 const {Search} =Input;
@@ -15,6 +13,7 @@ const DataSource =()=>{
   const [document,setDocument] = useState<Array<IDocument>>([])
   const [name,setName] = useState("")
   const [folder,setFolder] = useState(0);
+  const [children,setChildrens] = useState<Array<IDocument>>([]);
 
   const onSearch =()=>{
     queryPrivateDocumentList({
@@ -32,17 +31,15 @@ const DataSource =()=>{
     queryPrivateDocumentList({
       "creator":112
     }).then((res:any)=>{
+      // debugger
       setDocument(res.result)
+      // setChildrens(res.result.children); // [].children;
     })
   }
 
-  const onQueryDocumentFolder =(value:any)=>{
+  const onQueryDocumentFolder =(value:any,param:any)=>{
     setFolder(value);
-    queryDocument({
-      
-    }).then(res=>{
-
-    })
+    setChildrens(param);
   }
 
   const showModal = () =>{
@@ -88,17 +85,21 @@ const DataSource =()=>{
           </div>
           <Row>
             {
-                document?.map((item:any)=>{
-                  return <Col span={6} onClick={()=>{onQueryDocumentFolder(item.id)}}>
-                    <Adocument document={item} key={item.id} onQueryDocumentList={onQueryDocumentList} />
-                  </Col>
-                })
+              document?.map((item:any)=>{
+                return <Col 
+                  span={6} onClick={()=>{
+                    onQueryDocumentFolder(item.id,item.children)
+                  }}
+                  >
+                  <Adocument document={item} key={item.id} onQueryDocumentList={onQueryDocumentList} />
+                </Col>
+              })
             }
           </Row>
          </div>
         </Col>
         <Col span={12}>
-          <DocumentFolder id={folder} />
+          <DocumentFolder id={folder} fileList={children}/>
         </Col>
       </Row>
 
