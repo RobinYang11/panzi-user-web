@@ -15,6 +15,7 @@ export default (props:any)=>{
       queryPrivateDocumentList({
         "creator":112
       }).then((res:any)=>{
+
       })
     }
 
@@ -33,9 +34,9 @@ export default (props:any)=>{
           "parentId": props.id,
           "list":[info.file.response.result]
         }).then(res=>{
-          props.onQueryDesignList();
+          onQueryDesignList();
         })
-        message.success(`${info.file.name} 文件上传成功.`);
+        message.success(`${info.file.name} 文件上传成功`);
       } 
     },
   };
@@ -54,7 +55,7 @@ export default (props:any)=>{
             {
               props.fileList?.map((item:any)=>{
               return  <Col span={4}>
-                 <img src={item.url} alt="" />
+                 <img src={item.url} alt=""/>
                  <p>{item.name}</p>
                 </Col>
               })

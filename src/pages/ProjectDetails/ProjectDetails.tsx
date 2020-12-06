@@ -43,6 +43,7 @@ export default (props:IexportProps) =>{
   const [exportType,setExportType] = useState<Array<any>>([]);
   const [keyword,setKeyword] =useState("");
   const [email,setEmail] = useState();
+  const [id,setId] = useState(0);
 
   useEffect(()=>{
     onQueryRecord({recordProjectId:3});
@@ -152,10 +153,8 @@ export default (props:IexportProps) =>{
 }
 
   const onDeletePpt =()=>{
-    deletePpt({
-      "id":"5fb38782da818d7105d464ca"
-    }).then(res=>{
-      console.log(res)
+    deletePpt({id}).then(res=>{
+      showExportModal();
     })
   }
 
@@ -169,10 +168,16 @@ export default (props:IexportProps) =>{
       title: '预览',
       dataIndex: 'yulan',
       key: 2,
-      render:()=>{ return (
+      render:(row:any)=>{ return (
         <ul>
           <a>预览</a>
-          <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>onDeletePpt()} okText="Yes" cancelText="No">
+          <Popconfirm 
+          placement="top"
+          title="是否确认删除"
+          onConfirm={()=>{
+            onDeletePpt()}
+          }
+          okText="Yes" cancelText="No">
             <Button type="link">删除</Button>
           </Popconfirm>
         </ul>
@@ -186,14 +191,14 @@ export default (props:IexportProps) =>{
     multiple: true,
     accept:".pptx",
     onChange(info:any) {
+      debugger
        if (info.file.status === 'done') {
-        // let url = info.file.response.result.split(".pptx");
-        // let name =info.file.name.split(".pptx");
         addPpt({
           "fileName":info.file.name,
           "recordProjectId":3,
           "url": info.file.response.result
         }).then((res:any)=>{
+          // setId()
           showExportModal();
         })
         message.success(`${info.file.name} 文件上传成功`);
@@ -287,17 +292,6 @@ export default (props:IexportProps) =>{
                 </Checkbox>
             </Checkbox.Group>
           </Form.Item>
-          {/* <p>追评</p>
-          <Form.Item name="hasComment">
-            <Checkbox.Group>
-                <Checkbox value={1}>
-                  有追评
-                </Checkbox>
-                <Checkbox value={2}>
-                  无追评
-                </Checkbox>
-            </Checkbox.Group>
-          </Form.Item> */}
           <Form.Item
             className="submit"
           >
@@ -417,6 +411,33 @@ export default (props:IexportProps) =>{
                 </Checkbox>
             </Checkbox.Group>
           </Form.Item>
+          <p>标签</p>
+          <Form.Item name="level">
+            <Checkbox.Group>
+                <Checkbox value={1}>
+                  地下室
+                </Checkbox>
+                <Checkbox value={2}>
+                  楼栋
+                </Checkbox>
+                <Checkbox value={3}>
+                  景观
+                </Checkbox>
+                <Checkbox value={4}>
+                  场地
+                </Checkbox>
+                <Checkbox value={5}>
+                  户型
+                </Checkbox>
+            </Checkbox.Group>
+          </Form.Item>
+          <p>导出追评</p>
+          <Form.Item name="exportType">
+           <Radio.Group>
+              <Radio value="导出">导出</Radio>
+              <Radio value="不导出">不导出</Radio>
+            </Radio.Group>
+          </Form.Item>  
           <p>导出方式</p>
           <Form.Item
             name="email"

@@ -60,7 +60,7 @@ export default (props:any)=>{
             {
              props.fileList?.map((item:any)=>{
               return  <Col span={4}>
-                 <img src={item.url} alt=""/>
+                 <img src={item.sourceFile} alt="" key={item.id}/>
                  <p>{item.name}</p>
                 </Col>
               })
