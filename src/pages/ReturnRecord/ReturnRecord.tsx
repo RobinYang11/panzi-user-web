@@ -1,14 +1,13 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import{Input,Modal, Button ,Form, Dropdown, Row, Col} from 'antd';
+import{Input,Modal, Button ,Form, Dropdown, Row, Col, Upload} from 'antd';
 import './ReturnRecord.less'
-import { PlusOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import ReturnProject from '../../components/ReturnProject/ReturnProject';
 import { addRecordProject, queryRecordProject } from '../../api/api';
 import ProjectDetail from '../../components/Record/Record';
 import { useForm } from 'antd/lib/form/Form';
 
 const {Search} = Input;
-
 
 const ReturnRecord = (props:any) =>{
 
@@ -17,6 +16,8 @@ const ReturnRecord = (props:any) =>{
   const [projects,setProjects] = useState<Array<IRecordProject>>([]);
   const [name,setName] = useState('');
   const [toggle,setToggle] = useState('');
+  const [loading,setLoading] = useState(false)
+  const [imageUrl,setImageUrl]=useState('');
 
   useEffect(()=>{
     onQueryRecordProject();
@@ -64,6 +65,20 @@ const ReturnRecord = (props:any) =>{
     setVisible(false);
   }
 
+  const handleChange =(value:any)=>{  
+    
+    if(value.file.status==="done"){
+      setImageUrl(value.file.response.result)
+		}
+  }
+
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
+
   return(
     <>
       <div className="record">
@@ -88,7 +103,7 @@ const ReturnRecord = (props:any) =>{
             </Col>
              {
                projects?.map(i=>{
-                return <ReturnProject project={i} key={i.id} onQueryRecordProject={onQueryRecordProject} />
+                return <ReturnProject project={i} key={i.id} onQueryRecordProject={onQueryRecordProject}/>
                })
              }
           </Row>
@@ -103,6 +118,16 @@ const ReturnRecord = (props:any) =>{
           onFinish={onSubmit}
           form={form}
         >
+          <div style={{textAlign:"center",marginBottom:"10px"}}>
+            <Upload
+              action="/api/upload"
+              listType="picture-card"
+              showUploadList={false}
+              onChange={handleChange}
+            >
+             {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+            </Upload>
+          </div>
           <Form.Item
             label="项目名称"
             name="name"

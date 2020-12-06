@@ -1,15 +1,26 @@
 .Design {
+  .DesignFolder{
+    padding: 0 10px;
 
-  .DesignHeader {
-    overflow     : hidden;
-    margin-bottom: 15px;
-
-    .btn {
-      float: left;
+    .DesignHeader {
+      overflow     : hidden;
+      margin-bottom: 15px;
+  
+      .btn {
+        float: left;
+      }
+  
+      .search {
+        float: right;
+      }
     }
+  }
+  
 
-    .search {
-      float: right;
+  :global{
+    .ant-upload-drag{
+      height: auto;
     }
   }
 }
+

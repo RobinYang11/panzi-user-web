@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dropdown, Form, Input, Modal, Popconfirm, message, Col} from 'antd';
+import { Dropdown, Form, Input, Modal, Popconfirm, message, Col, Upload} from 'antd';
 import './ReturnProject.less'
 import { queryRecordProject, updateRecordProject } from '../../api/api';
 
@@ -13,25 +13,7 @@ export default (props:IReturnProps)=>{
   const [form] = Form.useForm();
   const { project } = props;
 
-  const [projects,setProjects] = useState<Array<IRecordProject>>([]);
   const [visible,setVisible] = useState(false);
-  const [id,setId] = useState(0);
-
-  const onUpdateName = (id:number,name:string) =>{
-    updateRecordProject({id,name}).then(res=>{
-      console.log(res)
-    })
-  }
-
-  const onQueryRecordProject = ()=>{
-    queryRecordProject({
-      "creator":{
-        "id":window.user.id
-      }
-    }).then((res:any)=>{
-      setProjects(res.result);
-    })
-  }
 
   // 重命名
   const onSubmit =(data:any)=>{
@@ -59,6 +41,12 @@ export default (props:IReturnProps)=>{
     form.setFieldsValue({name:project.name});
   }
   
+  const handleChange =(value:any)=>{
+    if(value.file.status==="done"){
+      
+		}
+  }
+
   return(
     <>
       <Col className="gutter-row" span={4}>
@@ -79,7 +67,7 @@ export default (props:IReturnProps)=>{
          >
           <li className="recordLi">
             <a href={`#/test4/${project.id}`}>
-              <img src={project.logo}/>
+              <img src=""/>
             </a>
             <p>{project.name}</p>
           </li>
@@ -97,6 +85,16 @@ export default (props:IReturnProps)=>{
           onFinish={onSubmit}
           form={form}
         >
+          <div style={{textAlign:"center",marginBottom:"10px"}}>
+            <Upload
+              action="/api/upload"
+              listType="picture-card"
+              showUploadList={false}
+              onChange={handleChange}
+            >
+              上传封面
+            </Upload>
+          </div>
           <Form.Item
             label="项目名称"
             name="name"

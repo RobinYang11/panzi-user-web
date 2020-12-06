@@ -2,7 +2,6 @@
 interface Window {
   user: any;
 }
-
 //返场记录项目实体
 
 // 团队实体
@@ -41,6 +40,7 @@ interface ITeam {
 
 // 返场记录项目
 interface IRecordProject {
+  
   id: number;
   //个人版巡场记录的项目名
   name: string;
@@ -50,7 +50,6 @@ interface IRecordProject {
   tmModify?: string;
   //1 未删除 || 2 已删除
   isDeleted: number;
-  logo?:string;
 }
 
 // 用户实体
@@ -75,37 +74,46 @@ interface IUser {
 // 文档实体
 interface IDocument{
     //文档id
-    id :number ;
+    id: number ;
     //文档地址
-    url?: string;
+    url: string ;
     //创建者
-    creator?: IUser ;
+    creator: number ;
     //项目id
-    projectId?: number ;
+    projectId: number ;
     //文档类型 file || folder
-    type?: string ;
+    type: string ;
     //文件夹名
-    folderName?: string ;
+    name: string ;
     // 父级文档id
-    parentId?:number ;
+    parentId: number ;
+    //子集文档
+    children: Array<IDocument> ;
+    //是否删除 1 未删除 || 2 已删除
+    isDiscard: number;
+    //团队id
+    teamId: number ;
 }
 
 // 图纸实体
 interface IDesign {
-  //图纸id
-  id: number ;
-  //图纸地址
-  url?: string ;
-  //创建者
-  creator?: IUser ;
-  //项目id
-  projectId?: number ;
-  //文件类型 file || folder
-  type?: string ;
-  //文件夹名
-  folderName?: string ;
-  //父级文件夹id
-  parent_id ?: number ;
+    id:number;
+    //图纸地址
+    url: string ;
+    //创建者
+    creator: number ;
+    //项目id
+    projectId: number ;
+    //文件类型 file || folder
+    type: string ;
+    //文件夹名
+    name: string ;
+    //父级文件夹id
+    parentId: number ;
+    //子集图纸
+    children: Array<Design> ;
+    //是否删除
+    isDiscard:number;
 }
 
 // 记录详情实体
@@ -167,7 +175,6 @@ interface IRecordDocument {
    //追评内容
    recordComment:Array<IRecordCommentDocument> ;
 }
-
 
 // 评论实体
 interface IRecordCommentDocument{

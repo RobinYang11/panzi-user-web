@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, message, Modal, Popconfirm, Rate, Tag, Upload } from 'antd';
+import { Button, Form, Input, message, Modal, Popconfirm, Popover, Rate, Tag, Upload } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
@@ -89,7 +89,7 @@ export default(props:RecordDocumentProps)=>{
 
   const handleChange =(value:any)=>{
     if(value.file.status==="done"){
-			imgs.push(value.file.response.result);
+			imgs?.push(value.file.response.result);
 			setImgs([...imgs]);
 		}
   }
@@ -119,6 +119,13 @@ export default(props:RecordDocumentProps)=>{
     })
   }
 
+  const content = (value:any)=>{
+    return <div className="bigImage">
+        <img src={value} alt=""/>
+        <a href={value} target="_blank">点击查看原图</a>
+    </div>
+  }
+
   return (
     <>
     <div>
@@ -134,7 +141,9 @@ export default(props:RecordDocumentProps)=>{
       <ul className="projectImg">
           {
             record.imgs?.map(item=>{
-              return <img src={item} alt="图片" style={{width:100,marginRight:"10px"}}/>
+              return( <Popover content={content(item)}>
+                <img src={item} alt="图片" style={{width:100,marginRight:"10px"}}/>
+               </Popover>)
             })
           }
       </ul>
@@ -193,7 +202,7 @@ export default(props:RecordDocumentProps)=>{
       >
         <p>问题照片</p> 
         <div>
-  				{imgs.map(i=>{
+  				{imgs?.map(i=>{
     					return <img src={i} style={{width:"100px",marginRight:"10px"}} />
     				})}
           <Upload

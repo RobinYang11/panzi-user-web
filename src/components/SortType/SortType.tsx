@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import {queryRecord } from '../../api/api';
 
 interface RecordFilterReq{
-  sortType:string
+  sortType:string,
 }
 
 interface sortTypeProps{
@@ -14,8 +14,10 @@ export default (props:sortTypeProps)=>{
   
   const {sortTypes} = props;
 
-  const onQueryRecord =(value:number)=>{
+  const onQueryRecord =(value:any)=>{
+    console.log(value)
     queryRecord({
+      recordProjectId:3,
       sortType:value
     }).then(res=>{
       console.log(res)
@@ -27,7 +29,9 @@ export default (props:sortTypeProps)=>{
       <ul>
           {
             sortTypes.map((i:any)=>{
-              return <li style={{cursor:"pointer"}} onClick={()=>{onQueryRecord(i.value)}}>{i.sortType}</li>
+              return <li style={{cursor:"pointer"}} onClick={()=>{onQueryRecord(i.value)}}>
+                {i.sortType}
+                </li>
             })
           }
       </ul>
