@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, message, Row } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import { batchAddDocument, queryPrivateDocumentList } from '../../api/api';
+import { batchAddDocument, queryDocument, queryPrivateDocumentList } from '../../api/api';
 import Dragger from 'antd/lib/upload/Dragger';
 import './SecondaryDirectoryDocument.less'
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -12,10 +12,10 @@ export default (props:any)=>{
   },[props.id])
 
   const onQueryDesignList = ()=>{
-      queryPrivateDocumentList({
-        "creator":112
+    queryDocument({
+        creator:112,
       }).then((res:any)=>{
-
+        
       })
     }
 

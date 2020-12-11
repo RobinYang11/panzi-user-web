@@ -1,8 +1,9 @@
 import React, { ReactNode, useState } from 'react';
 import {queryRecord } from '../../api/api';
-
+import './SortType.less';
 interface RecordFilterReq{
   sortType:string,
+  icon:ReactNode,
 }
 
 interface sortTypeProps{
@@ -13,9 +14,11 @@ interface sortTypeProps{
 export default (props:sortTypeProps)=>{
   
   const {sortTypes} = props;
+  const [sort,setSort] = useState(0);
+
 
   const onQueryRecord =(value:any)=>{
-    console.log(value)
+    setSort(value);
     queryRecord({
       recordProjectId:3,
       sortType:value
@@ -29,9 +32,12 @@ export default (props:sortTypeProps)=>{
       <ul>
           {
             sortTypes.map((i:any)=>{
-              return <li style={{cursor:"pointer"}} onClick={()=>{onQueryRecord(i.value)}}>
-                {i.sortType}
-                </li>
+              return(
+                    <li className={sort===i.value?"sortType sortTypes":"sortType"} onClick={()=>{onQueryRecord(i.value)}}>
+                       <span>{i.sortType}</span>
+                       <span className="icon">{i.icon}</span>
+                    </li>
+                )
             })
           }
       </ul>

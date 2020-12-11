@@ -1,15 +1,26 @@
 .recordLi {
-  display: inline-block;
-  height : 100px;
+  display      : inline-block;
+  width        : 192px;
+  height       : 192px;
+  background   : #FFFFFF;
+  border-radius: 8px;
+
+  &:hover {
+    box-shadow: 0px 3px 7px 0px rgba(214, 214, 214, 0.76);
+  }
 
   img {
-    border: 1px solid #000;
-    width : 70px;
-    height: 70px;
+    display: block;
+    width  : 100%;
+    height : 73%;
+  }
 
-    &:hover {
-      box-shadow: 0px 0px 3px rgb(65, 64, 64);
-    }
+  p {
+    font-size  : 18px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color      : #333333;
+    line-height: 62px;
   }
 }
 

@@ -5,7 +5,7 @@ import './Menu.less'
 export interface IMenuItem{
   name:string,
   path:string,
-  icon:ReactNode,
+  icon:string,
   component:any,
   render:boolean,
 }
@@ -29,7 +29,7 @@ export default (props:IMenuProps)=>{
           return(
             <li>
               <Link to={item.path} >
-                {item.icon}
+                <img src={item.icon} alt=""/>
                 <span>{item.name}</span>
               </Link>
             </li>

@@ -8,7 +8,9 @@ import TextArea from 'antd/lib/input/TextArea';
 import { useForm } from 'antd/lib/form/Form';
 import SortType from '../../components/SortType/SortType';
 import SortMenu from '../../SortMenu';
-import { UploadOutlined } from '@ant-design/icons';
+import shaixuan from '../../assets/筛选.png'
+import paixu from '../../assets/排序.png';
+
 
 const { RangePicker } = DatePicker;
 const {Search} = Input;
@@ -35,15 +37,14 @@ export default (props:IexportProps) =>{
   const [record,setRecordDetails] =useState<Array<IRecordDocument>>();
   const [reacordVisible,setRecordVisible] = useState(false);
   const [rate,setRate] = useState(0);
-  const [tags,setTags] = useState<Array<any>>([]);
+  const [tags,setTags] = useState<Array<any>>(["地下室","楼栋","景观","场地","户型"]);
   const [fileLists,setfileLists] = useState<Array<any>>([])
   const [exports,setExports] = useState(false);
   const [sort,setSort] = useState(false);
   const [data,setData] = useState<Array<any>>([])
-  const [exportType,setExportType] = useState<Array<any>>([]);
   const [keyword,setKeyword] =useState("");
   const [email,setEmail] = useState();
-  const [id,setId] = useState(0);
+  const [id,setId] = useState("");
 
   useEffect(()=>{
     onQueryRecord({recordProjectId:3});
@@ -152,7 +153,9 @@ export default (props:IexportProps) =>{
   setExports(true);
 }
 
+// 删除ppt
   const onDeletePpt =()=>{
+
     deletePpt({id}).then(res=>{
       showExportModal();
     })
@@ -191,14 +194,12 @@ export default (props:IexportProps) =>{
     multiple: true,
     accept:".pptx",
     onChange(info:any) {
-      debugger
        if (info.file.status === 'done') {
         addPpt({
           "fileName":info.file.name,
           "recordProjectId":3,
           "url": info.file.response.result
         }).then((res:any)=>{
-          // setId()
           showExportModal();
         })
         message.success(`${info.file.name} 文件上传成功`);
@@ -218,15 +219,11 @@ export default (props:IexportProps) =>{
     <div className="projectDetail">
       <div className="projectDetailHeader">
         <ul className="projectDetailLeft">
-            <li>
-               <Button onClick={showRecordModal}>新建</Button>
-            </li>
-            <li>
-                <Button onClick={showExportModal}>导出</Button>
-            </li>
-            <li>
-                <Button onClick={showExportModal}>数据分析</Button>
-            </li>
+          <li>
+            <span>
+              项目名称
+            </span>
+          </li>
         </ul>
         <ul className="projectDetailRight">
           <li>
@@ -238,15 +235,28 @@ export default (props:IexportProps) =>{
               />
           </li>
           <li>
-          <Popover  title="内容排序" content={<SortType sortTypes={SortMenu}/>} trigger="click">
-           <SortAscendingOutlined/>
-          </Popover>
-          </li>
-          <li>
-            <FilterOutlined onClick={showModal} />
-          </li>
+               <button onClick={showRecordModal} className="yellowBtn">
+                 <span>新建</span>
+               </button>
+            </li>
+            <li>
+                <button onClick={showExportModal} className="btn">
+                  <span>导出</span>
+                </button>
+            </li>
         </ul>
       </div>
+      <ul className="sortAndFilter">
+        <li>
+            <Popover  title="内容排序" content={<SortType sortTypes={SortMenu}/>} trigger="click">
+             <img src={paixu} alt=""/> <span>排序</span>
+            </Popover>
+          </li>
+          <li onClick={showModal}>
+            <img src={shaixuan} alt="" /> 
+            <span>筛选</span>
+          </li>
+      </ul>
       {
         record?.map(item=>{
           return <Record onQueryRecord={()=>{onQueryRecord({recordProjectId:3})}} record={item} key={item.id}/>
@@ -289,6 +299,39 @@ export default (props:IexportProps) =>{
                 </Checkbox>
                 <Checkbox value={3}>
                   严重
+                </Checkbox>
+            </Checkbox.Group>
+          </Form.Item>
+          <p>追评 </p>
+          <Form.Item
+            name="hasComment"
+          >
+            <Checkbox.Group>
+             <Checkbox value={1}>
+               有追评
+             </Checkbox>
+             <Checkbox value={2}>
+               无追评
+             </Checkbox>
+            </Checkbox.Group>
+          </Form.Item>
+          <p>标签</p>
+          <Form.Item name="tags">
+            <Checkbox.Group>
+                <Checkbox value="地下室">
+                  地下室
+                </Checkbox>
+                <Checkbox value="楼栋">
+                  楼栋
+                </Checkbox>
+                <Checkbox value="景观">
+                  景观
+                </Checkbox>
+                <Checkbox value="场地">
+                  场地
+                </Checkbox>
+                <Checkbox value="户型">
+                  户型
                 </Checkbox>
             </Checkbox.Group>
           </Form.Item>
@@ -340,7 +383,7 @@ export default (props:IexportProps) =>{
               <TextArea rows={4} placeholder="请描述下具体问题并提交建议" />
           </Form.Item>
            <p className="tag">标签</p>
-          {
+          {/* {
             tags.map(item=>{
               return <Tag>{item}</Tag>  
             })
@@ -351,7 +394,18 @@ export default (props:IexportProps) =>{
               enterButton="添加标签"
               size="middle"
               onSearch={onAddTag} 
-           />
+           /> */}
+         <Form.Item
+          name="tags"
+         >
+          <Select>
+            <Select.Option value="地下室">地下室</Select.Option>
+            <Select.Option value="楼栋">楼栋</Select.Option>
+            <Select.Option value="景观">景观</Select.Option>
+            <Select.Option value="场地">场地</Select.Option>
+            <Select.Option value="户型">户型</Select.Option>
+          </Select>
+        </Form.Item>
           <p>严重程度</p>
           <Form.Item
             name="level"
@@ -412,30 +466,30 @@ export default (props:IexportProps) =>{
             </Checkbox.Group>
           </Form.Item>
           <p>标签</p>
-          <Form.Item name="level">
+          <Form.Item name="tags">
             <Checkbox.Group>
-                <Checkbox value={1}>
+                <Checkbox value="地下室">
                   地下室
                 </Checkbox>
-                <Checkbox value={2}>
+                <Checkbox value="楼栋">
                   楼栋
                 </Checkbox>
-                <Checkbox value={3}>
+                <Checkbox value="景观">
                   景观
                 </Checkbox>
-                <Checkbox value={4}>
+                <Checkbox value="场地">
                   场地
                 </Checkbox>
-                <Checkbox value={5}>
+                <Checkbox value="户型">
                   户型
                 </Checkbox>
             </Checkbox.Group>
           </Form.Item>
           <p>导出追评</p>
-          <Form.Item name="exportType">
+          <Form.Item name="isExportComment">
            <Radio.Group>
-              <Radio value="导出">导出</Radio>
-              <Radio value="不导出">不导出</Radio>
+              <Radio value={1}>导出</Radio>
+              <Radio value={2}>不导出</Radio>
             </Radio.Group>
           </Form.Item>  
           <p>导出方式</p>
@@ -465,6 +519,12 @@ export default (props:IexportProps) =>{
               <Radio value="ppt">PPT</Radio>
             </Radio.Group>
           </Form.Item>
+          <Form.Item name="isHorizontal">
+            <Radio.Group defaultValue={2}>
+              <Radio value={1}>横版</Radio>
+              <Radio value={2}>竖版</Radio>
+            </Radio.Group>
+          </Form.Item>
           <div className="exportTemplate">
             <p className="exportLeft">导出模板</p>
             <div className="exportRight">
@@ -482,6 +542,16 @@ export default (props:IexportProps) =>{
             />
           </Form.Item>
           <Form.Item
+            name="saveToMyDocument"
+            style={{textAlign:"center"}}
+          >
+            <Checkbox.Group>
+              <Checkbox value={1}>
+                导出文件同步到个人文档
+              </Checkbox>
+            </Checkbox.Group>
+           </Form.Item>
+          <Form.Item
             className="submit"
           >
             <Button htmlType="reset" onClick={handleCancel}>取消</Button>
@@ -490,7 +560,7 @@ export default (props:IexportProps) =>{
             </Button>
           </Form.Item>
         </Form>
-        </div>
+      </div>
     </Modal>
     </>
   )

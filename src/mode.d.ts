@@ -38,7 +38,7 @@ interface ITeam {
   level?: number;
 }
 
-// 返场记录项目
+//记录项目
 interface IRecordProject {
   
   id: number;
@@ -50,6 +50,11 @@ interface IRecordProject {
   tmModify?: string;
   //1 未删除 || 2 已删除
   isDeleted: number;
+  // logo图片
+  logo:string;
+  page:number;
+  // 是否为默认logo: null 非默认 || 1 默认
+  isDefaultLogo:string 
 }
 
 // 用户实体
@@ -172,8 +177,12 @@ interface IRecordDocument {
    earliestTmCreate: string ;
    //追评时间
    tmLatestComment: string ;
+    //有无追评 1 有追评 || 2 无追评
+   hasComment: number ;
    //追评内容
    recordComment:Array<IRecordCommentDocument> ;
+   //整改描述
+   reply: string ;
 }
 
 // 评论实体
@@ -250,15 +259,25 @@ interface  IRecordFilterReq {
      */
     level:Array<number>;
 
-    /**
-     * 是否有追评： 1 有追评 || 2 无追评
+     /**
+     * 筛选用，多选，是否有追评： 1 有追评 || 2 无追评
      */
-    hasComment:Array<number>;
+    hasComment: Array<number> ;
+
+    /**
+      * 导出用，单选，是否导出追评： 1 有追评 || 2 无追评
+     */
+    isExportComment:number;
 
     /**
      * 身份： 自己 1 || 所有人 2
      */
     isSelf :number ;
+
+     /**
+     * 标签入参，可传多个：地下室，楼栋，景观，场地，户型
+     */
+    tags :Array<string>;
 
     /**
      * 发送到邮箱地址
@@ -269,7 +288,11 @@ interface  IRecordFilterReq {
     //排序类型: 1 最近编辑时间 || 2 创建时间最近 || 3 创建时间最远 || 4 整改时间最近 || 5 严重程度最高 || 6 追评时间最近
     sortType: number;
     // ppt模板实体
-    pptDocument: PptDocument ;    
+    pptDocument: PptDocument ; 
+    //导出word样式： 1 横板 || 2 竖版  (默认传2)
+    isHorizontal:number ;
+    //导出文件是否同步到个人文档  1 勾选代表同步 || 2 不勾选代表不同步
+    saveToMyDocument: number ;
 }
 
 // PPT实体类
@@ -293,3 +316,37 @@ interface PptDocument {
   // 1 未删除  || 2 已删除
   isDeleted: number ;
 }
+
+// 缺陷库实体
+interface Idefect{
+// 描述
+description:string;
+
+id:	string;
+
+// 标记类型: null 无 || 1 独家漫画 || 2 独家视频
+markType:string;
+
+// 附件媒体
+medias:Array<string>;
+
+page:	number;
+pageSize:number;
+
+// 状态 1 为发布 2草稿 3为已删除
+status:number;
+
+// 标签
+tags:Array<string>	
+
+// 创建时间
+tmCreate:string
+
+// 修改时间
+tmModify:string
+
+total:number
+// 类型
+type:	string
+}
+

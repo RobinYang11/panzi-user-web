@@ -17,7 +17,7 @@ const ReturnRecord = (props:any) =>{
   const [name,setName] = useState('');
   const [toggle,setToggle] = useState('');
   const [loading,setLoading] = useState(false)
-  const [imageUrl,setImageUrl]=useState('');
+  const [imageUrl,setImageUrl]=useState<Array<string>>([]);
 
   useEffect(()=>{
     onQueryRecordProject();
@@ -27,8 +27,9 @@ const ReturnRecord = (props:any) =>{
   const onQueryRecordProject = ()=>{
     queryRecordProject({
       "creator":{
-        "id":window.user.id
-      }
+        "id":2
+      },
+      "isDefaultLogo":2
     }).then((res:any)=>{
       console.log(res);
       setProjects(res.result);
@@ -36,6 +37,7 @@ const ReturnRecord = (props:any) =>{
   }
 
   const onSubmit =(data:any)=>{
+    debugger
       addRecordProject(data).then(res=>{
         setVisible(false);
         onQueryRecordProject();
@@ -65,10 +67,12 @@ const ReturnRecord = (props:any) =>{
     setVisible(false);
   }
 
+  // 上传照片
   const handleChange =(value:any)=>{  
-    
+    console.log(value)
     if(value.file.status==="done"){
-      setImageUrl(value.file.response.result)
+      imageUrl.push(value.file.response.result);
+      setImageUrl([...imageUrl]);
 		}
   }
 
@@ -93,17 +97,19 @@ const ReturnRecord = (props:any) =>{
           enterButton />
         </div>
           <Row gutter={16}>
-            <Col className="gutter-row" span={4}>
+            <Col className="gutter-row" span={6}>
                 <div className="recordModal">
                   <div className="recordAdd">
-                   <PlusOutlined  onClick={showModal} className="icon"/>
+                    <div className="addIcon">
+                      <PlusOutlined  onClick={showModal} className="icon"/>
+                    </div>
+                    <p>新建项目</p>
                   </div>
-                  <p>新建项目</p>
                 </div>
             </Col>
              {
                projects?.map(i=>{
-                return <ReturnProject project={i} key={i.id} onQueryRecordProject={onQueryRecordProject}/>
+                return <ReturnProject project={i} key={i.id} onQueryRecordProject={onQueryRecordProject} imageUrl={imageUrl} />
                })
              }
           </Row>
@@ -118,22 +124,29 @@ const ReturnRecord = (props:any) =>{
           onFinish={onSubmit}
           form={form}
         >
-          <div style={{textAlign:"center",marginBottom:"10px"}}>
-            <Upload
-              action="/api/upload"
-              listType="picture-card"
-              showUploadList={false}
-              onChange={handleChange}
-            >
-             {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-            </Upload>
-          </div>
+          <Form.Item
+            name="logo"
+          >
+            <div style={{textAlign:"center",marginBottom:"10px"}}>
+              <Upload
+                action="/api/upload"
+                listType="picture-card"
+                showUploadList={false}
+                onChange={handleChange}
+              >
+               {imageUrl ? imageUrl.map((item:any)=>{
+                 debugger
+                 return <img src={item} alt="avatar" style={{ width: '100%' }} />
+               }) : uploadButton}
+              </Upload>
+            </div>
+          </Form.Item>
           <Form.Item
             label="项目名称"
             name="name"
             rules={[{ required: true, message: '请输入项目名称' }]}
           >
-            <Input  name="name" type="text"/>
+            <Input type="text"/>
           </Form.Item>
           <div style={{textAlign:"right"}}>
             <button type="submit" onClick={handleCancel} style={{marginRight:"10px"}}>

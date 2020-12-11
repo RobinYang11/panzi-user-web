@@ -110,4 +110,21 @@ export function queryPrivateDocumentList(params:any):Promise<Response> {
   return request.post('/api/queryPrivateDocumentList',params)
 }
 
+// 缺陷库
+export function addDefect(params:any):Promise<Response> {
+  return request.post('/api/addDefect',params)
+}
+
+export function delectDefect(params:any):Promise<Response> {
+  return request.post('/api/delectDefect',params)
+}
+
+export function queryDefect(params:any):Promise<Response> {
+  return request.post('/api/queryDefect',params)
+}
+
+export function updateDefect(params:any):Promise<Response> {
+  return request.post('/api/updateDefect',params)
+}
+
 

@@ -1,7 +1,8 @@
 .projectDetail {
 
   .projectDetailHeader {
-    overflow: hidden;
+    overflow     : hidden;
+    margin-bottom: 21px;
 
     .projectDetailLeft {
       overflow: hidden;
@@ -11,6 +12,10 @@
         float       : left;
         text-align  : center;
         margin-right: 10px;
+
+        span {
+          font-size: 24px;
+        }
       }
     }
 
@@ -23,6 +28,54 @@
         float       : left;
         margin-right: 10px;
         font-size   : 20px;
+
+        .yellowBtn {
+          text-align   : center;
+          width        : 100px;
+          background   : rgba(255, 184, 31, 1);
+          border-radius: 8px;
+          border       : 0;
+          line-height  : 40px;
+          outline      : none;
+          color        : #ffffff;
+          margin       : 0px 26px;
+        }
+
+        .btn {
+          text-align   : center;
+          width        : 100px;
+          line-height  : 40px;
+          background   : #ffffff;
+          border-radius: 8px;
+          border       : 0;
+          outline      : none;
+        }
+      }
+    }
+  }
+
+  .sortAndFilter {
+    overflow     : hidden;
+    height       : 54px;
+    line-height  : 54px;
+    background   : #FFFFFF;
+    border-radius: 8px;
+
+    li {
+      float       : right;
+      margin-right: 41px;
+      cursor      : pointer;
+
+      img {
+        display       : inline-block;
+        width         : 21px;
+        height        : 20px;
+        vertical-align: sub;
+        margin-right  : 12px;
+      }
+
+      span {
+        font-size: 18px;
       }
     }
   }
@@ -48,7 +101,7 @@
   }
 
   .content {
-    font-size  : 16px;
+    font-size: 16px;
   }
 
   .projectImg {
@@ -60,6 +113,7 @@
       margin: 0 5px;
 
       img {
+        cursor       : pointer;
         border-radius: 5px;
         display      : inline-block;
         width        : 100px;
@@ -102,7 +156,7 @@
 .RecordModal {
   width: 800px !important;
 
-  p{
+  p {
     margin-top: 1em;
   }
 
@@ -110,7 +164,7 @@
     border-radius: 13px;
     padding      : 0px 8px;
     background   : #eee;
-    margin : 5px 10px 5px 0px;
+    margin       : 5px 10px 5px 0px;
   }
 
   .search {
