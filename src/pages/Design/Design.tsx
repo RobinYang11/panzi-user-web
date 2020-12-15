@@ -4,7 +4,6 @@ import { InboxOutlined } from '@ant-design/icons';
 import './Design.less';
 import { addDesignFolder, queryDesign, queryDesignList, uploadFile } from '../../api/api';
 import Folder from '../../components/DesignFolder/DesignFolder';
-import Dragger from 'antd/lib/upload/Dragger';
 import SecondaryDirectoryDesign from '../../components/SecondaryDirectoryDesign/SecondaryDirectoryDesign';
 
 const {Search} =Input;
@@ -72,7 +71,9 @@ const Design =()=>{
           <div className="DesignFolder">
             <div className="DesignHeader">
               <div className="btn">
-                <Button onClick={showModal}>新建文件夹</Button>
+                <button onClick={showModal} >
+                  <span>新建文件夹</span>
+                </button>
               </div>
               <div className="search">
                 <Search 
@@ -89,14 +90,14 @@ const Design =()=>{
               {
                 design?.map(item=>{
                   return <Col span={6} onClick={()=>{onQueryDesign(item.id,item.children)}}>
-                      <Folder Design={item} onQueryDesignList={onQueryDesignList} key={item.id}  />
+                      <Folder Design={item} onQueryDesignList={onQueryDesignList} key={item.id}/>
                   </Col>
                 })
               }
             </Row>
           </div>
         </Col>
-        <Col span={12}>
+        <Col span={12} style={{padding:"0 10px"}}>
            <SecondaryDirectoryDesign id={folder} fileList={children} onQueryDesignList={onQueryDesignList}/>
         </Col>
       </Row>

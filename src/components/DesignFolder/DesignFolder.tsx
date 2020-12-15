@@ -4,6 +4,7 @@ import { useForm } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
 import { delDesign, updateDesign } from '../../api/api';
 import './DesignFolder.less';
+import document from '../../assets/document.png';
 
 interface FolderProps{
   Design:IDesign,
@@ -45,7 +46,7 @@ export default (props:FolderProps)=>{
   }
 
   return(
-    <div style={{textAlign:"center"}}>
+    <div className="design">
         <Dropdown
           trigger={['contextMenu']}
           overlay={
@@ -61,9 +62,9 @@ export default (props:FolderProps)=>{
               </ul>
           }
          >
-          <li className="recordLi">
-              <FolderOutlined style={{fontSize:"60px"}}/>
-            <p>{Design.name+"----"+Design.id}</p>
+          <li className="designItem">
+            <img src={document} alt=""/>
+            <p>{Design.name}</p>
           </li>
         </Dropdown>
 

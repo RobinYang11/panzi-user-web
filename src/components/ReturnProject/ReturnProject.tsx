@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dropdown, Form, Input, Modal, Popconfirm, message, Col, Upload} from 'antd';
 import './ReturnProject.less'
 import { queryRecordProject, updateRecordProject } from '../../api/api';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
 interface IReturnProps{
   project:IRecordProject;
@@ -14,11 +15,16 @@ export default (props:IReturnProps)=>{
   const { project } = props;
 
   const [visible,setVisible] = useState(false);
+  const [imageUrl,setImageUrl] = useState("");
+  const [loading,setLoading] = useState(false);
 
   // 重命名
   const onSubmit =(data:any)=>{
-    updateRecordProject({id:project.id,...data}).then(res=>{
-      console.log(res)
+    updateRecordProject({
+        id:project.id,
+        logo:imageUrl,
+        ...data
+      } ).then(res=>{
       setVisible(false);
       props.onQueryRecordProject();
     })
@@ -39,17 +45,25 @@ export default (props:IReturnProps)=>{
   const showModal =()=>{
     setVisible(true);
     form.setFieldsValue({name:project.name});
+    setImageUrl(project.logo);
   }
   
   const handleChange =(value:any)=>{
     if(value.file.status==="done"){
-      
+      setImageUrl(value.file.response.result);
 		}
   }
 
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
+
   return(
     <>
-      <Col className="gutter-row" span={4}>
+      <Col className="gutter-row" span={6} style={{marginBottom:"20px"}}>
         <Dropdown
           trigger={['contextMenu']}
           overlay={
@@ -67,13 +81,12 @@ export default (props:IReturnProps)=>{
          >
           <li className="recordLi">
             <a href={`#/test4/${project.id}`}>
-              <img src=""/>
+              <img src={project.logo} alt=""/>
+              <p>{project.name}</p>
             </a>
-            <p>{project.name}</p>
           </li>
         </Dropdown>
        </Col>
-
 
        <Modal
         title="项目重命名"
@@ -92,7 +105,8 @@ export default (props:IReturnProps)=>{
               showUploadList={false}
               onChange={handleChange}
             >
-              上传封面
+              {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+               : uploadButton}
             </Upload>
           </div>
           <Form.Item

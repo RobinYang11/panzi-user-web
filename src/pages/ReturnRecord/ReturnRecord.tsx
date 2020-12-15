@@ -6,6 +6,7 @@ import ReturnProject from '../../components/ReturnProject/ReturnProject';
 import { addRecordProject, queryRecordProject } from '../../api/api';
 import ProjectDetail from '../../components/Record/Record';
 import { useForm } from 'antd/lib/form/Form';
+import Item from 'antd/lib/list/Item';
 
 const {Search} = Input;
 
@@ -17,26 +18,31 @@ const ReturnRecord = (props:any) =>{
   const [name,setName] = useState('');
   const [toggle,setToggle] = useState('');
   const [loading,setLoading] = useState(false)
-  const [imageUrl,setImageUrl]=useState('');
+  const [imageUrl,setImageUrl]=useState("");
 
   useEffect(()=>{
     onQueryRecordProject();
     console.log(window.user.id)
   },[])
-  
+
+  // 查询项目
   const onQueryRecordProject = ()=>{
     queryRecordProject({
       "creator":{
-        "id":window.user.id
-      }
+        "id":2
+      },
+      "isDefaultLogo":2 
     }).then((res:any)=>{
-      console.log(res);
       setProjects(res.result);
     })
   }
 
+  // 添加项目
   const onSubmit =(data:any)=>{
-      addRecordProject(data).then(res=>{
+      addRecordProject({
+        logo:imageUrl,
+        ...data
+      }).then(res=>{
         setVisible(false);
         onQueryRecordProject();
         form.resetFields();
@@ -65,10 +71,11 @@ const ReturnRecord = (props:any) =>{
     setVisible(false);
   }
 
+  // 上传照片
   const handleChange =(value:any)=>{  
-    
+    console.log(value)
     if(value.file.status==="done"){
-      setImageUrl(value.file.response.result)
+      setImageUrl(value.file.response.result);
 		}
   }
 
@@ -90,20 +97,23 @@ const ReturnRecord = (props:any) =>{
             setName(e.target.value)
           }}
           onSearch={onSearch}
-          enterButton />
+          style={{width:"500px",height:"32px"}}
+           />
         </div>
           <Row gutter={16}>
-            <Col className="gutter-row" span={4}>
+            <Col className="gutter-row" span={6}>
                 <div className="recordModal">
                   <div className="recordAdd">
-                   <PlusOutlined  onClick={showModal} className="icon"/>
+                    <div className="addIcon">
+                      <PlusOutlined  onClick={showModal} className="icon"/>
+                    </div>
+                    <p>新建项目</p>
                   </div>
-                  <p>新建项目</p>
                 </div>
             </Col>
              {
                projects?.map(i=>{
-                return <ReturnProject project={i} key={i.id} onQueryRecordProject={onQueryRecordProject}/>
+                return <ReturnProject project={i} key={i.id} onQueryRecordProject={onQueryRecordProject} />
                })
              }
           </Row>
@@ -125,7 +135,8 @@ const ReturnRecord = (props:any) =>{
               showUploadList={false}
               onChange={handleChange}
             >
-             {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+             {imageUrl ?  <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+              : uploadButton}
             </Upload>
           </div>
           <Form.Item
@@ -133,7 +144,7 @@ const ReturnRecord = (props:any) =>{
             name="name"
             rules={[{ required: true, message: '请输入项目名称' }]}
           >
-            <Input  name="name" type="text"/>
+            <Input type="text"/>
           </Form.Item>
           <div style={{textAlign:"right"}}>
             <button type="submit" onClick={handleCancel} style={{marginRight:"10px"}}>

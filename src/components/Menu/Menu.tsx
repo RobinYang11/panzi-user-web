@@ -1,11 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Menu.less'
 
 export interface IMenuItem{
   name:string,
   path:string,
-  icon:ReactNode,
+  icon:string,
   component:any,
   render:boolean,
 }
@@ -19,6 +19,8 @@ export default (props:IMenuProps)=>{
 
   const {menu} = props;
 
+  const [menuItem,setItem] = useState("");
+
   return(
     <ul>
       {
@@ -27,9 +29,14 @@ export default (props:IMenuProps)=>{
             return ;
           }
           return(
-            <li>
-              <Link to={item.path} >
-                {item.icon}
+            <li
+             onClick={(e:any)=>{
+              setItem(e.target.innerHTML);
+             }}
+            className={menuItem===item.name?"menuItem menuItems":"menuItem "}
+            >
+              <Link to={item.path} style={{width: "100%",display:"inline-block"}}>
+                <img src={item.icon} alt=""/>
                 <span>{item.name}</span>
               </Link>
             </li>

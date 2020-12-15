@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, message, Modal, Popconfirm, Popover, Rate, Tag, Upload } from 'antd';
+import { Button, Col, Form, Input, message, Modal, Popconfirm, Popover, Rate, Row, Tag, Upload } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
@@ -7,6 +7,10 @@ import React, { useEffect, useState } from 'react';
 import {addRecordComment, deleteRecord, queryRecord, queryRecordComment, updateRecordQuestion } from '../../api/api';
 import './Record.less';
 import Comment from '../Comment/Comment';
+import paizhao from '../../assets/拍照.png'
+import shanchu from '../../assets/删 除 拷贝.png'
+import bianji from '../../assets/编辑.png';
+
 const {Search} = Input
 
 interface RecordDocumentProps{
@@ -28,6 +32,7 @@ export default(props:RecordDocumentProps)=>{
   const [comments,setComments]= useState<Array<IRecordCommentDocument>>();
   const [description,setDescription] = useState('');
   const id = record.id;
+  const [commentImage,setCommentImage] = useState<Array<any>>([])
 
   useEffect(()=>{
     onQueryRecord();
@@ -51,7 +56,7 @@ export default(props:RecordDocumentProps)=>{
       props.onQueryRecord();
     })
   }
-
+  
   const handleCancel = ()=>{
     setRecordVisible(false);
   }
@@ -89,15 +94,21 @@ export default(props:RecordDocumentProps)=>{
 
   const handleChange =(value:any)=>{
     if(value.file.status==="done"){
-			imgs?.push(value.file.response.result);
-			setImgs([...imgs]);
+      imgs?.push(value.file.response.result);
+      setImgs([...imgs]);
 		}
+  }
+
+  const uploadImage =(value:any) =>{
+    if(value.file.status==="done"){
+      commentImage?.push(value.file.response.result);
+      setCommentImage([...commentImage]);
+    }
   }
 
   const showRecordModal =()=>{
     setRecordVisible(true);
     setTags(record?.tags);
-    // debugger
     setImgs(record?.imgs);
     form.setFieldsValue({
       id:record?.id,
@@ -112,8 +123,10 @@ export default(props:RecordDocumentProps)=>{
     addRecordComment({
       recordId:record.id,
       description:description,
+      imgs:commentImage
     }).then(res=>{
       console.log(res);
+      setCommentImage(commentImage);
       setDescription(value);
       onQueryRecordComment();
     })
@@ -121,18 +134,30 @@ export default(props:RecordDocumentProps)=>{
 
   const content = (value:any)=>{
     return <div className="bigImage">
-        <img src={value} alt=""/>
+        <img src={value} alt="" style={{cursor:"pointer"}}/>
         <a href={value} target="_blank">点击查看原图</a>
     </div>
   }
 
+  const suffix = (
+    <Upload
+      action="/api/upload"
+      listType="picture-card"
+      showUploadList={false}
+      onChange={uploadImage}
+      id="upload"
+    >
+      <img src={paizhao} alt=""/>
+    </Upload>
+  )
+
   return (
     <>
-    <div>
-       <div className="projectDetailNav">
+    <div className="projects">
+      <div className="projectDetailNav">
         <div className="creatTime">{ moment(parseInt(record.tmCreate)).format("YYYY:MM:DD hh:ss:mm")}</div>
         <ul className="favorableComments">
-          <Rate count={3} value={record.level} style={{color:"red"}}/>
+          <Rate count={3} value={record.level}/>
         </ul>
       </div>
       <div className="content">
@@ -142,7 +167,7 @@ export default(props:RecordDocumentProps)=>{
           {
             record.imgs?.map(item=>{
               return( <Popover content={content(item)}>
-                <img src={item} alt="图片" style={{width:100,marginRight:"10px"}}/>
+                <img src={item} alt="图片"/>
                </Popover>)
             })
           }
@@ -151,39 +176,43 @@ export default(props:RecordDocumentProps)=>{
         <ul className="buildingInformation">
           {
             record.tags.map(i=>{
-              return <Tag>{i}</Tag> 
+              return <span style={{marginLeft:"4px"}}>{"#"+i}</span> 
             })
           }
         </ul>
         <div className="operation">
-          <Button type="link" onClick={showRecordModal}>编辑</Button>
+          <img src={bianji} alt="" onClick={showRecordModal} className="bianji"/>
           <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>confirm(record.id)} okText="Yes" cancelText="No">
-            <Button type="link">删除</Button>
+            <img src={shanchu} alt="" className="shanchu"/>
           </Popconfirm>
         </div>
       </div>
       <p className="solid"></p>
-      <Search
-        allowClear
-        enterButton="添加评论"
-        size="middle"
-        value={description}
-        onSearch={onAddRecordComment}
-        onChange={(e:any)=>{
-          setDescription(e.target.value);
-        }}
-        style={{
-          margin:"10px 0"
-        }}
-      />
+
       <ul className="comment">
-        <p>最新追评</p> 
         {
           comments?.map((item)=>{
-            return <Comment comment={item} key={item.id} id={id} onQueryRecordComment={()=>{onQueryRecordComment()}}/>
-          })
+              return <Comment comment={item} key={item.id} id={id} onQueryRecordComment={()=>{onQueryRecordComment()}}/>
+            })
         }
       </ul>
+      <p className="queryAllComments" >查看全部评论</p>
+
+      <Row className="submitComment">
+        <Col span={24} style={{position:"relative"}}>
+          <Search
+            allowClear
+            enterButton="添加评论"
+            size="middle"
+            value={description}
+            onSearch={onAddRecordComment}
+            onChange={(e:any)=>{
+              setDescription(e.target.value);
+            }}
+            suffix={suffix}
+          />
+        </Col>
+      </Row>
     </div>
    
     <Modal
@@ -238,7 +267,7 @@ export default(props:RecordDocumentProps)=>{
         <Form.Item
           name="level"
         >
-           <Rate count={3} onChange={onChangeRate} value={rate} style={{color:"red"}}/>
+           <Rate count={3} onChange={onChangeRate} value={rate}/>
         </Form.Item>
         <Form.Item
           className="submit"

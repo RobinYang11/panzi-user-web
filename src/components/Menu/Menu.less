@@ -4,32 +4,38 @@
 
   ul {
     overflow   : hidden;
-    padding-top: 26px;
+    margin-top: 26px;
+    background: rgba(221, 221, 221, 1);
+    border-radius: 8px;
 
-    li {
-      height     : 40px;
-      line-height: 40px;
-
-      &:hover {
-        background-color: #f8f7f7;
-        color           : #25b864;
+    .menuItem {
+      height       : 50px;
+      line-height  : 50px;
+      margin-bottom: 50px;
+      margin-top: 20px;
+      
+      img {
+        margin-left   : 26px;
+        width         : 25px;
+        vertical-align: sub;
       }
 
-      a {
-        color  : #595959;
-        width  : 100%;
-        display: block;
-
-        &:hover {
-          color: #25b864;
-        }
-
-        span {
-          margin-left: 10px;
-        }
+      span {
+        margin-left: 20px;
+        font-size  : 20px;
+        font-family: MicrosoftYaHei;
+        font-weight: 400;
+        color      : #000;
       }
+    }
 
-
+    .menuItems {
+      width     : 254px;
+      height    : 50px;
+      background: #FFFFFF;
+      box-shadow: 0px 2px 10px 0px rgba(255, 184, 31, 0.19);
+      // color     : #000000;
+      background-color: rgba(255, 184, 31, 1);
     }
   }
 }

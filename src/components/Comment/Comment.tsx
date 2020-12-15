@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Popconfirm } from 'antd';
+import { Button, Popconfirm, Popover } from 'antd';
 import moment from 'moment';
 import './Comment.less';
-import { addRecordComment, deleteRecordComment, queryRecordComment } from '../../api/api';
-import Search from 'antd/lib/input/Search';
+import { addRecordComment, deleteRecordComment } from '../../api/api';
+import shanchu from '../../assets/删 除 拷贝.png'
 
 interface CommentProps{
   comment:IRecordCommentDocument,
@@ -16,8 +16,6 @@ export default(props:CommentProps)=>{
 
   const {comment} = props;
   
-  const [imgs,setImags] = useState<Array<any>>([]);
-
   const confirm =()=>{
     deleteRecordComment({
       id:comment.id
@@ -27,24 +25,33 @@ export default(props:CommentProps)=>{
     })
   }
 
+  const content = (value:any)=>{
+    return <div className="bigImage">
+        <img src={value} alt=""/>
+        <a href={value} target="_blank">点击查看原图</a>
+    </div>
+  }
+
   return (
     <>
-    <li>
-      <div className="commentHeart">{moment(parseInt(comment.tmCreate)).format("YYYY:MM:DD hh:mm:ss") }</div>
+    <li className="comments">
       <div className="discription">{comment.description}</div>
-      <div>
+      <div className="commentHeart">{moment(parseInt(comment.tmCreate)).format("YYYY:MM:DD mm:ss") }</div>
+      <div className="CommentImg">
         {
-          imgs.map(item=>{
-            return <img src={item} alt=""/>
-          })
+         comment.imgs?.map((item:any)=>{
+          return( <Popover content={content(item)}>
+             <img src={item} alt="" key={item.id}/>
+         </Popover>)
+         })
         }
       </div>
       <div className="btn">
-        <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>confirm()} okText="Yes" cancelText="No">
-          <Button type="link">删除</Button>
-        </Popconfirm>
-      </div>
-    </li>
+          <Popconfirm placement="top" title="是否确认删除" onConfirm={()=>confirm()} okText="Yes" cancelText="No">
+            <img src={shanchu} alt=""/>
+          </Popconfirm>
+        </div>
+      </li>
     </>
   )
 }
