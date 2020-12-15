@@ -11,13 +11,18 @@ import juXing53 from './assets/矩形 53 拷贝.png';
 import xingzhuang from './assets/形状 4 拷贝.png';
 import juXing from './assets/矩形 54 拷贝 2.png';
 import duoBianXing from './assets/多边形 2 拷贝.png';
+import biji from './assets/biji.png'
+import document from './assets/document.png';
+import drawing from './assets/icon_drawing.png';
+import defect from './assets/icon_flaw.png';
+
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
   {
-    name:"返场记录",
+    name:"笔记",
     path:"/test",
-    icon:xingzhuang,
+    icon:biji,
     component:ReturnRecord,
     render:true,
   },

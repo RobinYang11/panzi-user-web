@@ -7,7 +7,6 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 interface IReturnProps{
   project:IRecordProject;
   onQueryRecordProject:()=>void;
-  imageUrl:Array<String>;
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -16,13 +15,16 @@ export default (props:IReturnProps)=>{
   const { project } = props;
 
   const [visible,setVisible] = useState(false);
-  const [imageUrl,setImageUrl] = useState<Array<string>>([])
+  const [imageUrl,setImageUrl] = useState("");
   const [loading,setLoading] = useState(false);
 
   // 重命名
   const onSubmit =(data:any)=>{
-    debugger
-    updateRecordProject(data).then(res=>{
+    updateRecordProject({
+        id:project.id,
+        logo:imageUrl,
+        ...data
+      } ).then(res=>{
       setVisible(false);
       props.onQueryRecordProject();
     })
@@ -43,13 +45,12 @@ export default (props:IReturnProps)=>{
   const showModal =()=>{
     setVisible(true);
     form.setFieldsValue({name:project.name});
+    setImageUrl(project.logo);
   }
   
   const handleChange =(value:any)=>{
     if(value.file.status==="done"){
-      debugger
-      imageUrl.push(value.file.response.result);
-      setImageUrl([...imageUrl]);
+      setImageUrl(value.file.response.result);
 		}
   }
 
@@ -62,7 +63,7 @@ export default (props:IReturnProps)=>{
 
   return(
     <>
-      <Col className="gutter-row" span={6}>
+      <Col className="gutter-row" span={6} style={{marginBottom:"20px"}}>
         <Dropdown
           trigger={['contextMenu']}
           overlay={
@@ -80,7 +81,7 @@ export default (props:IReturnProps)=>{
          >
           <li className="recordLi">
             <a href={`#/test4/${project.id}`}>
-              <img src={project.logo===null?project.isDefaultLogo:project.logo} alt=""/>
+              <img src={project.logo} alt=""/>
               <p>{project.name}</p>
             </a>
           </li>
@@ -97,23 +98,17 @@ export default (props:IReturnProps)=>{
           onFinish={onSubmit}
           form={form}
         >
-          <Form.Item
-            name="logo"
-          >
-            <div style={{textAlign:"center",marginBottom:"10px"}}>
-              <Upload
-                action="/api/upload"
-                listType="picture-card"
-                showUploadList={false}
-                onChange={handleChange}
-              >
-                {imageUrl ? imageUrl.map((item:any)=>{
-                  debugger
-                   return <img src={item} alt="avatar" style={{ width: '100%' }} />
-                 }) : uploadButton}
-              </Upload>
-            </div>
-          </Form.Item>
+          <div style={{textAlign:"center",marginBottom:"10px"}}>
+            <Upload
+              action="/api/upload"
+              listType="picture-card"
+              showUploadList={false}
+              onChange={handleChange}
+            >
+              {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+               : uploadButton}
+            </Upload>
+          </div>
           <Form.Item
             label="项目名称"
             name="name"

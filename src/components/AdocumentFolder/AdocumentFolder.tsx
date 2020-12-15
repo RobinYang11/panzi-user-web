@@ -3,6 +3,8 @@ import { Col, Dropdown, Form, Input, message, Modal, Popconfirm } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
 import { delDocument, updateDocument } from '../../api/api';
+import documents from '../../assets/document.png';
+import './AdocumentFolder.less';
 
 interface DocumentProps{
   document:IDocument,
@@ -44,7 +46,7 @@ export default (props:DocumentProps)=>{
   }
 
   return(
-    <div style={{textAlign:"center"}}>
+    <div className="document">
         <Dropdown
           trigger={['contextMenu']}
           overlay={
@@ -60,9 +62,9 @@ export default (props:DocumentProps)=>{
               </ul>
           }
          >
-          <li className="recordLi">
-            <FolderOutlined style={{fontSize:"60px"}}/>
-            <p>{document.name +"---"+document.id}</p>
+          <li className="documentItem">
+            <img src={documents} alt=""/>
+            <p>{document.name }</p>
           </li>
         </Dropdown>
 

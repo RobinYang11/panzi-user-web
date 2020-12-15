@@ -1,26 +1,44 @@
 .Design {
-  .DesignFolder{
+  .DesignFolder {
     padding: 0 10px;
 
     .DesignHeader {
       overflow     : hidden;
       margin-bottom: 15px;
-  
+
       .btn {
         float: left;
+
+        button {
+          width        : 137px;
+          height       : 40px;
+          background   : #FFB81F;
+          border-radius: 8px;
+          border: 0;
+          outline: none;
+          cursor: pointer;
+
+          &:hover{
+            
+          }
+
+          span{
+            color: #fff;
+            font-size: 18px;
+          }
+        }
       }
-  
+
       .search {
         float: right;
       }
     }
   }
-  
 
-  :global{
-    .ant-upload-drag{
+
+  :global {
+    .ant-upload-drag {
       height: auto;
     }
   }
 }
-

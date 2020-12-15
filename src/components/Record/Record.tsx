@@ -31,7 +31,6 @@ export default(props:RecordDocumentProps)=>{
   const [rate,setRate] = useState(0);
   const [comments,setComments]= useState<Array<IRecordCommentDocument>>();
   const [description,setDescription] = useState('');
-  const [showComments,setShowComments] = useState(false);
   const id = record.id;
   const [commentImage,setCommentImage] = useState<Array<any>>([])
 
@@ -57,7 +56,7 @@ export default(props:RecordDocumentProps)=>{
       props.onQueryRecord();
     })
   }
-
+  
   const handleCancel = ()=>{
     setRecordVisible(false);
   }
@@ -110,7 +109,6 @@ export default(props:RecordDocumentProps)=>{
   const showRecordModal =()=>{
     setRecordVisible(true);
     setTags(record?.tags);
-    // debugger
     setImgs(record?.imgs);
     form.setFieldsValue({
       id:record?.id,
@@ -141,6 +139,18 @@ export default(props:RecordDocumentProps)=>{
     </div>
   }
 
+  const suffix = (
+    <Upload
+      action="/api/upload"
+      listType="picture-card"
+      showUploadList={false}
+      onChange={uploadImage}
+      id="upload"
+    >
+      <img src={paizhao} alt=""/>
+    </Upload>
+  )
+
   return (
     <>
     <div className="projects">
@@ -157,7 +167,7 @@ export default(props:RecordDocumentProps)=>{
           {
             record.imgs?.map(item=>{
               return( <Popover content={content(item)}>
-                <img src={item} alt="图片" style={{width:100,marginRight:"10px"}}/>
+                <img src={item} alt="图片"/>
                </Popover>)
             })
           }
@@ -166,7 +176,7 @@ export default(props:RecordDocumentProps)=>{
         <ul className="buildingInformation">
           {
             record.tags.map(i=>{
-              return <span style={{marginLeft:"2px"}}>{i}</span> 
+              return <span style={{marginLeft:"4px"}}>{"#"+i}</span> 
             })
           }
         </ul>
@@ -199,16 +209,8 @@ export default(props:RecordDocumentProps)=>{
             onChange={(e:any)=>{
               setDescription(e.target.value);
             }}
+            suffix={suffix}
           />
-           <Upload
-            action="/api/upload"
-            listType="picture-card"
-            showUploadList={false}
-            onChange={uploadImage}
-            id="upload"
-          >
-            <img src={paizhao} alt=""/>
-          </Upload>
         </Col>
       </Row>
     </div>

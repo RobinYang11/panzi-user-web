@@ -22,7 +22,7 @@ let weeks = week.setDate(week.getDate()-7);
 
 var months = new Date().setMonth((new Date().getMonth()-1))
 interface IexportProps{
-  filtContent:IRecordFilterReq
+  filtContent:IRecordProject
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -43,8 +43,9 @@ export default (props:IexportProps) =>{
   const [sort,setSort] = useState(false);
   const [data,setData] = useState<Array<any>>([])
   const [keyword,setKeyword] =useState("");
-  const [email,setEmail] = useState();
   const [id,setId] = useState("");
+  const [exportType,setExportType] = useState("local")
+  const [custom,setCustom] = useState("custom")
 
   useEffect(()=>{
     onQueryRecord({recordProjectId:3});
@@ -70,7 +71,6 @@ export default (props:IexportProps) =>{
   }
 
   const onFinish =(data:any)=>{
-    console.log(data);
     addRecord({
       "recordProjectId":3,
       "tags":tags,
@@ -78,7 +78,6 @@ export default (props:IexportProps) =>{
       "imgs":fileLists,
       ...data,
     }).then((res)=>{
-      console.log(res)
       setRecordVisible(false);
       onQueryRecord({recordProjectId:3});
     })
@@ -88,12 +87,11 @@ export default (props:IexportProps) =>{
     setRate(value);
   }
 
-  // 添加tags
+  // 添加tagsw
   const onAddTag =(value:any)=>{
-    tags.push(value);
+    // tags.push(value);
     // setTags(tags); 这种事错误的，react 任务 tags 指向原来的那个tags，是同一个对象，没有变化，所以不重新渲染,
-    setTags([...tags]);
-   
+    // setTags([...tags]);
   }
   // 添加图片
   const handleChange =(value:any)=>{
@@ -129,11 +127,6 @@ export default (props:IexportProps) =>{
     })
   }
 
-  const changeEmail =(e:any)=>{
-    setEmail(e.target.value);
-    console.log(e.target.value);
-  }
-
    // 导出内容
    const onExportFilter=(data:any)=>{
     console.log(data);
@@ -141,7 +134,7 @@ export default (props:IexportProps) =>{
       "recordProjectId":3,
       ...data
     }).then(res=>{
-      console.log(res);
+      setExports(false);
     })
   }
 
@@ -155,7 +148,6 @@ export default (props:IexportProps) =>{
 
 // 删除ppt
   const onDeletePpt =()=>{
-
     deletePpt({id}).then(res=>{
       showExportModal();
     })
@@ -221,7 +213,7 @@ export default (props:IexportProps) =>{
         <ul className="projectDetailLeft">
           <li>
             <span>
-              项目名称
+              项目名称 
             </span>
           </li>
         </ul>
@@ -230,32 +222,32 @@ export default (props:IexportProps) =>{
             <Search 
              placeholder="搜索"
              onSearch={onSearch}
-             onChange={e=>{ setKeyword(e.target.value)}}
+             onChange={e=>{setKeyword(e.target.value)}}
              value={keyword}
               />
           </li>
           <li>
-               <button onClick={showRecordModal} className="yellowBtn">
-                 <span>新建</span>
-               </button>
-            </li>
-            <li>
-                <button onClick={showExportModal} className="btn">
-                  <span>导出</span>
-                </button>
-            </li>
+            <button onClick={showRecordModal} className="yellowBtn">
+              <span style={{cursor:"pointer"}}>新建</span>
+            </button>
+          </li>
+          <li>
+            <button onClick={showExportModal} className="btn">
+              <span style={{cursor:"pointer"}}>导出</span>
+            </button>
+          </li>
         </ul>
       </div>
       <ul className="sortAndFilter">
-        <li>
-            <Popover  title="内容排序" content={<SortType sortTypes={SortMenu}/>} trigger="click">
-             <img src={paixu} alt=""/> <span>排序</span>
-            </Popover>
-          </li>
-          <li onClick={showModal}>
+        <li onClick={showModal}>
             <img src={shaixuan} alt="" /> 
             <span>筛选</span>
           </li>
+        <li>
+            <Popover className="popover" title="内容排序" content={<SortType sortTypes={SortMenu}/>} trigger="click" placement="bottom">
+             <img src={paixu} alt=""/> <span>排序</span>
+            </Popover>
+        </li>
       </ul>
       {
         record?.map(item=>{
@@ -277,27 +269,33 @@ export default (props:IexportProps) =>{
           form={form}
         >
           <p>创建时间</p>
-          <Form.Item
-            name="tmPeriod"
+          <Radio.Group
+            onChange={(e:any)=>{
+              setCustom(e.target.value);
+            }}
           >
-            <Radio.Group>
               <Radio value={dates}>今日</Radio>
               <Radio value={weeks}>一周内</Radio>
               <Radio value={months}>一个月内</Radio>
-              <Radio value="">自定义</Radio>
-                <RangePicker/>
-            </Radio.Group>
+              <Radio value="custom">自定义</Radio>
+          </Radio.Group>
+          <Form.Item
+            name="tmPeriod"
+          >
+           {
+             custom==="custom"?<RangePicker style={{marginTop:"10px"}}/>:""
+           }
           </Form.Item>
           <p>严重程度</p>
           <Form.Item name="level">
             <Checkbox.Group>
-                <Checkbox value={1}>
+                <Checkbox value={3}>
                   一般
                 </Checkbox>
                 <Checkbox value={2}>
                   重要
                 </Checkbox>
-                <Checkbox value={3}>
+                <Checkbox value={1}>
                   严重
                 </Checkbox>
             </Checkbox.Group>
@@ -356,7 +354,6 @@ export default (props:IexportProps) =>{
         <div className="recordHeader">
           <h3>新建巡场记录</h3>
         </div>
-        <p>项目:保利一期</p>
         <Form
           name="basic"
           onFinish={onFinish}
@@ -383,29 +380,17 @@ export default (props:IexportProps) =>{
               <TextArea rows={4} placeholder="请描述下具体问题并提交建议" />
           </Form.Item>
            <p className="tag">标签</p>
-          {/* {
+           <ul className="tags">
+           {
             tags.map(item=>{
-              return <Tag>{item}</Tag>  
+              return  <li
+                className="tagsItme"
+              >
+                <span onClick={onAddTag}>{item}</span>
+              </li>
             })
           }
-            <Search
-              className="search"
-              placeholder="添加标签"
-              enterButton="添加标签"
-              size="middle"
-              onSearch={onAddTag} 
-           /> */}
-         <Form.Item
-          name="tags"
-         >
-          <Select>
-            <Select.Option value="地下室">地下室</Select.Option>
-            <Select.Option value="楼栋">楼栋</Select.Option>
-            <Select.Option value="景观">景观</Select.Option>
-            <Select.Option value="场地">场地</Select.Option>
-            <Select.Option value="户型">户型</Select.Option>
-          </Select>
-        </Form.Item>
+           </ul>
           <p>严重程度</p>
           <Form.Item
             name="level"
@@ -438,29 +423,34 @@ export default (props:IexportProps) =>{
           onFinish={onExportFilter}
         >
           <p>创建时间</p>
-          <Form.Item
-            name="tmPeriod"
+          <Radio.Group
+            onChange={(e:any)=>{
+              setCustom(e.target.value);
+            }}
           >
-            <Radio.Group>
               <Radio value={dates}>今日</Radio>
               <Radio value={weeks}>一周内</Radio>
               <Radio value={months}>一个月内</Radio>
-              <Radio value="自定义">自定义</Radio>
-            </Radio.Group>
+              <Radio value="custom">自定义</Radio>
+          </Radio.Group>
+          <Form.Item
+            name="tmPeriod"
+          >
+           {
+             custom==="custom"?<RangePicker style={{marginTop:"10px"}}/>:""
+           }
           </Form.Item>
-          <Form.Item name="range-picker" label="RangePicker">
-            <RangePicker />
-          </Form.Item>
+         
           <p>严重程度</p>
           <Form.Item name="level">
             <Checkbox.Group>
-                <Checkbox value={1}>
+                <Checkbox value={3}>
                   一般
                 </Checkbox>
                 <Checkbox value={2}>
                   重要
                 </Checkbox>
-                <Checkbox value={3}>
+                <Checkbox value={1}>
                   严重
                 </Checkbox>
             </Checkbox.Group>
@@ -468,49 +458,50 @@ export default (props:IexportProps) =>{
           <p>标签</p>
           <Form.Item name="tags">
             <Checkbox.Group>
-                <Checkbox value="地下室">
+                <Checkbox value="#地下室">
                   地下室
                 </Checkbox>
-                <Checkbox value="楼栋">
+                <Checkbox value="#楼栋">
                   楼栋
                 </Checkbox>
-                <Checkbox value="景观">
+                <Checkbox value="#景观">
                   景观
                 </Checkbox>
-                <Checkbox value="场地">
+                <Checkbox value="#场地">
                   场地
                 </Checkbox>
-                <Checkbox value="户型">
+                <Checkbox value="#户型">
                   户型
                 </Checkbox>
             </Checkbox.Group>
           </Form.Item>
           <p>导出追评</p>
           <Form.Item name="isExportComment">
-           <Radio.Group>
+           <Radio.Group
+            
+           >
               <Radio value={1}>导出</Radio>
               <Radio value={2}>不导出</Radio>
             </Radio.Group>
           </Form.Item>  
           <p>导出方式</p>
-          <Form.Item
-            name="email"
+          <Radio.Group
+            onChange={(e:any)=>{
+              setExportType(e.target.value);
+            }}
           >
-            <Checkbox.Group>
-                <Checkbox>
-                  下载到本地
-                </Checkbox>
-                <br/>
-                <Checkbox>
-                  导出到邮箱
-                  <Input 
-                   placeholder="请填写邮箱地址"
-                   value={email}
-                   onChange={changeEmail}
-                   />
-                </Checkbox>
-            </Checkbox.Group>
-          </Form.Item>
+              <Radio value="local">下载到本地</Radio>
+              <Radio value="email">导出到邮箱</Radio>
+          </Radio.Group>
+         {
+          exportType==="email"?<Form.Item
+            name="email"
+            label="邮箱"
+            required
+          >
+            <Input placeholder="请填写邮箱地址" style={{marginTop:"10px"}}/>
+          </Form.Item>:""
+         }
           <p>导出文件格式</p>
           <Form.Item name="exportType">
            <Radio.Group>
@@ -520,7 +511,7 @@ export default (props:IexportProps) =>{
             </Radio.Group>
           </Form.Item>
           <Form.Item name="isHorizontal">
-            <Radio.Group defaultValue={2}>
+            <Radio.Group>
               <Radio value={1}>横版</Radio>
               <Radio value={2}>竖版</Radio>
             </Radio.Group>
@@ -545,11 +536,9 @@ export default (props:IexportProps) =>{
             name="saveToMyDocument"
             style={{textAlign:"center"}}
           >
-            <Checkbox.Group>
               <Checkbox value={1}>
                 导出文件同步到个人文档
               </Checkbox>
-            </Checkbox.Group>
            </Form.Item>
           <Form.Item
             className="submit"

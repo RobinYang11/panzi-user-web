@@ -1,36 +1,32 @@
 import { CheckOutlined } from '@ant-design/icons';
 import React from 'react';
+import  duigou from './assets/icon_pitch_sort@2x.png'
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default[
   {
-    sortType:"最近编辑时间",
+    sortType:"默认排序",
     value:1,
-    icon:<CheckOutlined />
+    icon:duigou
   },
   {
-    sortType:"创建时间最近",
+    sortType:"创建时间由近到远",
     value:2,
-    icon:<CheckOutlined />
+    icon:duigou
   },
   {
-    sortType:"创建时间最远",
+    sortType:"创建时间由远到近",
     value:3,
-    icon:<CheckOutlined />
+    icon:duigou
   },
   {
-    sortType:"整改时间最近",
-    value:4,
-    icon:<CheckOutlined />
-  },
-  {
-    sortType:"严重程度最高",
+    sortType:"追评时间由近倒远",
     value:5,
-    icon:<CheckOutlined />
+    icon:duigou
   },
   {
-    sortType:"追评时间最近",
+    sortType:"严重程度由高到低",
     value:6,
-    icon:<CheckOutlined />
+    icon:duigou
   },
 ]

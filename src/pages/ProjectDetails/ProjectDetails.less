@@ -66,8 +66,11 @@
       margin-right: 41px;
       cursor      : pointer;
 
+      .popover {
+        width: 200px !important;
+      }
+
       img {
-        display       : inline-block;
         width         : 21px;
         height        : 20px;
         vertical-align: sub;
@@ -114,7 +117,7 @@
 
       img {
         cursor       : pointer;
-        border-radius: 5px;
+        border-radius: 8px;
         display      : inline-block;
         width        : 100px;
         height       : 100px;
@@ -161,10 +164,34 @@
   }
 
   .tags {
-    border-radius: 13px;
-    padding      : 0px 8px;
-    background   : #eee;
-    margin       : 5px 10px 5px 0px;
+    overflow: hidden;
+
+    .tagsItme {
+      float        : left;
+      width        : 84px;
+      height       : 30px;
+      line-height  : 30px;
+      opacity      : 0.3;
+      border-radius: 15px;
+      text-align   : center;
+      margin-right : 16px;
+      background   : #EBEBEB;
+      cursor       : pointer;
+
+      .tagsContent {
+        font-size  : 14px;
+        font-weight: 600;
+        color      : #777777;
+      }
+    }
+
+    .tagsItmes {
+      background: #FFE48F;
+
+      .tagsContents {
+        color: #FFB81F;
+      }
+    }
   }
 
   .search {

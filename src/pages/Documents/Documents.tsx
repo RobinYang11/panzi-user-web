@@ -98,7 +98,7 @@ const DataSource =()=>{
           </Row>
          </div>
         </Col>
-        <Col span={12}>
+        <Col span={12} style={{padding:"0 10px"}}>
           <DocumentFolder id={folder} fileList={children}/>
         </Col>
       </Row>

@@ -6,6 +6,7 @@ import ReturnProject from '../../components/ReturnProject/ReturnProject';
 import { addRecordProject, queryRecordProject } from '../../api/api';
 import ProjectDetail from '../../components/Record/Record';
 import { useForm } from 'antd/lib/form/Form';
+import Item from 'antd/lib/list/Item';
 
 const {Search} = Input;
 
@@ -17,28 +18,31 @@ const ReturnRecord = (props:any) =>{
   const [name,setName] = useState('');
   const [toggle,setToggle] = useState('');
   const [loading,setLoading] = useState(false)
-  const [imageUrl,setImageUrl]=useState<Array<string>>([]);
+  const [imageUrl,setImageUrl]=useState("");
 
   useEffect(()=>{
     onQueryRecordProject();
     console.log(window.user.id)
   },[])
-  
+
+  // 查询项目
   const onQueryRecordProject = ()=>{
     queryRecordProject({
       "creator":{
         "id":2
       },
-      "isDefaultLogo":2
+      "isDefaultLogo":2 
     }).then((res:any)=>{
-      console.log(res);
       setProjects(res.result);
     })
   }
 
+  // 添加项目
   const onSubmit =(data:any)=>{
-    debugger
-      addRecordProject(data).then(res=>{
+      addRecordProject({
+        logo:imageUrl,
+        ...data
+      }).then(res=>{
         setVisible(false);
         onQueryRecordProject();
         form.resetFields();
@@ -71,8 +75,7 @@ const ReturnRecord = (props:any) =>{
   const handleChange =(value:any)=>{  
     console.log(value)
     if(value.file.status==="done"){
-      imageUrl.push(value.file.response.result);
-      setImageUrl([...imageUrl]);
+      setImageUrl(value.file.response.result);
 		}
   }
 
@@ -94,7 +97,8 @@ const ReturnRecord = (props:any) =>{
             setName(e.target.value)
           }}
           onSearch={onSearch}
-          enterButton />
+          style={{width:"500px",height:"32px"}}
+           />
         </div>
           <Row gutter={16}>
             <Col className="gutter-row" span={6}>
@@ -109,7 +113,7 @@ const ReturnRecord = (props:any) =>{
             </Col>
              {
                projects?.map(i=>{
-                return <ReturnProject project={i} key={i.id} onQueryRecordProject={onQueryRecordProject} imageUrl={imageUrl} />
+                return <ReturnProject project={i} key={i.id} onQueryRecordProject={onQueryRecordProject} />
                })
              }
           </Row>
@@ -124,23 +128,17 @@ const ReturnRecord = (props:any) =>{
           onFinish={onSubmit}
           form={form}
         >
-          <Form.Item
-            name="logo"
-          >
-            <div style={{textAlign:"center",marginBottom:"10px"}}>
-              <Upload
-                action="/api/upload"
-                listType="picture-card"
-                showUploadList={false}
-                onChange={handleChange}
-              >
-               {imageUrl ? imageUrl.map((item:any)=>{
-                 debugger
-                 return <img src={item} alt="avatar" style={{ width: '100%' }} />
-               }) : uploadButton}
-              </Upload>
-            </div>
-          </Form.Item>
+          <div style={{textAlign:"center",marginBottom:"10px"}}>
+            <Upload
+              action="/api/upload"
+              listType="picture-card"
+              showUploadList={false}
+              onChange={handleChange}
+            >
+             {imageUrl ?  <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+              : uploadButton}
+            </Upload>
+          </div>
           <Form.Item
             label="项目名称"
             name="name"
