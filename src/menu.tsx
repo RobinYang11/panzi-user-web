@@ -15,6 +15,7 @@ import biji from './assets/biji.png'
 import document from './assets/document.png';
 import drawing from './assets/icon_drawing.png';
 import defect from './assets/icon_flaw.png';
+import TabsManager from "./pages/TabsManager/TabsManager";
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -44,7 +45,7 @@ export default [
     name:"缺陷库",
     path:"/test3",
     icon:duoBianXing,
-    component:Defect,
+    component:TabsManager,
     render:true,
   },
   {

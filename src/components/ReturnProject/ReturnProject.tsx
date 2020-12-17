@@ -110,7 +110,6 @@ export default (props:IReturnProps)=>{
             </Upload>
           </div>
           <Form.Item
-            label="项目名称"
             name="name"
             rules={[{ required: true, message: '请输入项目名称' }]}
           >

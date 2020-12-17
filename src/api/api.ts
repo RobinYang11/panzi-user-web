@@ -127,4 +127,23 @@ export function updateDefect(params:any):Promise<Response> {
   return request.post('/api/updateDefect',params)
 }
 
+// 类型管理
+
+export function addType(params:any):Promise<Response> {
+  return request.post('/api/addType',params)
+}
+
+export function deletType(params:any):Promise<Response> {
+  return request.post('/api/deletType',params)
+}
+
+export function queryType(params:any):Promise<Response> {
+  return request.post('/api/queryType',params)
+}
+
+export function updateType(params:any):Promise<Response> {
+  return request.post('/api/updateType',params)
+}
+
+
 

@@ -4,7 +4,7 @@ import { Popover} from 'antd';
 import '../Dropdown/Dropdown'
 import Dropdown from '../Dropdown/Dropdown';
 import DropMenus from '../../DropMenus';
-import q from '../../assets/q.png';
+// import q from '../../assets/q.png';
 import shiliang from  '../../assets/矢量智能对象.png';
 import badou from '../../assets/badou.png'
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -15,7 +15,7 @@ export default () => {
         <div className="header-main">
           <div className="logo">
              <a href="">
-               <img src={q} alt="盘子"/>
+               <img src={shiliang} alt="盘子"/>
              </a>
           </div>
           <div className="header-nav-right">
