@@ -1,39 +1,89 @@
-.recordSearch {
-  width : 300px;
-  margin: 20px auto;
-}
+.Record {
 
-.gutter-row {
+  .ant-modal-body {
+    text-align: center !important;
+  }
 
-  .recordAdd {
-    width        : 192px;
-    height       : 192px;
+  .recordSearch {
+    width        : 500px;
+    height       : 32px;
     background   : #FFFFFF;
     border-radius: 8px;
-    margin-left: 12px;
-
-    .addIcon{
-      height: 73%;
-      width: 100%;
-      background: rgba(231, 231, 231, 1);
-    }
-
-    &:hover {
-      box-shadow: 0px 0px 3px rgb(65, 64, 64);
-    }
-
-    .icon {
-      color: #FFFFFF;
-      font-size : 76px;
-      margin-top: 30px;
-    }
+    margin       : 0 auto 30px;
   }
 
-  p{
-    font-size: 18px;
-    font-family: Microsoft YaHei;
-    font-weight: 400;
-    color: #333333;
-    line-height: 46px;
+  .gutter-row {
+
+    .recordAdd {
+      width        : 192px;
+      height       : 192px;
+      background   : #FFFFFF;
+      border-radius: 8px;
+      margin-left  : 12px;
+
+      .addIcon {
+        height    : 73%;
+        width     : 100%;
+        background: rgba(231, 231, 231, 1);
+      }
+
+      &:hover {
+        box-shadow: 0px 0px 3px rgb(65, 64, 64);
+      }
+
+      .icon {
+        color     : #FFFFFF;
+        font-size : 76px;
+        margin-top: 30px;
+      }
+    }
+
+    p {
+      font-size  : 18px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color      : #333333;
+      line-height: 46px;
+    }
   }
+  .addProject{
+    
+  }
+}
+
+
+
+.ant-input-group>.ant-input:first-child,
+.ant-input-group-addon:first-child {
+  width        : 500px !important;
+  height       : 32px !important;
+  background   : #FFFFFF !important;
+  border-radius: 8px !important;
+}
+
+.ant-input-search>.ant-input-group>.ant-input-group-addon {
+  display: none !important;
+}
+
+.ant-modal-title {
+  font-size: 22px !important;
+}
+
+.ant-modal-header {
+  border-bottom: none !important;
+}
+
+.ant-input {
+  width     : 333px !important;
+  outline   : none !important;
+  background: #EEEEEE !important;
+}
+
+.ant-form-item-control:first-child:not([class^='ant-col-']):not([class*=' ant-col-']) {
+  text-align: center !important;
+}
+
+.ant-input:focus, .ant-input-focused{
+  border: none !important;
+  border-bottom: 1px solid #EEEEEE !important;
 }

@@ -5,7 +5,8 @@ module.exports = function (app) {
   app.use(
     '/api',
     proxy({
-      target:"https://userweb.ngrok2.xiaomiqiu.cn",
+      target:"http://2081uw5545.iask.in",
+      // target:"https://userweb.ngrok2.xiaomiqiu.cn",
       // target: 'http://r3x4365388.wicp.vip',
       // target: 'http://r3x4365388.wicp.vip:19183',
       // target: 'http://2081uw5545.iask.in:46203',
