@@ -257,7 +257,7 @@ export default (props: IexportProps) => {
         </ul>
         {
           record?.map(item => {
-            return <Record onQueryRecord={() => { onQueryRecord({ recordProjectId: 3 }) }} record={item} key={item.id} />
+            return <Record onQueryRecord={() => { onQueryRecord({ recordProjectId: 3 }) }} record={item} key={item.id}/>
           })
         }
       </div>

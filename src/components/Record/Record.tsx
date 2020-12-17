@@ -15,13 +15,14 @@ const { Search } = Input
 
 interface RecordDocumentProps {
   record: IRecordDocument,
-  onQueryRecord: () => void
+  onQueryRecord: () => void,
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (props: RecordDocumentProps) => {
 
   const { record } = props;
+
   // debugger
   const [form] = useForm();
   const [reacordVisible, setRecordVisible] = useState(false);
@@ -29,10 +30,11 @@ export default (props: RecordDocumentProps) => {
   const [recordDetails, setRecordDetails] = useState<Array<IRecordDocument>>();
   const [imgs, setImgs] = useState<Array<any>>([]);
   const [rate, setRate] = useState(0);
-  const [comments, setComments] = useState<Array<IRecordCommentDocument>>();
+  const [comments, setComments] = useState<Array<IRecordCommentDocument>>([]);
   const [description, setDescription] = useState('');
   const id = record.id;
   const [commentImage, setCommentImage] = useState<Array<any>>([])
+  const [commentShow, setCommentShow] = useState(0);
 
   useEffect(() => {
     onQueryRecord();
@@ -118,14 +120,14 @@ export default (props: RecordDocumentProps) => {
   }
 
   // 添加评论
-  const onAddRecordComment = (e:any) => {
+  const onAddRecordComment = (e: any) => {
     console.log(e)
     addRecordComment({
       recordId: record.id,
-      description:e.target.value ,
+      description: e.target.value,
       imgs: commentImage
     }).then(res => {
-      setDescription(e.target.value);
+      // setDescription(e.target.value);
       onQueryRecordComment();
     })
   }
@@ -181,27 +183,10 @@ export default (props: RecordDocumentProps) => {
         <p className="solid"></p>
 
         <ul className="comment">
-          {/* <li>
-            <li className="comments">
-              <div className="discription">{comments.description}</div>
-              <div className="commentHeart">{moment(parseInt(comments.tmCreate)).format("YYYY:MM:DD mm:ss")}</div>
-              <div className="CommentImg">
-                {
-                  comments.imgs?.map((item: any) => {
-                    return (<Popover content={content(item)}>
-                      <img src={item} alt="" key={item.id} />
-                    </Popover>)
-                  })
-                }
-              </div>
-              <div className="btn">
-                <Popconfirm placement="top" title="是否确认删除" onConfirm={() => confirm()} okText="Yes" cancelText="No">
-                  <img src={shanchu} alt="" />
-                </Popconfirm>
-              </div>
-            </li>
-          </li> */}
-          <li>
+          {
+            <div>第一条评论</div>
+          }
+          <li className={commentShow === 1 ? " nextAllComments" : " nextAllComment"}>
             {
               comments?.map((item) => {
                 return <Comment comment={item} key={item.id} id={id} onQueryRecordComment={() => { onQueryRecordComment() }} />
@@ -209,7 +194,12 @@ export default (props: RecordDocumentProps) => {
             }
           </li>
         </ul>
-        <p className="queryAllComments" style={{ cursor: "pointer" }}>查看全部评论</p>
+        <p
+          className="queryAllComments"
+          onClick={() => {
+            setCommentShow(1)
+          }}
+        >查看全部评论</p>
 
         <Row className="submitComment">
           <Col span={24} style={{ position: "relative" }}>
