@@ -118,16 +118,14 @@ export default (props: RecordDocumentProps) => {
   }
 
   // 添加评论
-  const onAddRecordComment = (value: any) => {
-    console.log(value);
+  const onAddRecordComment = (e:any) => {
+    console.log(e)
     addRecordComment({
       recordId: record.id,
-      description: description,
+      description:e.target.value ,
       imgs: commentImage
     }).then(res => {
-      console.log(res);
-      setCommentImage(commentImage);
-      setDescription(value);
+      setDescription(e.target.value);
       onQueryRecordComment();
     })
   }
@@ -138,18 +136,6 @@ export default (props: RecordDocumentProps) => {
       <a href={value} target="_blank">点击查看原图</a>
     </div>
   }
-
-  const suffix = (
-    <Upload
-      action="/api/upload"
-      // listType="picture-card"
-      showUploadList={false}
-      onChange={uploadImage}
-      id="upload"
-    >
-      <img src={paizhao} alt="" />
-    </Upload>
-  )
 
   const layout = {
     labelCol: { span: 6 },
@@ -195,27 +181,66 @@ export default (props: RecordDocumentProps) => {
         <p className="solid"></p>
 
         <ul className="comment">
-          {
-            comments?.map((item) => {
-              return <Comment comment={item} key={item.id} id={id} onQueryRecordComment={() => { onQueryRecordComment() }} />
-            })
-          }
+          {/* <li>
+            <li className="comments">
+              <div className="discription">{comments.description}</div>
+              <div className="commentHeart">{moment(parseInt(comments.tmCreate)).format("YYYY:MM:DD mm:ss")}</div>
+              <div className="CommentImg">
+                {
+                  comments.imgs?.map((item: any) => {
+                    return (<Popover content={content(item)}>
+                      <img src={item} alt="" key={item.id} />
+                    </Popover>)
+                  })
+                }
+              </div>
+              <div className="btn">
+                <Popconfirm placement="top" title="是否确认删除" onConfirm={() => confirm()} okText="Yes" cancelText="No">
+                  <img src={shanchu} alt="" />
+                </Popconfirm>
+              </div>
+            </li>
+          </li> */}
+          <li>
+            {
+              comments?.map((item) => {
+                return <Comment comment={item} key={item.id} id={id} onQueryRecordComment={() => { onQueryRecordComment() }} />
+              })
+            }
+          </li>
         </ul>
-        <p className="queryAllComments" >查看全部评论</p>
+        <p className="queryAllComments" style={{ cursor: "pointer" }}>查看全部评论</p>
 
         <Row className="submitComment">
           <Col span={24} style={{ position: "relative" }}>
-            <Search
-              allowClear
-              enterButton="添加评论"
-              size="middle"
+            <input
               value={description}
-              onSearch={onAddRecordComment}
+              onInput={onAddRecordComment}
               onChange={(e: any) => {
                 setDescription(e.target.value);
               }}
-              suffix={suffix}
+              placeholder="这是一个不错的问题,可以进行二次评审"
             />
+            <div className="upload">
+              {
+                <Upload
+                  action="/api/upload"
+                  showUploadList={false}
+                  onChange={uploadImage}
+                  id="upload"
+                >
+                  <img src={paizhao} alt="" />
+                </Upload>
+              }
+            </div>
+            <button type="submit" onClick={onAddRecordComment}>
+              <span>发表</span>
+            </button>
+            <div>
+              {
+
+              }
+            </div>
           </Col>
         </Row>
       </div>
@@ -228,7 +253,7 @@ export default (props: RecordDocumentProps) => {
         width="1150px"
       >
         <div className="recordHeader">
-          <h3 style={{fontSize:"22px"}}>编辑巡场记录</h3>
+          <h3 style={{ fontSize: "22px" }}>编辑巡场记录</h3>
         </div>
         <Form
           {...layout}
@@ -237,16 +262,16 @@ export default (props: RecordDocumentProps) => {
         >
           <Row>
             <Col span={6}>
-              <p style={{ textAlign: "right", paddingRight:"10px" }}>问题照片:</p>
+              <p style={{ textAlign: "right", paddingRight: "10px" }}>问题照片:</p>
             </Col>
             <Col span={18}>
-              <ul style={{overflow:"hidden"}}>
-                <li style={{float:"left"}}>
+              <ul style={{ overflow: "hidden" }}>
+                <li style={{ float: "left" }}>
                   {imgs?.map(i => {
                     return <img src={i} style={{ width: "100px", marginRight: "10px" }} />
                   })}
                 </li>
-                <li style={{float:"left"}}>
+                <li style={{ float: "left" }}>
                   <Upload
                     action="api/upload"
                     listType="picture-card"
@@ -268,7 +293,7 @@ export default (props: RecordDocumentProps) => {
           </Form.Item>
           <Row>
             <Col span={6}>
-              <p style={{ textAlign: "right",  paddingRight:"10px" }} className="tag">标签:</p>
+              <p style={{ textAlign: "right", paddingRight: "10px" }} className="tag">标签:</p>
             </Col>
             <Col span={18}>
               <ul className="tags">
