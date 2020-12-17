@@ -29,7 +29,7 @@ export default(props:CommentProps)=>{
     return <div className="bigImage">
         <img src={value} alt=""/>
         <a href={value} target="_blank">点击查看原图</a>
-    </div>
+    </div>  
   }
 
   return (

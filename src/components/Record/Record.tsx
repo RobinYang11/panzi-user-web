@@ -94,6 +94,7 @@ export default (props: RecordDocumentProps) => {
     setTags([...tags]);
   }
 
+  // 添加图片
   const handleChange = (value: any) => {
     if (value.file.status === "done") {
       imgs?.push(value.file.response.result);
@@ -279,7 +280,18 @@ export default (props: RecordDocumentProps) => {
             name="description"
             rules={[{ required: true, message: '请描述具体问题' }]}
           >
-            <TextArea rows={4} placeholder="请描述下具体问题并提交建议" />
+            <textarea
+              rows={4}
+              placeholder="请描述下具体问题并提交建议"
+              style={{
+                width: "660px",
+                height: "88px",
+                background: "#EEEEEE",
+                borderRadius: "8px",
+                outline: "none",
+                textIndent: "10px"
+              }}
+            />
           </Form.Item>
           <Row>
             <Col span={6}>

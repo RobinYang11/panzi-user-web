@@ -268,7 +268,7 @@ export default (props: IexportProps) => {
         visible={visible}
         onCancel={onCancel}
         footer={null}
-        className="modal"
+        width="800px"
       >
         <Form
           onFinish={onQueryRecords}
@@ -397,12 +397,14 @@ export default (props: IexportProps) => {
             name="description"
             rules={[{ required: true, message: '请描述具体问题' }]}
           >
-            <TextArea rows={4} placeholder="请描述下具体问题并提交建议" 
+            <textarea rows={4} placeholder="请描述下具体问题并提交建议" 
               style={{
                 width: "660px",
                 height: "88px",
                 background: "#EEEEEE",
-                borderRadius: "8px"
+                borderRadius: "8px",
+                outline:"none",
+                textIndent:"10px"
               }}
             />
           </Form.Item>
