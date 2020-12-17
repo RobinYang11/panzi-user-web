@@ -86,10 +86,8 @@ export default (props:DocumentProps)=>{
             <Input  name="name" type="text"/>
           </Form.Item>
           <div style={{textAlign:"right"}}>
-            <button type="submit" onClick={handleCancel} style={{marginRight:"10px"}}>
-              取消
-            </button>
-            <button type="submit">
+            <button onClick={handleCancel} style={{width:"94px",height:"39px",background: "#F7F8F9", borderRadius:"8px",outline:"none",border:"0px",color:"#777777",marginRight:50}}>取消</button>
+            <button type="submit" className="sure" style={{width:"94px",height:"39px",background: "#FFB81F", borderRadius:"8px",outline:"none",border:"0px",color:"#FFFFFF"}}>
               确定
             </button>
           </div>

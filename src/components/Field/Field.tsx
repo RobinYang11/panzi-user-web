@@ -1,4 +1,5 @@
-import { Col, Modal, Row, Tag } from 'antd';
+import { Carousel, Col, Modal, Row, Tag } from 'antd';
+import moment from 'moment';
 import React, { useState } from 'react';
 import './Field.less'
 
@@ -20,35 +21,47 @@ export default (props:DefectProps)=>{
   const onCancel =()=>{
     setVisible(false);
   }
+
   return (
-    <>
-    <li onClick={showModal}>
-      <Row>
-        <Col span={20} style={{position:"relative"}}>
+    <div className="field">
+      <li onClick={showModal}>
+      <Row className="defectItem">
+        <Col span={18} style={{position:"relative"}}>
           <div className="content">
             {defect.description}
-           </div>
-           <div className="bottom">
-             <ul className="tags">
+          </div>
+          <Row className="bottom">
+            <Col span={20} className="tags">
               {
                 defect.tags.map((item:any)=>{
-                  return <Tag>{item}</Tag>
+                  return  <li>
+                     <span>{item}</span>
+                  </li>
                 })
               }
-             </ul>
-            <span className="tmCreate">{defect.tmCreate}</span>
-           </div>
+             </Col>
+            <Col span={4} className="tmCreate">{moment(parseInt(defect.tmCreate)).format("YYYY:MM:DD mm:ss")}</Col>
+          </Row>
         </Col>
-        <Col span={4} style={{padding:"3px"}}>
+        <Col span={6} className="imgAndVideo">
            {
-            defect.medias?.map((item:any)=>{
-              console.log(item)
-              if(item ===".jpg"||".png"){
-                return <img src={item} alt="" style={{width:"80%"}}/>
-              }else{
-                return <video src={item}></video>
+             defect.medias?.map((item:any)=>{
+
+              return ()=>{
+                switch(item.includes("jpg"||"mp4")||defect.medias.length>=1){          
+                  case "jpg" :
+                     <img src={defect.medias[0]} alt="" className="img"/>; 
+                     break;
+                  case "mp4" :
+                     <video src={defect.medias[0]} style={{width:200}} autoPlay></video>;
+                     break;
+                }
               }
-            })
+              //  return  defect.medias.length >=1? <img src={defect.medias[0]} alt="" className="img"/>&&<img src={defect.medias[0]} alt="" className="img"/>:"";
+                // return item.includes("jpg"||"mp4") ==="jpg"||"mp4" ? 
+                // defect.medias.length >=1? <img src={defect.medias[0]} alt="" className="img"/> ||
+                // defect.medias.length >=1? <video src={defect.medias[0]} style={{width:200}} autoPlay></video>:""
+             })
           }
         </Col>
       </Row>
@@ -57,27 +70,29 @@ export default (props:DefectProps)=>{
       <Modal
         footer={null}
         visible={visible}
+        width="600px"
         onCancel={onCancel}
-        className="modal"
-        style={{textAlign:"center"}}
       >
-        <p>
-          {defect.description}
-        </p>
-        <div >
-          {
-            defect.medias?.map((item:any)=>{
-              console.log(item)
-              if(item ===".jpg"||".png"){
-                return <img src={item} alt="" style={{width:"80%"}}/>
-              }else{
-                return <video src={item}></video>
+        <div className="imgModal">
+          <div>
+            <Carousel autoplay>
+              {
+                defect.medias?.map((item:any)=>{
+                  return  <div>
+                    <h3>
+                      <img src={item} className="contentStyle" alt=""/>
+                    </h3>
+                  </div>
+                })
               }
-            })
-          }
+             </Carousel>
+          </div>
+          <p>
+            {defect.description}
+          </p>
         </div>
       </Modal>
-    </>
+    </div>
   )
 
 }

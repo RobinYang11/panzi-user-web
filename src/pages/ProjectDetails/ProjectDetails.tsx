@@ -1,7 +1,6 @@
-import { FilterOutlined,  SortAscendingOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload, Tag, Table, Checkbox, Row, Select, Popconfirm, message } from 'antd';
-import './ProjectDetails.less';
+import { Button, Modal, Form, Radio,DatePicker, Popover, Input, Rate, Upload, Tag, Table, Checkbox, Row, Select, Popconfirm, message, Col } from 'antd';
+import  './ProjectDetails.less';
 import Record from '../../components/Record/Record';
 import { addPpt, addRecord, deletePpt, exportRecord, queryPpt, queryRecord} from '../../api/api';
 import TextArea from 'antd/lib/input/TextArea';
@@ -205,6 +204,10 @@ export default (props:IexportProps) =>{
     },
   };
   
+  const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
+  };
 
   return(
     <>
@@ -350,60 +353,82 @@ export default (props:IexportProps) =>{
         onCancel={handleCancel}
         footer={null}
         className="RecordModal"
+        width="1150px"
       >
         <div className="recordHeader">
-          <h3>新建巡场记录</h3>
+          <h3 style={{fontSize:"22px"}}>新建巡场记录</h3>
         </div>
         <Form
+          {...layout}
           name="basic"
           onFinish={onFinish}
         >
-          <p>问题照片</p> 
-          <div>
-    				{fileLists.map(i=>{
-      					return <img src={i} style={{width:"100px",marginRight:"10px"}} />
-      				})}
-    			</div>
-          <Upload
-            action="/api/upload"
-            listType="picture-card"
-            showUploadList={false}
-            onChange={handleChange}
-          >
-            上传
-          </Upload>
-          <p>问题描述</p>
+          <Row style={{marginBottom:"10px"}}>
+            <Col span={6} style={{textAlign:"right",paddingRight:"10px"}}>
+              <p>问题照片:</p> 
+            </Col>
+            <Col span={18}>
+            <div>
+        				{fileLists.map(i=>{
+          					return <img src={i} style={{width:"100px",marginRight:"10px"}} />
+          				})}
+        			</div>
+              <Upload
+                action="/api/upload"
+                listType="picture-card"
+                showUploadList={false}
+                onChange={handleChange}
+              >
+                上传
+              </Upload>
+            </Col>
+          </Row>
           <Form.Item
+            label="问题描述"
             name="description"
             rules={[{ required: true,message: '请描述具体问题'}]}
           >
-              <TextArea rows={4} placeholder="请描述下具体问题并提交建议" />
+              <TextArea rows={4} placeholder="请描述下具体问题并提交建议" 
+                style={{
+                  width: "660px",
+                  height: "88px",
+                  background: "#EEEEEE",
+                  borderRadius: "8px"   
+                }}
+              />
           </Form.Item>
-           <p className="tag">标签</p>
-           <ul className="tags">
-           {
-            tags.map(item=>{
-              return  <li
-                className="tagsItme"
-              >
-                <span onClick={onAddTag}>{item}</span>
-              </li>
-            })
-          }
-           </ul>
-          <p>严重程度</p>
+          <Row style={{marginTop:"10px"}}>
+             <Col span={6} style={{textAlign:"right",paddingRight:"10px"}}>
+               <p className="tag">标签:</p>
+             </Col>
+             <Col span={18}>
+             <ul className="tags">
+               {
+                tags.map(item=>{
+                  return  <li
+                    className="tagsItme"
+                  >
+                    <span onClick={onAddTag}>{item}</span>
+                  </li>
+                })
+              }
+             </ul>
+             </Col>
+          </Row>
+          
           <Form.Item
+            label="严重程度"
             name="level"
           >
-             <Rate count={3} onChange={onChangeRate} value={rate} style={{color:"red"}}/>
+             <Rate count={3} onChange={onChangeRate} value={rate} style={{color:"#FEC13F"}}/>
           </Form.Item>
           <Form.Item
             className="submit"
           >
-            <Button htmlType="reset" onClick={handleCancel}>取消</Button>
-            <Button type="primary" htmlType="submit" className="sure">
+            <button onClick={handleCancel} style={{width:"94px",height:"39px",background: "#F7F8F9", borderRadius:"8px",outline:"none",border:"0px",color:"#777777"}}>取消</button>
+            <button type="submit" className="sure" style={{width:"94px",height:"39px",background: "#FFB81F", borderRadius:"8px",outline:"none",border:"0px",color:"#FFFFFF"}}>
               确定
-            </Button>
+            </button>
           </Form.Item>
         </Form>
       </Modal>
@@ -414,103 +439,144 @@ export default (props:IexportProps) =>{
        onCancel={handleCancel}
        footer={null}
        className="RecordModal"
+       width="1150px"
     >
       <div className="exportContent">
         <div className="exportHeader">
-          <h3>导出内容</h3>
+          <h3 style={{fontSize:"22px",color:"#323232"}}>导出内容</h3>
         </div>
         <Form
           onFinish={onExportFilter}
         >
-          <p>创建时间</p>
-          <Radio.Group
-            onChange={(e:any)=>{
-              setCustom(e.target.value);
-            }}
+          <p>创建时间:</p>
+          <Row>
+             <Col span={18}>
+              <Radio.Group
+                onChange={(e:any)=>{
+                  setCustom(e.target.value);
+                }}
+                style={{marginLeft:"60px"}}
+              >
+                  <Radio value={dates} style={{marginRight:"60px"}}>今日</Radio>
+                  <Radio value={weeks} style={{marginRight:"60px"}}>一周内</Radio>
+                  <Radio value={months} style={{marginRight:"60px"}}>一个月内</Radio>
+                  <Radio value="custom" style={{marginRight:"60px"}}>自定义</Radio>
+              </Radio.Group>
+             </Col>
+             <Col span={6}>
+              <Form.Item
+                  name="tmPeriod"
+                  >
+                   {
+                     custom==="custom"?<RangePicker/>:""
+                   }
+              </Form.Item>
+             </Col>
+          </Row>
+          <p>严重程度:</p>
+          <Form.Item 
+          name="level"
+          style={{marginLeft:"60px"}}
+          
           >
-              <Radio value={dates}>今日</Radio>
-              <Radio value={weeks}>一周内</Radio>
-              <Radio value={months}>一个月内</Radio>
-              <Radio value="custom">自定义</Radio>
-          </Radio.Group>
-          <Form.Item
-            name="tmPeriod"
-          >
-           {
-             custom==="custom"?<RangePicker style={{marginTop:"10px"}}/>:""
-           }
-          </Form.Item>
-         
-          <p>严重程度</p>
-          <Form.Item name="level">
             <Checkbox.Group>
-                <Checkbox value={3}>
+                <Checkbox value={3}  style={{marginRight:"60px"}}>
                   一般
                 </Checkbox>
-                <Checkbox value={2}>
+                <Checkbox value={2}  style={{marginRight:"60px"}}>
                   重要
                 </Checkbox>
-                <Checkbox value={1}>
+                <Checkbox value={1}  style={{marginRight:"60px"}}>
                   严重
                 </Checkbox>
             </Checkbox.Group>
           </Form.Item>
-          <p>标签</p>
-          <Form.Item name="tags">
+          <p style={{marginLeft:"38px"}}>标签:</p>
+          <Form.Item
+           name="tags"
+           style={{marginLeft:"60px"}}
+           >
             <Checkbox.Group>
-                <Checkbox value="#地下室">
+                <Checkbox value="#地下室"  style={{marginRight:"60px"}}>
                   地下室
                 </Checkbox>
-                <Checkbox value="#楼栋">
+                <Checkbox value="#楼栋"  style={{marginRight:"60px"}}>
                   楼栋
                 </Checkbox>
-                <Checkbox value="#景观">
+                <Checkbox value="#景观"  style={{marginRight:"60px"}}>
                   景观
                 </Checkbox>
-                <Checkbox value="#场地">
+                <Checkbox value="#场地"  style={{marginRight:"60px"}}>
                   场地
                 </Checkbox>
-                <Checkbox value="#户型">
+                <Checkbox value="#户型" style={{marginRight:"60px"}}>
                   户型
                 </Checkbox>
             </Checkbox.Group>
           </Form.Item>
-          <p>导出追评</p>
-          <Form.Item name="isExportComment">
+          <p>导出追评:</p>
+          <Form.Item 
+          name="isExportComment"
+          style={{marginLeft:"60px"}}
+          >
            <Radio.Group
             
            >
-              <Radio value={1}>导出</Radio>
-              <Radio value={2}>不导出</Radio>
+              <Radio value={1}  style={{marginRight:"60px"}}>导出</Radio>
+              <Radio value={2}  style={{marginRight:"60px"}}>不导出</Radio>
             </Radio.Group>
           </Form.Item>  
-          <p>导出方式</p>
-          <Radio.Group
-            onChange={(e:any)=>{
-              setExportType(e.target.value);
-            }}
-          >
-              <Radio value="local">下载到本地</Radio>
-              <Radio value="email">导出到邮箱</Radio>
-          </Radio.Group>
-         {
-          exportType==="email"?<Form.Item
-            name="email"
-            label="邮箱"
-            required
-          >
-            <Input placeholder="请填写邮箱地址" style={{marginTop:"10px"}}/>
-          </Form.Item>:""
-         }
-          <p>导出文件格式</p>
-          <Form.Item name="exportType">
+          <p>导出方式:</p>
+          <Row>
+             <Col span={12}>
+               <Radio.Group
+                  onChange={(e:any)=>{
+                    setExportType(e.target.value);
+                  }}
+                  style={{marginLeft:"60px"}}
+                >
+                    <Radio value="local"  style={{marginRight:"60px"}}>下载到本地</Radio>
+                    <Radio value="email"  style={{marginRight:"60px"}}>导出到邮箱</Radio>
+               </Radio.Group>
+             </Col>
+             <Col span={12}>
+               {
+                exportType==="email"?<Form.Item
+                  name="email"
+                  required
+                >
+                  <Input 
+                  placeholder="请填写邮箱地址"
+                  style={{
+                    width: "240px",
+                    height: "30px",
+                    background: "#FFFFFF",
+                    border: "1px solid #C9C9C9",
+                    borderRadius: "8px"
+                  }}/>
+                </Form.Item>:""
+               }
+             </Col>
+          </Row>
+          <p
+            style={{marginTop:"20px"}}
+          >导出文件格式</p>
+          <Form.Item
+           name="exportType"
+           style={{marginLeft:"60px"}}
+           
+           >
            <Radio.Group>
-              <Radio value="word">Word</Radio>
-              <Radio value="excel">Excel</Radio>
-              <Radio value="ppt">PPT</Radio>
+              <Radio value="word"  style={{marginRight:"60px"}}>Word</Radio>
+              <Radio value="excel"  style={{marginRight:"60px"}}>Excel</Radio>
+              <Radio value="ppt"  style={{marginRight:"60px"}}>PPT</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item name="isHorizontal">
+          <Form.Item
+           name="isHorizontal"
+           style={{marginLeft:"60px"}}
+           
+           >
             <Radio.Group>
               <Radio value={1}>横版</Radio>
               <Radio value={2}>竖版</Radio>
@@ -520,8 +586,8 @@ export default (props:IexportProps) =>{
             <p className="exportLeft">导出模板</p>
             <div className="exportRight">
             <Upload {...Aprops}>
-              <Button>上传PPT</Button>
-            </Upload>,
+              <span>新增</span>
+            </Upload>
             </div>
           </div>
           <Form.Item
@@ -543,10 +609,10 @@ export default (props:IexportProps) =>{
           <Form.Item
             className="submit"
           >
-            <Button htmlType="reset" onClick={handleCancel}>取消</Button>
-            <Button type="primary" htmlType="submit" className="sure">
+            <button onClick={handleCancel} style={{width:"94px",height:"39px",background: "#F7F8F9", borderRadius:"8px",outline:"none",border:"0px",color:"#777777"}}>取消</button>
+            <button type="submit" className="sure" style={{width:"94px",height:"39px",background: "#FFB81F", borderRadius:"8px",outline:"none",border:"0px",color:"#FFFFFF"}}>
               确定
-            </Button>
+            </button>
           </Form.Item>
         </Form>
       </div>

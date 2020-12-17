@@ -6,39 +6,30 @@
       overflow     : hidden;
       margin-bottom: 15px;
 
-      .btn {
-        float: left;
+      button {
+        width        : 137px;
+        height       : 40px;
+        background   : #FFB81F;
+        border-radius: 8px;
+        border       : 0;
+        outline      : none;
+        cursor       : pointer;
 
-        button {
-          width        : 137px;
-          height       : 40px;
-          background   : #FFB81F;
-          border-radius: 8px;
-          border: 0;
-          outline: none;
-          cursor: pointer;
-
-          &:hover{
-            
-          }
-
-          span{
-            color: #fff;
-            font-size: 18px;
-          }
+        span {
+          color    : #fff;
+          font-size: 18px;
         }
-      }
-
-      .search {
-        float: right;
       }
     }
   }
 
+  .designModal {
 
-  :global {
-    .ant-upload-drag {
-      height: auto;
+    .ant-input-search .ant-input:hover,
+    .ant-input-search .ant-input:focus {
+      border-color: #FFFFFF !important;
+      box-shadow  : none !important;
+      width       : 200px !important;
     }
   }
 }

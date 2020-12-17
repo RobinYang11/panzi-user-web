@@ -1,15 +1,69 @@
-.content {
-  margin   : 10px 0px;
-  font-size: 14px;
-}
-
-.bottom {
-  overflow: hidden;
-  margin: 34px 0px 23px 0px;
-
-  .tags {
-    float: left;
+.field {
+  .ant-modal {
+    width: 600px !important;
   }
 
-  .tmCreate {}
+  .defectItem {
+    padding: 28px 0;
+
+    .content {
+      font-size: 16px;
+      height   : 73px;
+      width    : 655px;
+      overflow : hidden;
+    }
+
+    .bottom {
+      overflow  : hidden;
+      margin-top: 43px;
+      width     : 655px;
+
+      .tags {
+        overflow: hidden;
+
+        li {
+          float        : left;
+          padding      : 0px 10px;
+          background   : #EEEEEE;
+          border-radius: 9px;
+          text-align   : center;
+          line-height  : 18px;
+          margin       : 5px 23px 5px 0;
+
+          span {
+            font-size  : 12px;
+            font-family: Adobe Heiti Std;
+            font-weight: normal;
+            color      : #777777;
+          }
+        }
+      }
+    }
+
+    .img {
+      border       : 1px solid #EEEEEE;
+      width        : 238px;
+      height       : 134px;
+      border-radius: 8px;
+    }
+  }
+
+
+}
+
+.imgModal {
+  text-align: center;
+  overflow  : hidden;
+
+  .contentStyle {
+    display      : inline-block;
+    border       : 1px solid #EEEEEE;
+    color        : rgb(192, 51, 51);
+    line-height  : 160px;
+    text-align   : center;
+    width        : 430px;
+    height       : 270px;
+    background   : #DEDEDE;
+    border-radius: 8px;
+  }
 }

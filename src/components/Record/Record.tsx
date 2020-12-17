@@ -62,7 +62,7 @@ export default(props:RecordDocumentProps)=>{
   }
 
   const uploadButton = (
-    <div>
+    <div style={{width:"10px"}}>
       <PlusOutlined />
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
@@ -142,7 +142,7 @@ export default(props:RecordDocumentProps)=>{
   const suffix = (
     <Upload
       action="/api/upload"
-      listType="picture-card"
+      // listType="picture-card"
       showUploadList={false}
       onChange={uploadImage}
       id="upload"
@@ -150,6 +150,11 @@ export default(props:RecordDocumentProps)=>{
       <img src={paizhao} alt=""/>
     </Upload>
   )
+
+  const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
+  };
 
   return (
     <>
@@ -220,52 +225,58 @@ export default(props:RecordDocumentProps)=>{
       onCancel={handleCancel}
       footer={null}
       className="RecordModal"
+      width="1150px"
     >
       <div className="recordHeader">
-        <h3>新建巡场记录</h3>
+        <h3>编辑巡场记录</h3>
       </div>
-      <p>项目:保利一期</p>
       <Form
+        {...layout}
         onFinish={onFinish}
         form={form}
       >
-        <p>问题照片</p> 
-        <div>
-  				{imgs?.map(i=>{
-    					return <img src={i} style={{width:"100px",marginRight:"10px"}} />
-    				})}
-          <Upload
-          action="api/upload"
-          listType="picture-card"
-          showUploadList={false}
-          onChange={handleChange}
-          >
-          {uploadButton}
-        </Upload>
-  			</div>
-        <p>问题描述</p>
+        <Row>
+          <Col span={6}>
+            <p style={{textAlign:"right"}}>问题照片:</p> 
+          </Col>
+          <Col span={18}>
+            <div>
+      				{imgs?.map(i=>{
+        					return <img src={i} style={{width:"100px",marginRight:"10px"}} />
+          				})}
+                <Upload
+                action="api/upload"
+                listType="picture-card"
+                showUploadList={false}
+                onChange={handleChange}
+                >
+                {uploadButton}
+              </Upload>
+      			</div>
+          </Col>
+        </Row>
         <Form.Item
+          label="问题描述"
           name="description"
           rules={[{ required: true,message: '请描述具体问题'}]}
         >
             <TextArea rows={4} placeholder="请描述下具体问题并提交建议" />
         </Form.Item>
-         <p className="tag">标签</p>
-          {
-            tags.map(item=>{
-              return <Tag>{item}</Tag>  
-            })
-          }
-          <Search
-            className="search"
-            placeholder="添加标签"
-            enterButton="添加标签"
-            size="middle"
-            onSearch={onAddTag} 
-         />
-        <p>严重程度</p>
+        <Row>
+           <Col span={6}>
+              <p  style={{textAlign:"right"}}  className="tag">标签:</p>
+           </Col>
+           <Col span={18}>
+             {
+              tags.map(item=>{
+                return <Tag onChange={onAddTag}>{item}</Tag>  
+              })
+            }
+           </Col>
+        </Row>
         <Form.Item
           name="level"
+          label="严重程度"
         >
            <Rate count={3} onChange={onChangeRate} value={rate}/>
         </Form.Item>
