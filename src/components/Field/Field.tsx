@@ -31,7 +31,7 @@ export default (props: DefectProps) => {
         return <img src={defect.medias[0]} alt="图片" style={{ width: "239px", height: "134px",borderRadius:"8px",border:"1px solid #EEEEEE"}} />
       }
       if (isVideo(defect.medias[0])) {
-        return <video autoPlay src={defect.medias[0]} style={{ width: "239px", height: "134px" ,borderRadius:"8px",border:"1px solid #EEEEEE"}}></video>
+        return <video  src={defect.medias[0]} style={{ width: "239px", height: "134px" ,borderRadius:"8px",border:"1px solid #EEEEEE"}}></video>
       }
     }
   }

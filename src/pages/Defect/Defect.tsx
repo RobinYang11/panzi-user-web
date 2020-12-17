@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { queryDefect } from '../../api/api';
 import Field from '../../components/Field/Field';
 import './Defect.less';
+import search from '../../assets/search.png'
 
 const Defect = (props: any) => {
 
@@ -20,13 +21,12 @@ const Defect = (props: any) => {
 
   return (
     <>
-      <div className="headers" >
-        <span className="search">
-          <Search />
-        </span>
-      </div>
-
       <div className="defectMain">
+        <div>
+          
+				  <input className="input" placeholder="搜索"/>
+          <img src={search} alt="" className="searchBtn"/>
+        </div>
         <ul>
           {
             defects?.map((item: any) => {

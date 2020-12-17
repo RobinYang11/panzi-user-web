@@ -1,8 +1,12 @@
-import { Tabs } from 'antd'
+import { Col, Row, Tabs } from 'antd'
+import Search from 'antd/lib/input/Search';
 import React, { useEffect, useState } from 'react'
 import { queryType } from '../../api/api';
 import Defect from '../Defect/Defect';
+import './TabsManager.less'
+
 const { TabPane } = Tabs;
+
 
 export default (props: any) => {
 
@@ -38,8 +42,8 @@ export default (props: any) => {
 					})
 				}
 			</Tabs>
-
 		</div>
+
 	)
 
 }

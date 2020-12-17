@@ -4,102 +4,104 @@ import { addDocumentFolder, queryDocument, queryPrivateDocumentList } from '../.
 import Adocument from '../../components/AdocumentFolder/AdocumentFolder';
 import './Document.less';
 import DocumentFolder from '../../components/SecondaryDirectoryDocument/SecondaryDirectoryDocument';
+import search from '../../assets/search.png'
 
-const {Search} =Input;
+// const {Search} =Input;
 
-const DataSource =()=>{
+const DataSource = () => {
 
-  const [visible,setVisible] = useState(false);
-  const [document,setDocument] = useState<Array<IDocument>>([])
-  const [name,setName] = useState("")
-  const [folder,setFolder] = useState(0);
-  const [children,setChildrens] = useState<Array<IDocument>>([]);
+  const [visible, setVisible] = useState(false);
+  const [document, setDocument] = useState<Array<IDocument>>([])
+  const [name, setName] = useState("")
+  const [folder, setFolder] = useState(0);
+  const [children, setChildrens] = useState<Array<IDocument>>([]);
 
-  const onSearch =()=>{
+  const onSearch = (e:any) => {
     queryPrivateDocumentList({
-      name:name
-    }).then((res:any)=>{
+      name: e.target.value
+    }).then((res: any) => {
       setDocument(res.result)
     })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     onQueryDocumentList();
-  },[])
+  }, [])
 
-  const onQueryDocumentList = ()=>{
+  const onQueryDocumentList = () => {
     queryPrivateDocumentList({
-      "creator":112
-    }).then((res:any)=>{
+      "creator": 112
+    }).then((res: any) => {
       // debugger
       setDocument(res.result)
       // setChildrens(res.result.children); // [].children;
     })
   }
 
-  const onQueryDocumentFolder =(value:any,param:any)=>{
+  const onQueryDocumentFolder = (value: any, param: any) => {
     setFolder(value);
     setChildrens(param);
   }
 
-  const showModal = () =>{
+  const showModal = () => {
     setVisible(true);
   }
 
-  const handleCancel =()=>{
+  const handleCancel = () => {
     setVisible(false);
   }
 
-  const onAddDocument =(data:any)=>{
+  const onAddDocument = (data: any) => {
     console.log(data);
     addDocumentFolder({
       creator: 112,
       type: "folder",
       ...data
-    }).then(res=>{
-     setVisible(false);
-     onQueryDocumentList();
+    }).then(res => {
+      setVisible(false);
+      onQueryDocumentList();
     })
   }
 
   return (
     <div className="document">
-      <PageHeader title="文档管理"/>
+      <PageHeader title="文档管理" />
       <Row>
         <Col span={12}>
-          <div style={{padding:"0 10px"}}>
-          <div className="documentHeader">
-            <div className="btn">
-              <Button onClick={showModal}>新建文件夹</Button>
-            </div>
-            <div className="search">
-              <Search 
-              placeholder="搜索"
-              onSearch={onSearch}
-              value={name}
-              onChange={(e:any)=>{
-                setName(e.target.value);
-              }}
-              style={{ width: 200,textAlign:"right"}} />
-            </div>
-          </div>
-          <Row>
-            {
-              document?.map((item:any)=>{
-                return <Col 
-                  span={6} onClick={()=>{
-                    onQueryDocumentFolder(item.id,item.children)
+          <div style={{ padding: "0 10px" }}>
+            <Row className="documentHeader">
+              <Col span={12} className="btn">
+                <Button onClick={showModal}>新建文件夹</Button>
+              </Col>
+              <Col span={12} className="search">
+                <input
+                  placeholder="搜索"
+                  onInput={onSearch}
+                  value={name}
+                  onChange={(e: any) => {
+                    setName(e.target.value);
                   }}
+                />
+                <img src={search} alt=""/>
+              </Col>
+            </Row>
+            <Row>
+              {
+                document?.map((item: any) => {
+                  return <Col
+                    span={6} onClick={() => {
+                      onQueryDocumentFolder(item.id, item.children)
+                    }}
                   >
-                  <Adocument document={item} key={item.id} onQueryDocumentList={onQueryDocumentList} />
-                </Col>
-              })
-            }
-          </Row>
-         </div>
+                    <Adocument document={item} key={item.id} onQueryDocumentList={onQueryDocumentList} />
+                  </Col>
+                })
+              }
+            </Row>
+          </div>
         </Col>
-        <Col span={12} style={{padding:"0 10px"}}>
-          <DocumentFolder id={folder} fileList={children}/>
+        <Col span={12} style={{ padding: "0 10px" }}>
+          <DocumentFolder id={folder} fileList={children} />
         </Col>
       </Row>
 
@@ -116,11 +118,11 @@ const DataSource =()=>{
             name="name"
             rules={[{ required: true, message: '请输入项目名称' }]}
           >
-            <Input placeholder="文件夹标题"/>
+            <Input placeholder="文件夹标题" />
           </Form.Item>
-          <div style={{textAlign:"center"}}>
-            <button onClick={handleCancel} style={{width:"94px",height:"39px",background: "#F7F8F9", borderRadius:"8px",outline:"none",border:"0px",color:"#777777",marginRight:50}}>取消</button>
-            <button type="submit" className="sure" style={{width:"94px",height:"39px",background: "#FFB81F", borderRadius:"8px",outline:"none",border:"0px",color:"#FFFFFF"}}>
+          <div style={{ textAlign: "center" }}>
+            <button onClick={handleCancel} style={{ width: "94px", height: "39px", background: "#F7F8F9", borderRadius: "8px", outline: "none", border: "0px", color: "#777777", marginRight: 50 }}>取消</button>
+            <button type="submit" className="sure" style={{ width: "94px", height: "39px", background: "#FFB81F", borderRadius: "8px", outline: "none", border: "0px", color: "#FFFFFF" }}>
               确定
             </button>
           </div>

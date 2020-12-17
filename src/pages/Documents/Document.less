@@ -1,26 +1,25 @@
 .document {
 
   .documentHeader {
-    overflow     : hidden;
+    overflow: hidden;
     margin-bottom: 15px;
+    position: relative;
 
     .btn {
-      float: left;
+      text-align: left;
 
       button {
-        width        : 137px;
-        height       : 40px;
-        background   : #FFB81F;
+        width: 137px;
+        height: 40px;
+        background: #FFB81F;
         border-radius: 8px;
         border: 0;
         outline: none;
         cursor: pointer;
 
-        &:hover{
-          
-        }
+        &:hover {}
 
-        span{
+        span {
           color: #fff;
           font-size: 18px;
         }
@@ -29,6 +28,22 @@
 
     .search {
       float: right;
+
+      input {
+        outline: none;
+        border: 1px solid #eeeeee;
+        width: 214px;
+        height: 40px;
+        background: #FFFFFF;
+        border-radius: 8px;
+        text-indent: 52px;
+      }
+
+      img{
+        position: absolute;
+        top: 10px;
+        left: 20px;
+      }
     }
   }
 }
