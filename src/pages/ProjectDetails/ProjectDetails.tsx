@@ -9,6 +9,7 @@ import SortType from '../../components/SortType/SortType';
 import SortMenu from '../../SortMenu';
 import shaixuan from '../../assets/筛选.png'
 import paixu from '../../assets/排序.png';
+import search from '../../assets/search.png'
 
 
 const { RangePicker } = DatePicker;
@@ -118,10 +119,10 @@ export default (props: IexportProps) => {
   }
 
   // 根据关键字搜索
-  const onSearch = (values: any) => {
-    setKeyword(values)
+  const onSearch = (e: any) => {
+    setKeyword(e.target.value)
     onQueryRecord({
-      keyword: keyword,
+      keyword: e.target.value,
       recordProjectId: 3,
     })
   }
@@ -225,11 +226,32 @@ export default (props: IexportProps) => {
           </ul>
           <ul className="projectDetailRight">
             <li>
-              <Search
+              <input
                 placeholder="搜索"
-                onSearch={onSearch}
+                onInput={onSearch}
                 onChange={e => { setKeyword(e.target.value) }}
                 value={keyword}
+                style={{
+                  width: "220px",
+                  height: "40px",
+                  background: "#FFFFFF",
+                  borderRadius: "8px",
+                  outline: "none",
+                  border: 0,
+                  textIndent: "40px"
+                }}
+              />
+              <img
+                src={search}
+                alt=""
+                style={{
+                  position: "absolute",
+                  left: "13px",
+                  top: "10px",
+                  display:"inline-block",
+                  width:"20px",
+                  height:"20px"
+                }}
               />
             </li>
             <li>
@@ -257,7 +279,7 @@ export default (props: IexportProps) => {
         </ul>
         {
           record?.map(item => {
-            return <Record onQueryRecord={() => { onQueryRecord({ recordProjectId: 3 }) }} record={item} key={item.id}/>
+            return <Record onQueryRecord={() => { onQueryRecord({ recordProjectId: 3 }) }} record={item} key={item.id} />
           })
         }
       </div>
@@ -371,15 +393,15 @@ export default (props: IexportProps) => {
               <p>问题照片:</p>
             </Col>
             <Col span={18}>
-              <ul style={{overflow:"hidden"}}>
-                <li style={{float:"left"}}>
+              <ul style={{ overflow: "hidden" }}>
+                <li style={{ float: "left" }}>
                   {
                     fileLists.map(i => {
                       return <img src={i} style={{ width: "100px", marginRight: "10px" }} />
                     })
                   }
                 </li>
-                <li style={{float:"left"}}>
+                <li style={{ float: "left" }}>
                   <Upload
                     action="/api/upload"
                     listType="picture-card"
@@ -397,14 +419,14 @@ export default (props: IexportProps) => {
             name="description"
             rules={[{ required: true, message: '请描述具体问题' }]}
           >
-            <textarea rows={4} placeholder="请描述下具体问题并提交建议" 
+            <textarea rows={4} placeholder="请描述下具体问题并提交建议"
               style={{
                 width: "660px",
                 height: "88px",
                 background: "#EEEEEE",
                 borderRadius: "8px",
-                outline:"none",
-                textIndent:"10px"
+                outline: "none",
+                textIndent: "10px"
               }}
             />
           </Form.Item>
