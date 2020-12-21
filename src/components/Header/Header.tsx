@@ -1,24 +1,50 @@
 import React from 'react';
 import './header.less';
-import { Popover} from 'antd';
+import { Col, Popover, Row} from 'antd';
 import '../Dropdown/Dropdown'
 import Dropdown from '../Dropdown/Dropdown';
 import DropMenus from '../../DropMenus';
-// import q from '../../assets/q.png';
 import shiliang from  '../../assets/矢量智能对象.png';
-import badou from '../../assets/badou.png'
+import logo from '../../assets/ICON.png';
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
   
   return (
       <div className="header">
-        <div className="header-main">
-          <div className="logo">
+        <Row className="header-main">
+          <Col span={4} className="logo">
              <a href="">
-               <img src={shiliang} alt="盘子"/>
+               <img src={logo} alt="盘子" style={{float:"left"}}/>
+               <span style={{
+                 float:"left",
+                 fontSize:"22.5px",
+                 color:"#000",
+                 marginLeft: "16px",
+                 marginTop: "4px"
+                 }}>盘八斗</span>
              </a>
-          </div>
-          <div className="header-nav-right">
+          </Col>
+          <Col span={15} className="header-nav-menu">
+            <ul className="header-menu">
+              <li className="list-item frist-item">
+                <a href="">工作台</a>
+              </li>
+              <li className="list-item">
+                <a href="">教程</a>
+              </li>
+              <li className="list-item">
+                <a href="">帮助</a>
+              </li>
+              <li className="list-item">
+                <a href="">下载</a>
+              </li>
+            </ul>
+          </Col>
+          <Col span={4}
+           style={{textAlign:"right"}}
+           className="header-nav-right"
+           >
             <ul>
               <li>
                 <Popover content={<Dropdown dropMenu={DropMenus}/>}  trigger="hover">
@@ -34,24 +60,8 @@ export default () => {
                 </span>
               </li>
             </ul>
-          </div>
-          <div className="header-nav-menu">
-            <ul className="header-menu">
-              <li className="list-item frist-item">
-                <a href="">工作台</a>
-              </li>
-              <li className="list-item">
-                <a href="">教程</a>
-              </li>
-              <li className="list-item">
-                <a href="">帮助</a>
-              </li>
-              <li className="list-item">
-                <a href="">下载</a>
-              </li>
-            </ul>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </div>
   )
 }

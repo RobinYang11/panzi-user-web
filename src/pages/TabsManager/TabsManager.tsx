@@ -1,5 +1,4 @@
 import { Col, Row, Tabs } from 'antd'
-import Search from 'antd/lib/input/Search';
 import React, { useEffect, useState } from 'react'
 import { queryType } from '../../api/api';
 import Defect from '../Defect/Defect';
@@ -8,6 +7,7 @@ import './TabsManager.less'
 const { TabPane } = Tabs;
 
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (props: any) => {
 
 	const [type, setType] = useState<Array<IType>>([]);

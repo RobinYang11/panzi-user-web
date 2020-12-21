@@ -10,6 +10,8 @@ import SortMenu from '../../SortMenu';
 import shaixuan from '../../assets/筛选.png'
 import paixu from '../../assets/排序.png';
 import search from '../../assets/search.png'
+import { CloseCircleOutlined } from '@ant-design/icons';
+import add from '../../assets/icon_add_newly.png';
 
 
 const { RangePicker } = DatePicker;
@@ -394,13 +396,36 @@ export default (props: IexportProps) => {
             </Col>
             <Col span={18}>
               <ul style={{ overflow: "hidden" }}>
-                <li style={{ float: "left" }}>
+                <Row>
                   {
-                    fileLists.map(i => {
-                      return <img src={i} style={{ width: "100px", marginRight: "10px" }} />
+                    fileLists.map((i:any,index:number)=> {
+                      return <Col span={4} style={{position:"relative",margin:"10px"}}>
+                        <img 
+                        src={i}
+                        style={{ 
+                          width: "100px",
+                          height:"100px",
+                          marginRight: "10px",
+                          borderRadius:"8px"
+                          }}
+                          alt="图片" />
+                        <span
+                        style={{
+                          cursor:"pointer",
+                          position:"absolute",
+                          top:"-5px",
+                          right:"-5px",
+                        }}
+                          onClick={()=>{
+                            fileLists.splice(index,1);
+                            setfileLists([...fileLists])
+                          }}>
+                          <CloseCircleOutlined />
+                        </span>
+                      </Col>
                     })
                   }
-                </li>
+                </Row>
                 <li style={{ float: "left" }}>
                   <Upload
                     action="/api/upload"
@@ -421,6 +446,7 @@ export default (props: IexportProps) => {
           >
             <textarea rows={4} placeholder="请描述下具体问题并提交建议"
               style={{
+                border:"none",
                 width: "660px",
                 height: "88px",
                 background: "#EEEEEE",
@@ -510,7 +536,6 @@ export default (props: IexportProps) => {
             <Form.Item
               name="level"
               style={{ marginLeft: "60px" }}
-
             >
               <Checkbox.Group>
                 <Checkbox value={3} style={{ marginRight: "60px" }}>
@@ -530,19 +555,19 @@ export default (props: IexportProps) => {
               style={{ marginLeft: "60px" }}
             >
               <Checkbox.Group>
-                <Checkbox value="#地下室" style={{ marginRight: "60px" }}>
+                <Checkbox value="地下室" style={{ marginRight: "60px" }}>
                   地下室
                 </Checkbox>
-                <Checkbox value="#楼栋" style={{ marginRight: "60px" }}>
+                <Checkbox value="楼栋" style={{ marginRight: "60px" }}>
                   楼栋
                 </Checkbox>
-                <Checkbox value="#景观" style={{ marginRight: "60px" }}>
+                <Checkbox value="景观" style={{ marginRight: "60px" }}>
                   景观
                 </Checkbox>
-                <Checkbox value="#场地" style={{ marginRight: "60px" }}>
+                <Checkbox value="场地" style={{ marginRight: "60px" }}>
                   场地
                 </Checkbox>
-                <Checkbox value="#户型" style={{ marginRight: "60px" }}>
+                <Checkbox value="户型" style={{ marginRight: "60px" }}>
                   户型
                 </Checkbox>
               </Checkbox.Group>
@@ -553,7 +578,6 @@ export default (props: IexportProps) => {
               style={{ marginLeft: "60px" }}
             >
               <Radio.Group
-
               >
                 <Radio value={1} style={{ marginRight: "60px" }}>导出</Radio>
                 <Radio value={2} style={{ marginRight: "60px" }}>不导出</Radio>
@@ -597,7 +621,6 @@ export default (props: IexportProps) => {
             <Form.Item
               name="exportType"
               style={{ marginLeft: "60px" }}
-
             >
               <Radio.Group>
                 <Radio value="word" style={{ marginRight: "60px" }}>Word</Radio>
@@ -619,7 +642,16 @@ export default (props: IexportProps) => {
               <p className="exportLeft">导出模板</p>
               <div className="exportRight">
                 <Upload {...Aprops}>
-                  <span>新增</span>
+                  <img 
+                  src={add} 
+                  alt=""
+                  style={{
+                    marginRight:"17px",
+                    verticalAlign: "sub",
+                    cursor:"pointer"
+                  }}
+                  />
+                  <span style={{cursor:"pointer"}}>新增</span>
                 </Upload>
               </div>
             </div>

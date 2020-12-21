@@ -1,15 +1,16 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, message, Modal, Popconfirm, Popover, Rate, Row, Tag, Upload } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { addRecordComment, deleteRecord, queryRecord, queryRecordComment, updateRecordQuestion } from '../../api/api';
 import './Record.less';
 import Comment from '../Comment/Comment';
 import paizhao from '../../assets/拍照.png'
 import shanchu from '../../assets/删 除 拷贝.png'
 import bianji from '../../assets/编辑.png';
+import Item from 'antd/lib/list/Item';
 
 const { Search } = Input
 
@@ -34,7 +35,8 @@ export default (props: RecordDocumentProps) => {
   const [description, setDescription] = useState('');
   const id = record.id;
   const [commentImage, setCommentImage] = useState<Array<any>>([])
-  const [commentShow, setCommentShow] = useState(0);
+  const [commentShow, setCommentShow] = useState(false);
+
 
   useEffect(() => {
     onQueryRecord();
@@ -106,6 +108,7 @@ export default (props: RecordDocumentProps) => {
     if (value.file.status === "done") {
       commentImage?.push(value.file.response.result);
       setCommentImage([...commentImage]);
+
     }
   }
 
@@ -120,15 +123,22 @@ export default (props: RecordDocumentProps) => {
     });
   }
 
+  
+  // 通过ref获取 原生input的值
+  const ref = useRef<any>()
+
   // 添加评论
   const onAddRecordComment = (e: any) => {
-    console.log(e)
+
+    // 判断ref的current
+   if(ref.current) {
+     console.log(ref.current.value)
+    }
     addRecordComment({
       recordId: record.id,
-      description: e.target.value,
+      description: ref.current.value,
       imgs: commentImage
     }).then(res => {
-      // setDescription(e.target.value);
       onQueryRecordComment();
     })
   }
@@ -145,16 +155,26 @@ export default (props: RecordDocumentProps) => {
     wrapperCol: { span: 18 },
   };
 
+
   return (
     <>
       <div className="projects">
-        <div className="projectDetailNav">
-          <div className="creatTime">{moment(parseInt(record.tmCreate)).format("YYYY:MM:DD hh:ss:mm")}</div>
-          <ul className="favorableComments">
+        <Row>
+          <Col 
+          span={12}
+          className="creatTime"
+          style={{textAlign:"left"}}
+          >
+            {moment(parseInt(record.tmCreate)).format("YYYY:MM:DD hh:ss:mm")}
+          </Col>
+          <Col 
+          span={12}
+          style={{textAlign:"right"}}
+          >
             <Rate count={3} value={record.level} />
-          </ul>
-        </div>
-        <div className="content">
+          </Col>
+        </Row>
+        <div style={{marginBottom:"20px",fontSize:"18px"}}>
           {record.description}
         </div>
         <ul className="projectImg">
@@ -187,7 +207,7 @@ export default (props: RecordDocumentProps) => {
           {
             <div>第一条评论</div>
           }
-          <li className={commentShow === 1 ? " nextAllComments" : " nextAllComment"}>
+          <li className={commentShow === true ? " nextAllComments" : " nextAllComment"}>
             {
               comments?.map((item) => {
                 return <Comment comment={item} key={item.id} id={id} onQueryRecordComment={() => { onQueryRecordComment() }} />
@@ -198,19 +218,15 @@ export default (props: RecordDocumentProps) => {
         <p
           className="queryAllComments"
           onClick={() => {
-            setCommentShow(1)
+            setCommentShow(true)
           }}
         >查看全部评论</p>
 
         <Row className="submitComment">
           <Col span={24} style={{ position: "relative" }}>
             <input
-              value={description}
-              onInput={onAddRecordComment}
-              onChange={(e: any) => {
-                setDescription(e.target.value);
-              }}
-              placeholder="这是一个不错的问题,可以进行二次评审"
+             ref={ref}
+             placeholder="这是一个不错的问题,可以进行二次评审"
             />
             <div className="upload">
               {
@@ -227,11 +243,36 @@ export default (props: RecordDocumentProps) => {
             <button type="submit" onClick={onAddRecordComment}>
               <span>发表</span>
             </button>
-            <div>
+            <Row>
               {
-
+               commentImage?.map((itme:any,index:number)=>{
+                return  <Col span={3} style={{position:"relative",margin:"10px"}}>
+                  <img 
+                  src={itme} 
+                  alt="" 
+                  style={{
+                    width:"100px",
+                    height:"100px",
+                    margin:"5px",
+                    borderRadius:"8px"
+                    }}/>
+                  <span
+                  style={{
+                    cursor:"pointer",
+                    position:"absolute",
+                    top:"-5px",
+                    right:"-5px",
+                  }}
+                    onClick={()=>{
+                      commentImage.splice(index,1);
+                      setCommentImage([...commentImage])
+                    }}>
+                    <CloseCircleOutlined />
+                  </span>
+                </Col>
+               })
               }
-            </div>
+            </Row>
           </Col>
         </Row>
       </div>
@@ -257,14 +298,36 @@ export default (props: RecordDocumentProps) => {
             </Col>
             <Col span={18}>
               <ul style={{ overflow: "hidden" }}>
-                <li style={{ float: "left" }}>
-                  {imgs?.map(i => {
-                    return <img src={i} style={{ width: "100px", marginRight: "10px" }} />
+                <Row>
+                  {imgs?.map((i:any,index:number )=> {
+                    return <Col span={4} style={{position:"relative",margin:"5px"}}>
+                         <img 
+                          src={i}
+                          style={{ 
+                            width: "100px",
+                            height:"100px",
+                            margin: "10px",
+                            borderRadius:"8px"
+                            }}  alt=""/>
+                         <span
+                          style={{
+                            cursor:"pointer",
+                            position:"absolute",
+                            top:"-5px",
+                            right:"-15px",
+                          }}
+                            onClick={()=>{
+                              imgs.splice(index,1);
+                              setCommentImage([...imgs])
+                            }}>
+                            <CloseCircleOutlined />
+                          </span>
+                    </Col>
                   })}
-                </li>
+                </Row>
                 <li style={{ float: "left" }}>
                   <Upload
-                    action="api/upload"
+                    action="api/upload" 
                     listType="picture-card"
                     showUploadList={false}
                     onChange={handleChange}
@@ -284,6 +347,7 @@ export default (props: RecordDocumentProps) => {
               rows={4}
               placeholder="请描述下具体问题并提交建议"
               style={{
+                border:"none",
                 width: "660px",
                 height: "88px",
                 background: "#EEEEEE",
