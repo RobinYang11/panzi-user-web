@@ -122,7 +122,6 @@ export default (props: RecordDocumentProps) => {
       level: record?.level,
     });
   }
-
   
   // 通过ref获取 原生input的值
   const ref = useRef<any>()
