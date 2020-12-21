@@ -22,28 +22,28 @@ import TabsManager from "./pages/TabsManager/TabsManager";
 export default [
   {
     name:"笔记",
-    path:"/test",
+    path:"/project",
     icon:biji,
     component:ReturnRecord,
     render:true,
   },
   {
     name:"图纸",
-    path:"/test1",
+    path:"/design",
     icon:juXing53,
     component:Design,
     render:true,
   },
   {
     name:"文档",
-    path:"/test2",
+    path:"/document",
     icon:juXing,
     component:Documents,
     render:true,
   },
   {
     name:"缺陷库",
-    path:"/test3",
+    path:"/defect",
     icon:duoBianXing,
     component:TabsManager,
     render:true,

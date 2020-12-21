@@ -554,19 +554,19 @@ export default (props: IexportProps) => {
               style={{ marginLeft: "60px" }}
             >
               <Checkbox.Group>
-                <Checkbox value="#地下室" style={{ marginRight: "60px" }}>
+                <Checkbox value="地下室" style={{ marginRight: "60px" }}>
                   地下室
                 </Checkbox>
-                <Checkbox value="#楼栋" style={{ marginRight: "60px" }}>
+                <Checkbox value="楼栋" style={{ marginRight: "60px" }}>
                   楼栋
                 </Checkbox>
-                <Checkbox value="#景观" style={{ marginRight: "60px" }}>
+                <Checkbox value="景观" style={{ marginRight: "60px" }}>
                   景观
                 </Checkbox>
-                <Checkbox value="#场地" style={{ marginRight: "60px" }}>
+                <Checkbox value="场地" style={{ marginRight: "60px" }}>
                   场地
                 </Checkbox>
-                <Checkbox value="#户型" style={{ marginRight: "60px" }}>
+                <Checkbox value="户型" style={{ marginRight: "60px" }}>
                   户型
                 </Checkbox>
               </Checkbox.Group>
