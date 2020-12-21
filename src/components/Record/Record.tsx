@@ -138,7 +138,7 @@ export default (props: RecordDocumentProps) => {
       recordId: record.id,
       description: ref.current.value,
       imgs: commentImage
-    }).then(res => {
+    }).then((res:any) => {
       onQueryRecordComment();
     })
   }
