@@ -13,6 +13,7 @@ import search from '../../assets/search.png'
 import { CloseCircleOutlined } from '@ant-design/icons';
 import add from '../../assets/icon_add_newly.png';
 
+
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 

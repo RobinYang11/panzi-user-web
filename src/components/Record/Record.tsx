@@ -37,6 +37,7 @@ export default (props: RecordDocumentProps) => {
   const [commentImage, setCommentImage] = useState<Array<any>>([])
   const [commentShow, setCommentShow] = useState(false);
 
+
   useEffect(() => {
     onQueryRecord();
     onQueryRecordComment();
@@ -128,6 +129,7 @@ export default (props: RecordDocumentProps) => {
 
   // 添加评论
   const onAddRecordComment = (e: any) => {
+
     // 判断ref的current
    if(ref.current) {
      console.log(ref.current.value)
