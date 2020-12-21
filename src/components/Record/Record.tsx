@@ -108,7 +108,6 @@ export default (props: RecordDocumentProps) => {
     if (value.file.status === "done") {
       commentImage?.push(value.file.response.result);
       setCommentImage([...commentImage]);
-
     }
   }
 

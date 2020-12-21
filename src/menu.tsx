@@ -50,7 +50,7 @@ export default [
   },
   {
     name:"项目详情",
-    path:"/test4/:id",
+    path:"/ProjectDetails/:id",
     icon:"../src/assets/形状 4 拷贝.png",
     component:ProjectDetails,
     render:false,

@@ -80,7 +80,7 @@ export default (props: IReturnProps) => {
           }
         >
           <li className="recordLi">
-            <a href={`#/test4/${project.id}`}>
+            <a href={`#/ProjectDetails/${project.id}`}>
               <img src={project.logo} alt="" />
               <p>{project.name}</p>
             </a>

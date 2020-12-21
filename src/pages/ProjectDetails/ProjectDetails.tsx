@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Radio, DatePicker, Popover, Input, Rate, Upload, Tag, Table, Checkbox, Row, Select, Popconfirm, message, Col } from 'antd';
+import { Button, Modal, Form, Radio, DatePicker, Popover, Input, Rate, Upload,  Table, Checkbox, Row, Popconfirm, message, Col } from 'antd';
 import './ProjectDetails.less';
 import Record from '../../components/Record/Record';
 import { addPpt, addRecord, deletePpt, exportRecord, queryPpt, queryRecord } from '../../api/api';
-import TextArea from 'antd/lib/input/TextArea';
 import { useForm } from 'antd/lib/form/Form';
 import SortType from '../../components/SortType/SortType';
 import SortMenu from '../../SortMenu';
@@ -18,10 +17,8 @@ const { RangePicker } = DatePicker;
 const { Search } = Input;
 
 let dates = new Date().setHours(0, 0, 0, 0);
-
 let week = new Date();
 let weeks = week.setDate(week.getDate() - 7);
-
 var months = new Date().setMonth((new Date().getMonth() - 1))
 interface IexportProps {
   filtContent: IRecordProject
@@ -45,7 +42,6 @@ export default (props: IexportProps) => {
   const [sort, setSort] = useState(false);
   const [data, setData] = useState<Array<any>>([])
   const [keyword, setKeyword] = useState("");
-  const [id, setId] = useState("");
   const [exportType, setExportType] = useState("local")
   const [custom, setCustom] = useState("custom")
 
@@ -149,7 +145,8 @@ export default (props: IexportProps) => {
   }
 
   // 删除ppt
-  const onDeletePpt = () => {
+  const onDeletePpt = (id:any) => {
+    message.info('已成功删除');
     deletePpt({ id }).then(res => {
       showExportModal();
     })
@@ -157,15 +154,20 @@ export default (props: IexportProps) => {
 
   const columns = [
     {
+      title: 'id',
+      dataIndex: 'id',
+      key: 1,
+    },
+    {
       title: '盘子默认模板',
       dataIndex: 'fileName',
-      key: 1,
+      key: 2,
     },
     {
       title: '预览',
       dataIndex: 'yulan',
-      key: 2,
-      render: (row: any) => {
+      key: 3,
+      render: (row:any) => {
         return (
           <ul>
             <a>预览</a>
@@ -173,7 +175,7 @@ export default (props: IexportProps) => {
               placement="top"
               title="是否确认删除"
               onConfirm={() => {
-                onDeletePpt()
+                onDeletePpt(row.id);
               }
               }
               okText="Yes" cancelText="No">
