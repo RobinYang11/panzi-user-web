@@ -9,7 +9,9 @@ import SortType from '../../components/SortType/SortType';
 import SortMenu from '../../SortMenu';
 import shaixuan from '../../assets/筛选.png'
 import paixu from '../../assets/排序.png';
-
+import search from '../../assets/search.png'
+import { CloseCircleOutlined } from '@ant-design/icons';
+import add from '../../assets/icon_add_newly.png';
 
 const { RangePicker } = DatePicker;
 const { Search } = Input;
@@ -118,10 +120,10 @@ export default (props: IexportProps) => {
   }
 
   // 根据关键字搜索
-  const onSearch = (values: any) => {
-    setKeyword(values)
+  const onSearch = (e: any) => {
+    setKeyword(e.target.value)
     onQueryRecord({
-      keyword: keyword,
+      keyword: e.target.value,
       recordProjectId: 3,
     })
   }
@@ -225,11 +227,32 @@ export default (props: IexportProps) => {
           </ul>
           <ul className="projectDetailRight">
             <li>
-              <Search
+              <input
                 placeholder="搜索"
-                onSearch={onSearch}
+                onInput={onSearch}
                 onChange={e => { setKeyword(e.target.value) }}
                 value={keyword}
+                style={{
+                  width: "220px",
+                  height: "40px",
+                  background: "#FFFFFF",
+                  borderRadius: "8px",
+                  outline: "none",
+                  border: 0,
+                  textIndent: "40px"
+                }}
+              />
+              <img
+                src={search}
+                alt=""
+                style={{
+                  position: "absolute",
+                  left: "13px",
+                  top: "10px",
+                  display:"inline-block",
+                  width:"20px",
+                  height:"20px"
+                }}
               />
             </li>
             <li>
@@ -268,7 +291,7 @@ export default (props: IexportProps) => {
         visible={visible}
         onCancel={onCancel}
         footer={null}
-        className="modal"
+        width="800px"
       >
         <Form
           onFinish={onQueryRecords}
@@ -371,15 +394,38 @@ export default (props: IexportProps) => {
               <p>问题照片:</p>
             </Col>
             <Col span={18}>
-              <ul style={{overflow:"hidden"}}>
-                <li style={{float:"left"}}>
+              <ul style={{ overflow: "hidden" }}>
+                <Row>
                   {
-                    fileLists.map(i => {
-                      return <img src={i} style={{ width: "100px", marginRight: "10px" }} />
+                    fileLists.map((i:any,index:number)=> {
+                      return <Col span={4} style={{position:"relative",margin:"10px"}}>
+                        <img 
+                        src={i}
+                        style={{ 
+                          width: "100px",
+                          height:"100px",
+                          marginRight: "10px",
+                          borderRadius:"8px"
+                          }}
+                          alt="图片" />
+                        <span
+                        style={{
+                          cursor:"pointer",
+                          position:"absolute",
+                          top:"-5px",
+                          right:"-5px",
+                        }}
+                          onClick={()=>{
+                            fileLists.splice(index,1);
+                            setfileLists([...fileLists])
+                          }}>
+                          <CloseCircleOutlined />
+                        </span>
+                      </Col>
                     })
                   }
-                </li>
-                <li style={{float:"left"}}>
+                </Row>
+                <li style={{ float: "left" }}>
                   <Upload
                     action="/api/upload"
                     listType="picture-card"
@@ -397,12 +443,15 @@ export default (props: IexportProps) => {
             name="description"
             rules={[{ required: true, message: '请描述具体问题' }]}
           >
-            <TextArea rows={4} placeholder="请描述下具体问题并提交建议" 
+            <textarea rows={4} placeholder="请描述下具体问题并提交建议"
               style={{
+                border:"none",
                 width: "660px",
                 height: "88px",
                 background: "#EEEEEE",
-                borderRadius: "8px"
+                borderRadius: "8px",
+                outline: "none",
+                textIndent: "10px"
               }}
             />
           </Form.Item>
@@ -486,7 +535,6 @@ export default (props: IexportProps) => {
             <Form.Item
               name="level"
               style={{ marginLeft: "60px" }}
-
             >
               <Checkbox.Group>
                 <Checkbox value={3} style={{ marginRight: "60px" }}>
@@ -529,7 +577,6 @@ export default (props: IexportProps) => {
               style={{ marginLeft: "60px" }}
             >
               <Radio.Group
-
               >
                 <Radio value={1} style={{ marginRight: "60px" }}>导出</Radio>
                 <Radio value={2} style={{ marginRight: "60px" }}>不导出</Radio>
@@ -573,7 +620,6 @@ export default (props: IexportProps) => {
             <Form.Item
               name="exportType"
               style={{ marginLeft: "60px" }}
-
             >
               <Radio.Group>
                 <Radio value="word" style={{ marginRight: "60px" }}>Word</Radio>
@@ -595,7 +641,16 @@ export default (props: IexportProps) => {
               <p className="exportLeft">导出模板</p>
               <div className="exportRight">
                 <Upload {...Aprops}>
-                  <span>新增</span>
+                  <img 
+                  src={add} 
+                  alt=""
+                  style={{
+                    marginRight:"17px",
+                    verticalAlign: "sub",
+                    cursor:"pointer"
+                  }}
+                  />
+                  <span style={{cursor:"pointer"}}>新增</span>
                 </Upload>
               </div>
             </div>

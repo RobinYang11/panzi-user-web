@@ -116,9 +116,19 @@ const DataSource = () => {
         >
           <Form.Item
             name="name"
-            rules={[{ required: true, message: '请输入项目名称' }]}
           >
-            <Input placeholder="文件夹标题" />
+            <input 
+            placeholder="文件夹标题"
+            style={{
+              width: "380px",
+              height: "40px",
+              outline: "none",
+              border: 0,
+              background: "#EEEEEE",
+              borderRadius: "8px",
+              textIndent:"18px",
+            }}
+            />
           </Form.Item>
           <div style={{ textAlign: "center" }}>
             <button onClick={handleCancel} style={{ width: "94px", height: "39px", background: "#F7F8F9", borderRadius: "8px", outline: "none", border: "0px", color: "#777777", marginRight: 50 }}>取消</button>

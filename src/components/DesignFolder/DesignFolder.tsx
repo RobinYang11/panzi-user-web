@@ -1,6 +1,4 @@
-import { FolderOutlined } from '@ant-design/icons';
-import { Col, Dropdown, Form, Input, message, Modal, Popconfirm } from 'antd';
-import { useForm } from 'antd/lib/form/Form';
+import { Dropdown, Form, Input, message, Modal, Popconfirm } from 'antd';
 import React, { useState } from 'react';
 import { delDesign, updateDesign } from '../../api/api';
 import './DesignFolder.less';
@@ -79,11 +77,20 @@ export default (props:FolderProps)=>{
           form={form}
         >
           <Form.Item
-            label="项目名称"
             name="name"
-            rules={[{ required: true, message: '请输入项目名称' }]}
           >
-            <Input  name="name" type="text"/>
+            <input
+             type="text"
+             style={{
+              width: "380px",
+              height: "40px",
+              outline: "none",
+              border: 0,
+              background: "#EEEEEE",
+              borderRadius: "8px",
+              textIndent:"18px",
+              }}
+             />
           </Form.Item>
           <div style={{textAlign:"center"}}>
             <button onClick={handleCancel} style={{width:"94px",height:"39px",background: "#F7F8F9", borderRadius:"8px",outline:"none",border:"0px",color:"#777777",marginRight:50}}>取消</button>

@@ -4,11 +4,11 @@ import  duigou from './assets/icon_pitch_sort@2x.png'
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default[
-  {
-    sortType:"默认排序",
-    value:1,
-    icon:duigou
-  },
+  // {
+  //   sortType:"默认排序",
+  //   value:1,
+  //   icon:duigou
+  // },
   {
     sortType:"创建时间由近到远",
     value:2,
