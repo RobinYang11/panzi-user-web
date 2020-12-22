@@ -1,6 +1,6 @@
-import { Carousel, Col, Modal, Row, Tag } from 'antd';
+import { Carousel, Col, Modal, Row } from 'antd';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { isImage, isVideo } from '../../utils/tool';
 import './Field.less'
 
@@ -14,7 +14,6 @@ export default (props: DefectProps) => {
   const { defect } = props;
   const [visible, setVisible] = useState(false);
 
-
   const showModal = () => {
     setVisible(true);
   }
@@ -23,15 +22,48 @@ export default (props: DefectProps) => {
     setVisible(false);
   }
 
+  const renderImages = () =>{
+
+   return defect.medias?.map((item:any)=>{
+        if (isImage(item)) {
+          return <div>
+            <img 
+            src={item} 
+            alt="图片" 
+            className="modalImg"
+           />
+          </div> 
+        }
+  
+        if (isVideo(item)) {
+          return  <div>
+              <video  
+              controls={true}
+              src={item} 
+              >
+           </video>
+          </div>
+        }
+      })
+  }
+
 
   const renderImage = () => {
 
-    if (defect.medias.length >= 1) {
+    if (defect.medias.length>= 1) {
       if (isImage(defect.medias[0])) {
-        return <img src={defect.medias[0]} alt="图片" style={{ width: "239px", height: "134px",borderRadius:"8px",border:"1px solid #EEEEEE"}} />
+        return <img src={defect.medias[0]} 
+        alt="图片" 
+        className="fieldImage"
+        />
       }
       if (isVideo(defect.medias[0])) {
-        return <video  src={defect.medias[0]} style={{ width: "239px", height: "134px" ,borderRadius:"8px",border:"1px solid #EEEEEE"}}></video>
+        return  <video  
+            controls={true}
+            src={defect.medias[0]} 
+            className="filedVideo"
+            >
+         </video>
       }
     }
   }
@@ -47,7 +79,7 @@ export default (props: DefectProps) => {
             <Row className="bottom">
               <Col span={20} className="tags">
                 {
-                  defect.tags.map((item: any) => {
+                  defect.tags?.map((item: any) => {
                     return <li>
                       <span>{item}</span>
                     </li>
@@ -65,6 +97,7 @@ export default (props: DefectProps) => {
         </Row>
       </li>
 
+
       <Modal
         footer={null}
         visible={visible}
@@ -73,11 +106,9 @@ export default (props: DefectProps) => {
       >
         <div className="imgModal">
           <div>
-            <Carousel autoplay>
               {
-                renderImage()
+                renderImages()
               }
-            </Carousel>
           </div>
           <p style={{fontSize:"16px"}}>
             {defect.description}
@@ -86,5 +117,4 @@ export default (props: DefectProps) => {
       </Modal>
     </div>
   )
-
 }

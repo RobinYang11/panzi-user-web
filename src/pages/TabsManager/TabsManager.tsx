@@ -43,7 +43,6 @@ export default (props: any) => {
 				}
 			</Tabs>
 		</div>
-
 	)
 
 }

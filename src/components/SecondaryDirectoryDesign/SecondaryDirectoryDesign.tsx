@@ -4,6 +4,9 @@ import { InboxOutlined } from '@ant-design/icons';
 import { batchAddDesign, queryDesignList } from '../../api/api';
 import Dragger from 'antd/lib/upload/Dragger';
 import './SecondaryDirectoryDesign.less'
+import dwg from '../../assets/pic_drawing.png' 
+
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (props:any)=>{
   console.log(props)
@@ -60,7 +63,7 @@ export default (props:any)=>{
             {
              props.fileList?.map((item:any)=>{
               return  <Col span={4}>
-                 <img src={item.sourceFile} alt="" key={item.id}/>
+                 <img src={dwg} alt="" key={item.id}/>
                  <p>{item.name}</p>
                 </Col>
               })

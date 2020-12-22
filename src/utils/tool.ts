@@ -6,7 +6,6 @@ export function isImage(url:string){
     let lastItem = arr[arr.length-1]
     
     if(ImageArr.includes(lastItem)){
-
         return true;
     }
     

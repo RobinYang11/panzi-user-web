@@ -131,6 +131,7 @@ export default (props: RecordDocumentProps) => {
 
     // 判断ref的current
    if(ref.current) {
+    //  debugger
      console.log(ref.current.value)
     }
     addRecordComment({

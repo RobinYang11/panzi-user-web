@@ -71,6 +71,7 @@ export default (props:FolderProps)=>{
         visible={visible}
         onCancel={handleCancel}
         footer={null}
+        className="designModal"
       >
         <Form
           onFinish={onSubmit}
@@ -81,20 +82,18 @@ export default (props:FolderProps)=>{
           >
             <input
              type="text"
-             style={{
-              width: "380px",
-              height: "40px",
-              outline: "none",
-              border: 0,
-              background: "#EEEEEE",
-              borderRadius: "8px",
-              textIndent:"18px",
-              }}
+             className="input"
              />
           </Form.Item>
-          <div style={{textAlign:"center"}}>
-            <button onClick={handleCancel} style={{width:"94px",height:"39px",background: "#F7F8F9", borderRadius:"8px",outline:"none",border:"0px",color:"#777777",marginRight:50}}>取消</button>
-            <button type="submit" className="sure" style={{width:"94px",height:"39px",background: "#FFB81F", borderRadius:"8px",outline:"none",border:"0px",color:"#FFFFFF"}}>
+          <div className="btns">
+            <button 
+            onClick={handleCancel}  
+            className="cancelbtn"
+            >取消</button>
+            <button 
+            type="submit" 
+            className="okBtn"
+            > 
               确定
             </button>
           </div>
